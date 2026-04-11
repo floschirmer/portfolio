@@ -306,13 +306,13 @@ function stopAllMedia(){
 
 // ROUTING
 let currentSection='home';
-function checkRoute(){if(window.location.hash==='#backend')openBackend();}
 function openBackend(){document.getElementById('backend-page').classList.add('open');if(loggedIn)showAdminUI();}
 function closeBackend(){document.getElementById('backend-page').classList.remove('open');history.replaceState({},'',window.location.pathname);}
 window.addEventListener('hashchange',()=>{
-  if(window.location.hash==='#backend'){openBackend();}
-  else{document.getElementById('backend-page').classList.remove('open');}
-  history.replaceState({},'',window.location.pathname);
+  if(window.location.hash==='#backend'){
+    openBackend();
+    history.replaceState({},'',window.location.pathname);
+  }
 });
 
 // NAV
@@ -743,7 +743,10 @@ function init(){
   data=migrateData(data);
   renderAll();
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
-  // Hash IMMER entfernen — Startseite ohne Ausnahme
+  // Erst prüfen ob #backend in URL, dann Hash entfernen
+  if(window.location.hash==='#backend'){
+    openBackend();
+  }
   history.replaceState({},'',window.location.pathname);
 }
 init();
