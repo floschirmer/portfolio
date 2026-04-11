@@ -412,7 +412,7 @@ function renderProject(sectionId,idx){
 function buildEmbed(m){
   if(m.type==='youtube'){const id=extractYT(m.url);return id?`<div class="embed-wrap"><iframe src="https://www.youtube.com/embed/${id}" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige YouTube-URL</p>';}
   if(m.type==='vimeo'){const id=extractVimeo(m.url);return id?`<div class="embed-wrap"><iframe src="https://player.vimeo.com/video/${id}" allowfullscreen allow="autoplay;fullscreen;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige Vimeo-URL</p>';}
-  if(m.type==='soundcloud')return`<div class="embed-audio"><iframe height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(m.url)}&color=%231a1a1a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false"></iframe></div>`;
+  if(m.type==='soundcloud'){const srcMatch=m.url.match(/src=["']([^"']+)["']/);if(srcMatch){return`<div class="embed-audio"><iframe height="166" scrolling="no" frameborder="no" allow="autoplay" style="width:100%" src="${escH(srcMatch[1])}"></iframe></div>`;}return`<div class="embed-audio"><iframe height="166" scrolling="no" frameborder="no" allow="autoplay" style="width:100%" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(m.url)}&color=%231a1a1a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false"></iframe></div>`;}
   if(m.type==='bandcamp'){
     // Unterstützt sowohl die src-URL direkt als auch den kopierten iframe-Code
     let src=m.url;
