@@ -248,7 +248,7 @@
 
 <script>
 // DATA — wird beim Export mit aktuellen Inhalten ersetzt
-var _DATA_ = {"name":"FLORIAN SCHIRMER","sub":"komposition | klanggestaltung","homeText":{"de":"Willkommen.","en":"Welcome."},"footer":"© 2026","bio":{"img":"https://i.ibb.co/67vmw9xp/DSC00352.jpg","text":{"de":"Komponist und Musiker ","en":"Composer and musician "}},"sections":[{"id":"musik","label":{"de":"musik","en":"music"},"type":"projects"},{"id":"theater","label":{"de":"theater","en":"theatre"},"type":"projects"},{"id":"visuelles","label":{"de":"visuelles","en":"visual"},"type":"projects"},{"id":"bio","label":{"de":"bio","en":"bio"},"type":"bio"},{"id":"kontakt","label":{"de":"kontakt","en":"contact"},"type":"kontakt"}],"projects":{"musik":[{"title":{"de":"L-Tryptophan ","en":"New Project"},"year":"2024","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Band mit Elli ","en":""},"media":[]}],"theater":[],"visuelles":[]},"contactLinks":[],"events":[{"date":"2026-04-22","title":{"de":"Veritas NTM","en":"Veritas NTM"},"link":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","isPast":false}]};
+var _DATA_ = {"name":"FLORIAN SCHIRMER","sub":"komposition | klanggestaltung","homeText":{"de":"Willkommen.","en":"Welcome."},"footer":"\u00a9 2026","bio":{"img":"","text":{"de":"","en":""}},"sections":[{"id":"musik","label":{"de":"musik","en":"music"},"type":"projects"},{"id":"theater","label":{"de":"theater","en":"theatre"},"type":"projects"},{"id":"visuelles","label":{"de":"visuelles","en":"visual"},"type":"projects"},{"id":"bio","label":{"de":"bio","en":"bio"},"type":"bio"},{"id":"kontakt","label":{"de":"kontakt","en":"contact"},"type":"kontakt"}],"projects":{"musik":[],"theater":[],"visuelles":[]},"contactLinks":[],"events":[]};
 var data = JSON.parse(JSON.stringify(_DATA_));
 
 // PASSWORT
@@ -307,12 +307,9 @@ function stopAllMedia(){
 // ROUTING
 let currentSection='home';
 function checkRoute(){if(window.location.hash==='#backend')openBackend();}
-function openBackend(){document.getElementById('backend-page').classList.add('open');window.location.hash='#backend';if(loggedIn)showAdminUI();}
-function closeBackend(){document.getElementById('backend-page').classList.remove('open');history.pushState({},'',window.location.pathname+window.location.search);}
-window.addEventListener('hashchange',()=>{
-  if(window.location.hash==='#backend')openBackend();
-  else document.getElementById('backend-page').classList.remove('open');
-});
+function openBackend(){document.getElementById('backend-page').classList.add('open');if(loggedIn)showAdminUI();}
+function closeBackend(){document.getElementById('backend-page').classList.remove('open');}
+window.addEventListener('hashchange',()=>{document.getElementById('backend-page').classList.remove('open');history.replaceState({},'',window.location.pathname);});
 
 // NAV
 function buildNav(){
@@ -412,7 +409,13 @@ function buildEmbed(m){
   if(m.type==='youtube'){const id=extractYT(m.url);return id?`<div class="embed-wrap"><iframe src="https://www.youtube.com/embed/${id}" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige YouTube-URL</p>';}
   if(m.type==='vimeo'){const id=extractVimeo(m.url);return id?`<div class="embed-wrap"><iframe src="https://player.vimeo.com/video/${id}" allowfullscreen allow="autoplay;fullscreen;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige Vimeo-URL</p>';}
   if(m.type==='soundcloud')return`<div class="embed-audio"><iframe height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(m.url)}&color=%231a1a1a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false"></iframe></div>`;
-  if(m.type==='bandcamp'){const w=m.url.replace(/<iframe/i,'<iframe style="width:100%;border:0;"');return`<div class="embed-audio">${w}</div>`;}
+  if(m.type==='bandcamp'){
+    // Unterstützt sowohl die src-URL direkt als auch den kopierten iframe-Code
+    let src=m.url;
+    const match=m.url.match(/src=["']([^"']+)["']/);
+    if(match)src=match[1];
+    return`<div class="embed-audio"><iframe style="width:100%;height:120px;border:0;" src="${escH(src)}" seamless></iframe></div>`;
+  }
   if(m.type==='instagram'||m.type==='link')return`<a class="ext-link" href="${escH(m.url)}" target="_blank" rel="noopener">${escH(m.caption||m.url)}</a>`;
   return'';
 }
@@ -634,7 +637,7 @@ function editProject(sectionId,idx){
         <option value="youtube">▶ YouTube URL</option>
         <option value="vimeo">▶ Vimeo URL</option>
         <option value="soundcloud">🎵 SoundCloud URL</option>
-        <option value="bandcamp">🎵 Bandcamp (iframe-Code von Bandcamp kopieren)</option>
+        <option value="bandcamp">🎵 Bandcamp (nur die src-URL einfügen)</option>
         <option value="instagram">📸 Instagram Link</option>
         <option value="link">🔗 Externer Link (Website etc.)</option>
       </select>
@@ -736,10 +739,8 @@ function init(){
   data=migrateData(data);
   renderAll();
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
-  // #backend → Backend öffnen, sonst immer Startseite
-  if(window.location.hash==='#backend'){
-    openBackend();
-  }
+  // Hash IMMER entfernen — Startseite ohne Ausnahme
+  history.replaceState({},'',window.location.pathname);
 }
 init();
 </script>
