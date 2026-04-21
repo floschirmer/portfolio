@@ -5,34 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title id="site-title-tag">FLORIAN SCHIRMER</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#ffffff;--text:#1a1a1a;--muted:#888;--line:#d0cdc8;}
     *{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
-    body{background:var(--bg);color:var(--text);font-family:'Karla',sans-serif;font-weight:300;min-height:100vh;}
+    body{background:var(--bg);color:var(--text);font-family:'Viaoda Libre',cursive;font-weight:300;min-height:100vh;}
     #app{display:flex;flex-direction:column;min-height:100vh;}
-    header{padding:2.5rem 4rem 2rem;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;}
-    .site-name{font-family:'EB Garamond',serif;font-size:1.4rem;font-weight:400;letter-spacing:0.05em;text-transform:uppercase;color:var(--text);cursor:pointer;display:block;}
+    header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;}
+    .site-name{font-family:'Viaoda Libre',cursive;font-size:1.4rem;font-weight:400;letter-spacing:0.05em;text-transform:uppercase;color:var(--text);cursor:pointer;display:block;}
     .site-sub{font-size:0.78rem;color:var(--muted);letter-spacing:0.08em;margin-top:0.2rem;}
     .header-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.7rem;}
     nav{display:flex;flex-wrap:wrap;justify-content:flex-end;}
     nav a{font-size:0.78rem;letter-spacing:0.12em;text-transform:lowercase;color:var(--muted);text-decoration:none;margin-left:2rem;padding-bottom:2px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s;cursor:pointer;}
     nav a:hover,nav a.active{color:var(--text);border-bottom-color:var(--text);}
     .lang-switch{display:flex;gap:0;align-self:flex-end;}
-    .lang-btn{background:none;border:none;font-family:'Karla',sans-serif;font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);cursor:pointer;padding:0.1rem 0.4rem;transition:color .2s;}
+    .lang-btn{background:none;border:none;font-family:'Viaoda Libre',cursive;font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);cursor:pointer;padding:0.1rem 0.4rem;transition:color .2s;}
     .lang-btn.active{color:var(--text);font-weight:500;}
     .lang-sep{font-size:0.7rem;color:var(--line);line-height:1.4;}
     main{flex:1;padding:3rem 4rem;max-width:960px;}
-    footer{padding:2rem 4rem;border-top:1px solid var(--line);font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;}
+    footer{padding:2rem 4rem;font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;}
     .view{display:none;}.view.active{display:block;}
     /* HOME */
-    .home-intro{font-family:'EB Garamond',serif;font-size:1.1rem;line-height:1.9;max-width:500px;color:#555;margin-bottom:3rem;}
+    .home-intro{font-family:'Viaoda Libre',cursive;font-size:1.1rem;line-height:1.9;max-width:500px;color:#555;margin-bottom:3rem;}
     .events-section{margin-bottom:2.5rem;}
     .events-heading{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--line);}
     .event-item{display:flex;align-items:baseline;gap:1.5rem;padding:0.9rem 0;border-bottom:1px solid var(--line);}
     .event-date{font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;min-width:90px;flex-shrink:0;}
-    .event-title{font-family:'EB Garamond',serif;font-size:1rem;}
+    .event-title{font-family:'Viaoda Libre',cursive;font-size:1rem;}
     .event-title a{color:var(--text);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s;}
     .event-title a:hover{border-bottom-color:var(--text);}
     .event-past .event-title{color:var(--muted);}
@@ -42,13 +42,13 @@
     .project-item:first-child{border-top:1px solid var(--line);}
     .project-item:hover{opacity:0.6;}
     .project-item-header{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:0.4rem;}
-    .project-title{font-family:'EB Garamond',serif;font-size:1.15rem;font-weight:400;}
+    .project-title{font-family:'Viaoda Libre',cursive;font-size:1.15rem;font-weight:400;}
     .project-year{font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;}
     .project-short-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;max-width:500px;}
     /* SINGLE PROJECT */
     .back-btn{font-size:0.72rem;letter-spacing:0.1em;color:var(--muted);cursor:pointer;border:none;background:none;padding:0;margin-bottom:2.5rem;display:inline-flex;align-items:center;gap:0.4rem;transition:color .2s;}
     .back-btn:hover{color:var(--text);}
-    .project-heading{font-family:'EB Garamond',serif;font-size:2rem;font-weight:400;margin-bottom:0.3rem;}
+    .project-heading{font-family:'Viaoda Libre',cursive;font-size:2rem;font-weight:400;margin-bottom:0.3rem;}
     .project-meta{font-size:0.75rem;color:var(--muted);letter-spacing:0.1em;margin-bottom:2rem;}
     .project-desc{font-size:0.92rem;line-height:1.9;margin-bottom:2rem;max-width:600px;color:#333;}
     .media-block{margin-bottom:2rem;}
@@ -60,27 +60,27 @@
     .photo-grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.8rem;margin-bottom:2rem;}
     .photo-grid-view img{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;display:block;transition:opacity .2s;}
     .photo-grid-view img:hover{opacity:0.8;}
-    .ext-link{display:inline-block;margin-top:0.5rem;font-family:'Karla',sans-serif;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--text);padding-bottom:2px;text-decoration:none;transition:opacity .2s;}
+    .ext-link{display:inline-block;margin-top:0.5rem;font-family:'Viaoda Libre',cursive;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--text);padding-bottom:2px;text-decoration:none;transition:opacity .2s;}
     .ext-link:hover{opacity:0.6;}
     /* BIO */
     .bio-grid{display:grid;grid-template-columns:400px 1fr;gap:3rem;align-items:start;}
     .bio-img{width:100%;display:block;}
     .bio-img-placeholder{width:100%;aspect-ratio:2/3;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
-    .bio-text{font-family:'EB Garamond',serif;font-size:1.05rem;line-height:1.9;font-weight:400;}
+    .bio-text{font-family:'Viaoda Libre',cursive;font-size:1.05rem;line-height:1.9;font-weight:400;}
     /* KONTAKT */
     .contact-links-grid{display:flex;flex-direction:column;margin-bottom:3rem;}
     .contact-link-item{display:flex;align-items:baseline;gap:2rem;border-bottom:1px solid var(--line);padding:1rem 0;}
     .contact-link-item:first-child{border-top:1px solid var(--line);}
     .contact-link-label{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);min-width:110px;flex-shrink:0;}
-    .contact-link-val a{font-family:'EB Garamond',serif;font-size:1.05rem;color:var(--text);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;transition:border-color .2s;}
+    .contact-link-val a{font-family:'Viaoda Libre',cursive;font-size:1.05rem;color:var(--text);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;transition:border-color .2s;}
     .contact-link-val a:hover{border-color:var(--text);}
     .contact-section-title{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;}
     .mail-form{max-width:500px;}
     .mail-form label{display:block;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;margin-top:1.2rem;}
-    .mail-form input,.mail-form textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);padding:0.5rem 0;font-family:'Karla',sans-serif;font-weight:300;font-size:0.9rem;color:var(--text);outline:none;transition:border-color .2s;resize:none;}
+    .mail-form input,.mail-form textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);padding:0.5rem 0;font-family:'Viaoda Libre',cursive;font-weight:300;font-size:0.9rem;color:var(--text);outline:none;transition:border-color .2s;resize:none;}
     .mail-form input:focus,.mail-form textarea:focus{border-color:var(--text);}
     .mail-form textarea{height:120px;}
-    .mail-form button{margin-top:1.5rem;background:var(--text);color:var(--bg);border:none;padding:0.7rem 2rem;font-family:'Karla',sans-serif;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
+    .mail-form button{margin-top:1.5rem;background:var(--text);color:var(--bg);border:none;padding:0.7rem 2rem;font-family:'Viaoda Libre',cursive;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
     .mail-form button:hover{opacity:0.7;}
     .form-status{margin-top:1rem;font-size:0.8rem;color:var(--muted);}
     /* LIGHTBOX */
@@ -93,24 +93,24 @@
     #backend-page.open{display:block;}
     .backend-wrap{max-width:720px;margin:0 auto;padding:3rem 2rem;}
     .backend-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--line);}
-    .backend-title{font-family:'EB Garamond',serif;font-size:1.5rem;font-weight:400;}
+    .backend-title{font-family:'Viaoda Libre',cursive;font-size:1.5rem;font-weight:400;}
     .backend-close{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;border:none;background:none;transition:color .2s;}
     .backend-close:hover{color:var(--text);}
     #pw-gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:1.2rem;}
-    #pw-gate h3{font-family:'EB Garamond',serif;font-size:1.2rem;font-weight:400;}
-    #pw-input{border:none;border-bottom:1px solid var(--line);background:transparent;padding:0.5rem 0;font-family:'Karla',sans-serif;font-size:0.9rem;outline:none;width:220px;text-align:center;letter-spacing:0.2em;}
+    #pw-gate h3{font-family:'Viaoda Libre',cursive;font-size:1.2rem;font-weight:400;}
+    #pw-input{border:none;border-bottom:1px solid var(--line);background:transparent;padding:0.5rem 0;font-family:'Viaoda Libre',cursive;font-size:0.9rem;outline:none;width:220px;text-align:center;letter-spacing:0.2em;}
     #pw-error{font-size:0.75rem;color:#c00;min-height:1rem;}
-    #pw-gate button{background:var(--text);color:var(--bg);border:none;padding:0.6rem 1.5rem;font-family:'Karla',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;}
+    #pw-gate button{background:var(--text);color:var(--bg);border:none;padding:0.6rem 1.5rem;font-family:'Viaoda Libre',cursive;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;}
     #admin-ui{display:none;}
     #admin-ui.visible{display:block;}
     .admin-section{margin-bottom:1.5rem;}
     .admin-section-title{font-size:0.67rem;letter-spacing:0.15em;text-transform:uppercase;color:#888;margin-bottom:0.7rem;padding-bottom:0.4rem;border-bottom:1px solid #eee;}
     .admin-field{margin-bottom:0.7rem;}
     .admin-field label{display:block;font-size:0.64rem;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:0.25rem;}
-    .admin-field input,.admin-field textarea,.admin-field select{width:100%;border:1px solid #ddd;padding:0.4rem 0.6rem;font-family:'Karla',sans-serif;font-size:0.83rem;color:#1a1a1a;outline:none;background:#fafafa;transition:border-color .2s;resize:vertical;}
+    .admin-field input,.admin-field textarea,.admin-field select{width:100%;border:1px solid #ddd;padding:0.4rem 0.6rem;font-family:'Viaoda Libre',cursive;font-size:0.83rem;color:#1a1a1a;outline:none;background:#fafafa;transition:border-color .2s;resize:vertical;}
     .admin-field input:focus,.admin-field textarea:focus,.admin-field select:focus{border-color:#1a1a1a;background:white;}
     .admin-field textarea{height:80px;}
-    .admin-btn{background:#1a1a1a;color:white;border:none;padding:0.4rem 0.9rem;font-family:'Karla',sans-serif;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-right:0.3rem;margin-top:0.3rem;display:inline-block;transition:background .2s;}
+    .admin-btn{background:#1a1a1a;color:white;border:none;padding:0.4rem 0.9rem;font-family:'Viaoda Libre',cursive;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-right:0.3rem;margin-top:0.3rem;display:inline-block;transition:background .2s;}
     .admin-btn:hover{background:#444;}
     .admin-btn.danger{background:#c00;}.admin-btn.danger:hover{background:#e00;}
     .admin-btn.secondary{background:#888;}.admin-btn.secondary:hover{background:#666;}
@@ -138,7 +138,7 @@
     .export-box{background:#f0f7e8;border:1px solid #b8dba0;padding:1.2rem;margin-bottom:1.5rem;}
     .export-box-title{font-size:0.67rem;letter-spacing:0.15em;text-transform:uppercase;color:#3a7a20;margin-bottom:0.5rem;font-weight:500;}
     .export-box p{font-size:0.82rem;color:#444;line-height:1.6;margin-bottom:0.7rem;}
-    .export-btn{background:#3a7a20;color:white;border:none;padding:0.5rem 1.4rem;font-family:'Karla',sans-serif;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
+    .export-btn{background:#3a7a20;color:white;border:none;padding:0.5rem 1.4rem;font-family:'Viaoda Libre',cursive;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;}
     .export-btn:hover{background:#2a5a15;}
     .save-notice{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a1a1a;color:white;padding:0.45rem 0.9rem;font-size:0.7rem;letter-spacing:0.1em;z-index:600;opacity:0;transition:opacity .3s;pointer-events:none;}
     .save-notice.show{opacity:1;}
@@ -368,8 +368,9 @@ function formatDate(d){if(!d)return'';try{return new Date(d+'T12:00:00').toLocal
 function renderHomeEvents(){
   const el=document.getElementById('home-events');
   const events=data.events||[];if(!events.length){el.innerHTML='';return;}
-  const upcoming=events.filter(e=>!e.isPast&&isUpcoming(e)).sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const past=events.filter(e=>e.isPast||!isUpcoming(e)).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  // isPast-Flag hat Priorität — dann nach Datum sortieren
+  const upcoming=events.filter(e=>!e.isPast).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const past=events.filter(e=>e.isPast).sort((a,b)=>new Date(b.date)-new Date(a.date));
   let html='';
   if(upcoming.length){html+=`<div class="events-section"><div class="events-heading">${t('upcoming')}</div>`;upcoming.forEach(ev=>{html+=`<div class="event-item"><span class="event-date">${formatDate(ev.date)}</span><span class="event-title">${ev.link?`<a href="${escH(ev.link)}" target="_blank">${escH(L(ev.title))}</a>`:escH(L(ev.title))}</span></div>`;});html+='</div>';}
   if(past.length){html+=`<div class="events-section"><div class="events-heading">${t('past')}</div>`;past.forEach(ev=>{html+=`<div class="event-item event-past"><span class="event-date">${formatDate(ev.date)}</span><span class="event-title">${ev.link?`<a href="${escH(ev.link)}" target="_blank">${escH(L(ev.title))}</a>`:escH(L(ev.title))}</span></div>`;});html+='</div>';}
@@ -636,7 +637,7 @@ function editProject(sectionId,idx){
     <div class="admin-field"><label>Beschreibung (Detailseite) DE / EN</label><div class="bilingual"><div><div class="bilingual-label">🇩🇪</div><textarea id="ep-dde">${escH((p.desc||{}).de||'')}</textarea></div><div><div class="bilingual-label">🇬🇧</div><textarea id="ep-den">${escH((p.desc||{}).en||'')}</textarea></div></div></div>
     <div class="admin-field"><label>Medien</label>
       <div id="ep-ml-${sectionId}-${idx}"></div>
-      <select id="ep-mtype" style="border:1px solid #ddd;padding:.38rem;font-size:.8rem;font-family:Karla,sans-serif;width:100%;margin-bottom:.4rem;background:#fafafa;outline:none;">
+      <select id="ep-mtype" style="border:1px solid #ddd;padding:.38rem;font-size:.8rem;font-family:'Viaoda Libre',cursive;width:100%;margin-bottom:.4rem;background:#fafafa;outline:none;">
         <option value="photo">📷 Foto (URL)</option>
         <option value="youtube">▶ YouTube URL</option>
         <option value="vimeo">▶ Vimeo URL</option>
@@ -645,8 +646,8 @@ function editProject(sectionId,idx){
         <option value="instagram">📸 Instagram Link</option>
         <option value="link">🔗 Externer Link (Website etc.)</option>
       </select>
-      <input id="ep-murl" placeholder="URL oder iframe-Code einfügen" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:Karla,sans-serif;margin-bottom:.35rem;outline:none;"/>
-      <input id="ep-mcap" placeholder="Beschriftung — z.B. 'Instagram' oder 'Mehr Info'" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:Karla,sans-serif;margin-bottom:.5rem;outline:none;"/>
+      <input id="ep-murl" placeholder="URL oder iframe-Code einfügen" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:'Viaoda Libre',cursive;margin-bottom:.35rem;outline:none;"/>
+      <input id="ep-mcap" placeholder="Beschriftung — z.B. 'Instagram' oder 'Mehr Info'" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:'Viaoda Libre',cursive;margin-bottom:.5rem;outline:none;"/>
       <button class="admin-btn secondary small" onclick="addMedia('${sectionId}',${idx})">+ Medium hinzufügen</button>
     </div>
     <div style="margin-top:.7rem;"><button class="admin-btn" onclick="saveProject('${sectionId}',${idx})">Speichern</button><button class="admin-btn secondary" onclick="renderTabProjects('${sectionId}')">Abbrechen</button></div>`;
@@ -701,8 +702,8 @@ function renderTabKontakt(){
       <div id="contact-admin-list"></div>
       <div style="border:1px solid #eee;padding:.8rem;margin-top:.5rem;background:#fafafa;">
         <div class="admin-section-title">Neuer Link</div>
-        <input id="new-cl-label" placeholder="Bezeichnung (z.B. Instagram)" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:Karla,sans-serif;margin-bottom:.35rem;outline:none;"/>
-        <input id="new-cl-url" placeholder="URL (z.B. https://instagram.com/deinname)" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:Karla,sans-serif;margin-bottom:.5rem;outline:none;"/>
+        <input id="new-cl-label" placeholder="Bezeichnung (z.B. Instagram)" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:'Viaoda Libre',cursive;margin-bottom:.35rem;outline:none;"/>
+        <input id="new-cl-url" placeholder="URL (z.B. https://instagram.com/deinname)" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:'Viaoda Libre',cursive;margin-bottom:.5rem;outline:none;"/>
         <button class="admin-btn" onclick="addCL()">+ Hinzufügen</button>
       </div>
     </div>`;
@@ -712,7 +713,7 @@ function renderContactAdmin(){
   const el=document.getElementById('contact-admin-list');if(!el)return;
   const links=data.contactLinks||[];
   if(!links.length){el.innerHTML='<p style="font-size:.73rem;color:#aaa;margin-bottom:.5rem;">Noch keine Links.</p>';return;}
-  el.innerHTML=links.map((l,i)=>`<div class="contact-admin-card"><div class="cac-info"><input value="${escH(l.label)}" onchange="updateCL(${i},'label',this.value)" style="border:none;border-bottom:1px solid #eee;background:transparent;font-size:.78rem;font-weight:500;font-family:Karla,sans-serif;width:100%;outline:none;margin-bottom:.2rem;"/><input value="${escH(l.url)}" onchange="updateCL(${i},'url',this.value)" style="border:none;border-bottom:1px solid #eee;background:transparent;font-size:.7rem;color:#888;font-family:Karla,sans-serif;width:100%;outline:none;"/></div><button class="admin-btn danger small" onclick="deleteCL(${i})">✕</button></div>`).join('');
+  el.innerHTML=links.map((l,i)=>`<div class="contact-admin-card"><div class="cac-info"><input value="${escH(l.label)}" onchange="updateCL(${i},'label',this.value)" style="border:none;border-bottom:1px solid #eee;background:transparent;font-size:.78rem;font-weight:500;font-family:'Viaoda Libre',cursive;width:100%;outline:none;margin-bottom:.2rem;"/><input value="${escH(l.url)}" onchange="updateCL(${i},'url',this.value)" style="border:none;border-bottom:1px solid #eee;background:transparent;font-size:.7rem;color:#888;font-family:'Viaoda Libre',cursive;width:100%;outline:none;"/></div><button class="admin-btn danger small" onclick="deleteCL(${i})">✕</button></div>`).join('');
 }
 function addCL(){
   const label=document.getElementById('new-cl-label').value.trim(),url=document.getElementById('new-cl-url').value.trim();
