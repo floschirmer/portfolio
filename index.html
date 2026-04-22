@@ -447,14 +447,39 @@ function applyLangUI(){
   s('cf-title','cfTitle');s('cf-label-name','cfName');s('cf-label-email','cfEmail');
   s('cf-label-subject','cfSubject');s('cf-label-msg','cfMsg');s('cf-send-btn','cfSend');
 }
-function sendMail(){
+async function sendMail(){
   const email=document.getElementById('cf-email').value.trim();
   const msg=document.getElementById('cf-msg').value.trim();
   const name=document.getElementById('cf-name').value.trim();
   const subject=document.getElementById('cf-subject').value.trim();
-  if(!email||!msg){document.getElementById('form-status').textContent=t('cfFill');return;}
-  window.location.href=`mailto:florian-schirmer@outlook.com?subject=${encodeURIComponent(subject||'Kontakt')}&body=${encodeURIComponent('Von: '+name+' <'+email+'>\n\n'+msg)}`;
-  document.getElementById('form-status').textContent=t('cfOpen');
+  const status=document.getElementById('form-status');
+  const btn=document.getElementById('cf-send-btn');
+  if(!email||!msg){status.textContent=t('cfFill');return;}
+  btn.disabled=true;
+  status.style.color='var(--muted)';
+  status.textContent=lang==='en'?'Sending…':'Wird gesendet…';
+  try{
+    const res=await fetch('https://formspree.io/f/xrerydal',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({name,email,subject,message:msg})
+    });
+    if(res.ok){
+      status.style.color='green';
+      status.textContent=lang==='en'?'Message sent — thank you!':'Nachricht gesendet — danke!';
+      document.getElementById('cf-name').value='';
+      document.getElementById('cf-email').value='';
+      document.getElementById('cf-subject').value='';
+      document.getElementById('cf-msg').value='';
+    }else{
+      status.style.color='#c00';
+      status.textContent=lang==='en'?'Something went wrong. Please try again.':'Etwas ist schiefgelaufen. Bitte nochmal versuchen.';
+    }
+  }catch(e){
+    status.style.color='#c00';
+    status.textContent=lang==='en'?'No connection. Please try again.':'Keine Verbindung. Bitte nochmal versuchen.';
+  }
+  btn.disabled=false;
 }
 
 // LIGHTBOX
