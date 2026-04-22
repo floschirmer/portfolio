@@ -4,16 +4,28 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title id="site-title-tag">FLORIAN SCHIRMER</title>
+  <meta name="description" content="Flo Schirmer – Komposition &amp; Klanggestaltung in Bands und für Theater und Film."/>
+  <meta name="description" lang="en" content="Flo Schirmer – Composition &amp; Sound Design in Bands and for Theatre and Film."/>
+  <meta name="keywords" content="Flo Schirmer, Komponist, Klanggestaltung, Komposition, Theater, Film, Freiburg, Mannheim, L-Tryptophan, Spa Boys, Timbeau"/>
+  <meta name="author" content="Flo Schirmer"/>
+  <meta property="og:title" content="Flo Schirmer – Komposition &amp; Klanggestaltung"/>
+  <meta property="og:description" content="Komposition &amp; Klanggestaltung in Bands und für Theater und Film."/>
+  <meta property="og:url" content="https://floschirmer.de"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:title" content="Flo Schirmer – Komposition &amp; Klanggestaltung"/>
+  <meta name="twitter:description" content="Komposition &amp; Klanggestaltung in Bands und für Theater und Film."/>
+  <link rel="canonical" href="https://floschirmer.de"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#ffffff;--text:#1a1a1a;--muted:#888;--line:#d0cdc8;}
     *{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
-    body{background:var(--bg);color:var(--text);font-family:'Viaoda Libre',cursive;font-weight:300;min-height:100vh;}
+    body{background:var(--bg);color:var(--text);font-family:'Viaoda Libre',cursive;font-weight:300;min-height:100vh;text-transform:lowercase;}
     #app{display:flex;flex-direction:column;min-height:100vh;}
     header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;}
-    .site-name{font-family:'Viaoda Libre',cursive;font-size:1.4rem;font-weight:400;letter-spacing:0.05em;text-transform:uppercase;color:var(--text);cursor:pointer;display:block;}
+    .site-name{font-family:'Viaoda Libre',cursive;font-size:1.4rem;font-weight:400;letter-spacing:0.05em;text-transform:lowercase;color:var(--text);cursor:pointer;display:block;}
     .site-sub{font-size:0.78rem;color:var(--muted);letter-spacing:0.08em;margin-top:0.2rem;}
     .header-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.7rem;}
     nav{display:flex;flex-wrap:wrap;justify-content:flex-end;}
@@ -29,17 +41,17 @@
     /* HOME */
     .home-intro{font-family:'Viaoda Libre',cursive;font-size:1.1rem;line-height:1.9;max-width:500px;color:#555;margin-bottom:3rem;}
     .events-section{margin-bottom:2.5rem;}
-    .events-heading{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--line);}
-    .event-item{display:flex;align-items:baseline;gap:1.5rem;padding:0.9rem 0;border-bottom:1px solid var(--line);}
+    .events-heading{font-size:0.7rem;letter-spacing:0.12em;text-transform:lowercase;color:var(--muted);margin-bottom:1rem;padding-bottom:0;}
+    .event-item{display:flex;align-items:baseline;gap:1.5rem;padding:0.9rem 0;}
     .event-date{font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;min-width:90px;flex-shrink:0;}
     .event-title{font-family:'Viaoda Libre',cursive;font-size:1rem;}
-    .event-title a{color:var(--text);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s;}
-    .event-title a:hover{border-bottom-color:var(--text);}
+    .event-title a{color:var(--text);text-decoration:none;}
+    .event-title a:hover{text-decoration:underline;}
     .event-past .event-title{color:var(--muted);}
     /* PROJECT LIST */
     .project-list{list-style:none;}
-    .project-item{border-bottom:1px solid var(--line);padding:1.4rem 0;cursor:pointer;transition:opacity .15s;}
-    .project-item:first-child{border-top:1px solid var(--line);}
+    .project-item{padding:1.4rem 0;cursor:pointer;transition:opacity .15s;}
+    .project-item:first-child{}
     .project-item:hover{opacity:0.6;}
     .project-item-header{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:0.4rem;}
     .project-title{font-family:'Viaoda Libre',cursive;font-size:1.15rem;font-weight:400;}
@@ -60,7 +72,7 @@
     .photo-grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.8rem;margin-bottom:2rem;}
     .photo-grid-view img{width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;display:block;transition:opacity .2s;}
     .photo-grid-view img:hover{opacity:0.8;}
-    .ext-link{display:inline-block;margin-top:0.5rem;font-family:'Viaoda Libre',cursive;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);border-bottom:1px solid var(--text);padding-bottom:2px;text-decoration:none;transition:opacity .2s;}
+    .ext-link{display:inline-block;margin-top:0.5rem;font-family:'Viaoda Libre',cursive;font-size:0.78rem;letter-spacing:0.1em;text-transform:lowercase;color:var(--text);border-bottom:none;padding-bottom:2px;text-decoration:none;transition:opacity .2s;}
     .ext-link:hover{opacity:0.6;}
     /* BIO */
     .bio-grid{display:grid;grid-template-columns:400px 1fr;gap:3rem;align-items:start;}
@@ -69,18 +81,18 @@
     .bio-text{font-family:'Viaoda Libre',cursive;font-size:1.05rem;line-height:1.9;font-weight:400;}
     /* KONTAKT */
     .contact-links-grid{display:flex;flex-direction:column;margin-bottom:3rem;}
-    .contact-link-item{display:flex;align-items:baseline;gap:2rem;border-bottom:1px solid var(--line);padding:1rem 0;}
-    .contact-link-item:first-child{border-top:1px solid var(--line);}
-    .contact-link-label{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);min-width:110px;flex-shrink:0;}
-    .contact-link-val a{font-family:'Viaoda Libre',cursive;font-size:1.05rem;color:var(--text);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;transition:border-color .2s;}
+    .contact-link-item{display:flex;align-items:baseline;gap:2rem;padding:1rem 0;}
+    .contact-link-item:first-child{}
+    .contact-link-label{font-size:0.72rem;letter-spacing:0.08em;text-transform:lowercase;color:var(--muted);min-width:110px;flex-shrink:0;}
+    .contact-link-val a{font-family:'Viaoda Libre',cursive;font-size:1.05rem;color:var(--text);text-decoration:none;transition:color .2s;}
     .contact-link-val a:hover{border-color:var(--text);}
-    .contact-section-title{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;}
+    .contact-section-title{font-size:0.7rem;letter-spacing:0.1em;text-transform:lowercase;color:var(--muted);margin-bottom:1.5rem;}
     .mail-form{max-width:500px;}
-    .mail-form label{display:block;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem;margin-top:1.2rem;}
+    .mail-form label{display:block;font-size:0.7rem;letter-spacing:0.08em;text-transform:lowercase;color:var(--muted);margin-bottom:0.4rem;margin-top:1.2rem;}
     .mail-form input,.mail-form textarea{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);padding:0.5rem 0;font-family:'Viaoda Libre',cursive;font-weight:300;font-size:0.9rem;color:var(--text);outline:none;transition:border-color .2s;resize:none;}
     .mail-form input:focus,.mail-form textarea:focus{border-color:var(--text);}
     .mail-form textarea{height:120px;}
-    .mail-form button{margin-top:1.5rem;background:var(--text);color:var(--bg);border:none;padding:0.7rem 2rem;font-family:'Viaoda Libre',cursive;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
+    .mail-form button{margin-top:1.5rem;background:var(--text);color:var(--bg);border:none;padding:0.7rem 2rem;font-family:'Viaoda Libre',cursive;font-size:0.75rem;letter-spacing:0.08em;text-transform:lowercase;cursor:pointer;transition:opacity .2s;}
     .mail-form button:hover{opacity:0.7;}
     .form-status{margin-top:1rem;font-size:0.8rem;color:var(--muted);}
     /* LIGHTBOX */
