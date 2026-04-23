@@ -75,7 +75,7 @@
     .ext-link{display:inline-block;margin-top:0.5rem;font-family:'Viaoda Libre',cursive;font-size:0.78rem;letter-spacing:0.1em;text-transform:lowercase;color:var(--text);border-bottom:none;padding-bottom:2px;text-decoration:none;transition:opacity .2s;}
     .ext-link:hover{opacity:0.6;}
     /* BIO */
-    .bio-grid{display:grid;grid-template-columns:400px 1fr;gap:3rem;align-items:start;}
+    .bio-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:3rem;align-items:start;}
     .bio-img{width:100%;display:block;}
     .bio-img-placeholder{width:100%;aspect-ratio:2/3;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
     .bio-text{font-family:'Viaoda Libre',cursive;font-size:1.05rem;line-height:1.9;font-weight:400;}
@@ -95,6 +95,22 @@
     .mail-form button{margin-top:1.5rem;background:var(--text);color:var(--bg);border:none;padding:0.7rem 2rem;font-family:'Viaoda Libre',cursive;font-size:0.75rem;letter-spacing:0.08em;text-transform:lowercase;cursor:pointer;transition:opacity .2s;}
     .mail-form button:hover{opacity:0.7;}
     .form-status{margin-top:1rem;font-size:0.8rem;color:var(--muted);}
+
+    /* TERMINE HINTERGRUNDBILD */
+    .home-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;display:none;}
+    .home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(255,255,255,0.12) 0%,rgba(255,255,255,0.12) 35%,rgba(255,255,255,0.70) 52%,rgba(255,255,255,0.93) 100%);}
+    #view-home .home-intro,#view-home #home-events{position:relative;z-index:1;}
+    /* RUBRIK ZWEISPALTIG */
+    .section-two-col{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+    .section-media-col{position:sticky;top:6rem;}
+    .section-media-col .media-block{margin-bottom:1.5rem;}
+    .section-media-col .embed-audio iframe{width:100%;border:none;display:block;}
+    .section-media-col .embed-wrap{position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;}
+    .section-media-col .embed-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+    @media(max-width:700px){
+      .section-two-col{grid-template-columns:1fr;}
+      .section-media-col{position:static;}
+    }
     /* LIGHTBOX */
     .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;align-items:center;justify-content:center;cursor:pointer;}
     .lightbox.open{display:flex;}
@@ -189,11 +205,15 @@
   </header>
   <main>
     <div class="view active" id="view-home">
+      <div class="home-bg" id="home-bg"></div>
       <p class="home-intro" id="home-text">Willkommen.</p>
       <div id="home-events"></div>
     </div>
     <div class="view" id="view-section">
-      <ul class="project-list" id="section-list"></ul>
+      <div class="section-two-col">
+        <ul class="project-list" id="section-list"></ul>
+        <div class="section-media-col" id="section-media-col"></div>
+      </div>
     </div>
     <div class="view" id="view-project">
       <button class="back-btn" id="back-btn">← zurück</button>
@@ -289,6 +309,8 @@ function migrateData(d){
   if(!d.contactLinks)d.contactLinks=[];
   if(!d.events)d.events=[];
   if(!d.sections)d.sections=defaultSections();
+  if(!d.sectionMedia)d.sectionMedia={};
+  if(!d.eventsImage)d.eventsImage={url:'',active:false};
   if(typeof d.homeText==='string')d.homeText={de:d.homeText,en:''};
   if(typeof d.sub==='string')d.sub={de:d.sub,en:''};
   if(d.bio&&typeof d.bio.text==='string')d.bio.text={de:d.bio.text,en:''};
@@ -380,6 +402,8 @@ function renderHomeText(){document.getElementById('home-text').innerHTML=escH(L(
 function isUpcoming(ev){return(new Date(ev.date+'T23:59:59')-new Date())/3600000>-24;}
 function formatDate(d){if(!d)return'';try{return new Date(d+'T12:00:00').toLocaleDateString(lang==='en'?'en-GB':'de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});}catch(e){return d;}}
 function renderHomeEvents(){
+  const bg=document.getElementById('home-bg');
+  if(bg){const ei=data.eventsImage||{};if(ei.active&&ei.url){bg.style.backgroundImage="url('"+escH(ei.url)+"')";bg.style.display='block';}else{bg.style.display='none';}}
   const el=document.getElementById('home-events');
   const events=data.events||[];if(!events.length){el.innerHTML='';return;}
   // isPast-Flag hat Priorität — dann nach Datum sortieren
@@ -395,7 +419,7 @@ function renderHomeEvents(){
 function renderSectionList(sectionId){
   const ul=document.getElementById('section-list');
   const projects=data.projects[sectionId]||[];
-  if(!projects.length){ul.innerHTML=`<li style="padding:1rem 0;color:#888;font-size:.85rem;border-top:1px solid #d0cdc8;">${t('noProjects')}</li>`;return;}
+  if(!projects.length){ul.innerHTML=`<li style="padding:1rem 0;color:#888;font-size:.85rem;">${t('noProjects')}</li>`;return;}
   ul.innerHTML=projects.map((p,i)=>`
     <li class="project-item" onclick="navigate('${sectionId}',${i})">
       <div class="project-item-header">
@@ -404,6 +428,16 @@ function renderSectionList(sectionId){
       </div>
       ${L(p.shortDesc)?`<div class="project-short-desc">${escH(L(p.shortDesc))}</div>`:''}
     </li>`).join('');
+  // Rechte Spalte mit Rubrik-Medien befüllen
+  const mediaCol=document.getElementById('section-media-col');
+  if(!mediaCol)return;
+  const sMedia=(data.sectionMedia||{})[sectionId]||[];
+  if(!sMedia.length){mediaCol.innerHTML='';return;}
+  const photos=sMedia.filter(m=>m.type==='photo');
+  let html='';
+  if(photos.length){html+='<div class="photo-grid-view" style="margin-bottom:1.5rem;">';photos.forEach(m=>{html+=`<img src="${escH(m.url)}" alt="" onclick="openLB('${escH(m.url)}')" loading="lazy" onerror="this.style.display='none'" style="aspect-ratio:4/3;object-fit:cover;"/>`;});html+='</div>';}
+  sMedia.filter(m=>m.type!=='photo').forEach(m=>{html+=`<div class="media-block">${buildEmbed(m)}`;if(m.caption&&m.type!=='link'&&m.type!=='instagram')html+=`<div class="media-caption">${escH(m.caption)}</div>`;html+='</div>';});
+  mediaCol.innerHTML=html;
 }
 
 // EINZELNES PROJEKT
@@ -607,7 +641,14 @@ function changePw(){
 
 // TERMINE
 function renderTabTermine(){
+  const ei=data.eventsImage||{url:'',active:false};
   document.getElementById('tab-termine').innerHTML=`
+    <div class="admin-section">
+      <div class="admin-section-title">Hintergrundbild (Startseite)</div>
+      <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="ev-img-url" value="${escH(ei.url||'')}" placeholder="https://i.ibb.co/..."/></div>
+      <div class="admin-field"><label>Sichtbar?</label><select id="ev-img-active"><option value="0"${!ei.active?' selected':''}>Nein – kein Bild</option><option value="1"${ei.active?' selected':''}>Ja – Bild anzeigen</option></select></div>
+      <button class="admin-btn" onclick="saveEventsImage()">Speichern</button>
+    </div>
     <div class="admin-section">
       <div class="admin-section-title">Termine</div>
       <div id="ev-list"></div>
@@ -664,12 +705,64 @@ function addEvent(){
   renderEventsAdmin();renderHomeEvents();showSaveNotice();
 }
 function deleteEvent(idx){if(!confirm('Löschen?'))return;data.events.splice(idx,1);renderEventsAdmin();renderHomeEvents();showSaveNotice();}
+function saveEventsImage(){
+  if(!data.eventsImage)data.eventsImage={};
+  data.eventsImage.url=document.getElementById('ev-img-url').value.trim();
+  data.eventsImage.active=document.getElementById('ev-img-active').value==='1';
+  renderHomeEvents();showSaveNotice();
+}
 
 // PROJEKTE
 function renderTabProjects(sectionId){
   const el=document.getElementById('tab-proj_'+sectionId);if(!el)return;
-  el.innerHTML=`<div class="admin-section"><div class="admin-section-title">Projekte</div><div id="pa-${sectionId}"></div><button class="admin-btn" style="margin-top:.6rem;" onclick="addProject('${sectionId}')">+ Projekt hinzufügen</button></div>`;
+  el.innerHTML=`
+    <div class="admin-section">
+      <div class="admin-section-title">Medien — rechte Spalte der Rubrikseite</div>
+      <div id="sm-list-${sectionId}"></div>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:flex-end;margin-top:.5rem;">
+        <select id="sm-type-${sectionId}" style="border:1px solid #ddd;padding:.35rem;font-size:.8rem;font-family:'Viaoda Libre',cursive;background:#fafafa;outline:none;">
+          <option value="photo">📷 Foto</option>
+          <option value="youtube">▶ YouTube</option>
+          <option value="vimeo">▶ Vimeo</option>
+          <option value="soundcloud">🎵 SoundCloud</option>
+          <option value="bandcamp">🎵 Bandcamp</option>
+          <option value="instagram">📸 Instagram</option>
+          <option value="link">🔗 Link</option>
+        </select>
+        <input id="sm-url-${sectionId}" placeholder="URL" style="border:1px solid #ddd;padding:.35rem .5rem;font-size:.8rem;flex:1;min-width:140px;font-family:'Viaoda Libre',cursive;outline:none;"/>
+        <input id="sm-cap-${sectionId}" placeholder="Beschriftung (optional)" style="border:1px solid #ddd;padding:.35rem .5rem;font-size:.8rem;flex:1;min-width:100px;font-family:'Viaoda Libre',cursive;outline:none;"/>
+        <button class="admin-btn secondary small" onclick="addSectionMedia('${sectionId}')">+ Hinzufügen</button>
+      </div>
+    </div>
+    <div class="admin-section"><div class="admin-section-title">Projekte</div><div id="pa-${sectionId}"></div><button class="admin-btn" style="margin-top:.6rem;" onclick="addProject('${sectionId}')">+ Projekt hinzufügen</button></div>`;
+  renderSectionMediaAdmin(sectionId);
   renderProjectCards(sectionId);
+}
+function renderSectionMediaAdmin(sectionId){
+  const el=document.getElementById('sm-list-'+sectionId);if(!el)return;
+  const sm=(data.sectionMedia||{})[sectionId]||[];
+  if(!sm.length){el.innerHTML='<p style="font-size:.7rem;color:#aaa;margin-bottom:.4rem;">Noch keine Medien.</p>';return;}
+  el.innerHTML=sm.map((m,i)=>`<div class="media-admin-item"><span>${typeLabel(m.type)} — ${escH((m.url||'').substring(0,45))}${(m.url||'').length>45?'…':''}</span><button class="admin-btn danger small" onclick="removeSectionMedia('${sectionId}',${i})">✕</button></div>`).join('');
+}
+function addSectionMedia(sectionId){
+  const type=document.getElementById('sm-type-'+sectionId).value;
+  const url=document.getElementById('sm-url-'+sectionId).value.trim();
+  const caption=document.getElementById('sm-cap-'+sectionId).value.trim();
+  if(!url){alert('Bitte URL eingeben.');return;}
+  if(!data.sectionMedia)data.sectionMedia={};
+  if(!data.sectionMedia[sectionId])data.sectionMedia[sectionId]=[];
+  data.sectionMedia[sectionId].push({type,url,caption});
+  document.getElementById('sm-url-'+sectionId).value='';
+  document.getElementById('sm-cap-'+sectionId).value='';
+  renderSectionMediaAdmin(sectionId);
+  if(currentSection===sectionId)renderSectionList(sectionId);
+  showSaveNotice();
+}
+function removeSectionMedia(sectionId,idx){
+  data.sectionMedia[sectionId].splice(idx,1);
+  renderSectionMediaAdmin(sectionId);
+  if(currentSection===sectionId)renderSectionList(sectionId);
+  showSaveNotice();
 }
 function renderProjectCards(sectionId){
   const el=document.getElementById('pa-'+sectionId);if(!el)return;
