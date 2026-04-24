@@ -100,6 +100,11 @@
     .home-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;display:none;}
     .home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to left,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.78) 52%,rgba(255,255,255,0.97) 100%);}
     #view-home .home-intro,#view-home #home-events{position:relative;z-index:1;}
+
+    /* RUBRIK HINTERGRUNDBILD */
+    .section-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-repeat:no-repeat;display:none;}
+    .section-bg::after{content:'';position:absolute;inset:0;}
+    #view-section .section-two-col{position:relative;z-index:1;}
     /* RUBRIK ZWEISPALTIG */
     .section-two-col{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
     .section-media-col{position:sticky;top:6rem;}
@@ -210,6 +215,7 @@
       <div id="home-events"></div>
     </div>
     <div class="view" id="view-section">
+      <div class="section-bg" id="section-bg"></div>
       <div class="section-two-col">
         <ul class="project-list" id="section-list"></ul>
         <div class="section-media-col" id="section-media-col"></div>
@@ -310,6 +316,7 @@ function migrateData(d){
   if(!d.events)d.events=[];
   if(!d.sections)d.sections=defaultSections();
   if(!d.sectionMedia)d.sectionMedia={};
+  if(!d.sectionBg)d.sectionBg={};
   if(!d.eventsImage)d.eventsImage={url:'',active:false};
   if(typeof d.homeText==='string')d.homeText={de:d.homeText,en:''};
   if(typeof d.sub==='string')d.sub={de:d.sub,en:''};
@@ -360,6 +367,9 @@ function buildNav(){
 
 function navigate(sectionId,projectIdx){
   stopAllMedia();
+  // Hintergrundbild verstecken beim Verlassen
+  const bg=document.getElementById('section-bg');if(bg)bg.style.display='none';
+  const overlay=document.getElementById('section-bg-overlay');if(overlay)overlay.style.display='none';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
   if(sectionId==='home'){
@@ -417,6 +427,34 @@ function renderHomeEvents(){
 
 // PROJEKTLISTE
 function renderSectionList(sectionId){
+  // Hintergrundbild anwenden
+  const bg=document.getElementById('section-bg');
+  if(bg){
+    const sb=(data.sectionBg||{})[sectionId]||{};
+    if(sb.active&&sb.url){
+      bg.style.backgroundImage="url('"+escH(sb.url)+"')";
+      bg.style.backgroundPosition=(sb.posX||'50')+'% '+(sb.posY||'50')+'%';
+      // Gradient
+      const dir=sb.gradient||'to left';
+      bg.querySelector? null : null;
+      bg.style.display='block';
+      // Gradient via ::after simulieren wir über ein Overlay-div
+      let overlay=document.getElementById('section-bg-overlay');
+      if(!overlay){overlay=document.createElement('div');overlay.id='section-bg-overlay';overlay.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;';document.getElementById('view-section').prepend(overlay);}
+      const gradMap={
+        'to left':'linear-gradient(to left,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.80) 55%,rgba(255,255,255,0.97) 100%)',
+        'to right':'linear-gradient(to right,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.80) 55%,rgba(255,255,255,0.97) 100%)',
+        'to bottom':'linear-gradient(to bottom,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.80) 55%,rgba(255,255,255,0.97) 100%)',
+        'to top':'linear-gradient(to top,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.80) 55%,rgba(255,255,255,0.97) 100%)'
+      };
+      overlay.style.background=gradMap[dir]||gradMap['to left'];
+      overlay.style.display='block';
+    }else{
+      bg.style.display='none';
+      const overlay=document.getElementById('section-bg-overlay');
+      if(overlay)overlay.style.display='none';
+    }
+  }
   const ul=document.getElementById('section-list');
   const projects=data.projects[sectionId]||[];
   if(!projects.length){ul.innerHTML=`<li style="padding:1rem 0;color:#888;font-size:.85rem;">${t('noProjects')}</li>`;return;}
@@ -715,7 +753,24 @@ function saveEventsImage(){
 // PROJEKTE
 function renderTabProjects(sectionId){
   const el=document.getElementById('tab-proj_'+sectionId);if(!el)return;
+  const sb=(data.sectionBg||{})[sectionId]||{url:'',active:false,posX:'50',posY:'50',gradient:'to left'};
   el.innerHTML=`
+    <div class="admin-section">
+      <div class="admin-section-title">Hintergrundbild der Rubrik-Seite</div>
+      <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="sb-url-${sectionId}" value="${escH(sb.url||'')}" placeholder="https://i.ibb.co/..."/></div>
+      <div class="admin-field"><label>Sichtbar?</label><select id="sb-active-${sectionId}"><option value="0"${!sb.active?' selected':''}>Nein – kein Bild</option><option value="1"${sb.active?' selected':''}>Ja – Bild anzeigen</option></select></div>
+      <div class="admin-field"><label>Bildausschnitt horizontal (0 = ganz links, 50 = mitte, 100 = ganz rechts)</label><input type="range" id="sb-posx-${sectionId}" min="0" max="100" value="${escH(sb.posX||'50')}" oninput="document.getElementById('sb-posx-val-${sectionId}').textContent=this.value+'%'"/><span id="sb-posx-val-${sectionId}" style="font-size:.7rem;margin-left:.4rem;">${escH(sb.posX||'50')}%</span></div>
+      <div class="admin-field"><label>Bildausschnitt vertikal (0 = ganz oben, 50 = mitte, 100 = ganz unten)</label><input type="range" id="sb-posy-${sectionId}" min="0" max="100" value="${escH(sb.posY||'50')}" oninput="document.getElementById('sb-posy-val-${sectionId}').textContent=this.value+'%'"/><span id="sb-posy-val-${sectionId}" style="font-size:.7rem;margin-left:.4rem;">${escH(sb.posY||'50')}%</span></div>
+      <div class="admin-field"><label>Gradient-Richtung (wo ist der Text lesbar?)</label>
+        <select id="sb-grad-${sectionId}">
+          <option value="to left"${sb.gradient==='to left'?' selected':''}>← Links transparent, rechts deckend</option>
+          <option value="to right"${sb.gradient==='to right'?' selected':''}>→ Rechts transparent, links deckend</option>
+          <option value="to bottom"${sb.gradient==='to bottom'?' selected':''}>↓ Oben transparent, unten deckend</option>
+          <option value="to top"${sb.gradient==='to top'?' selected':''}>↑ Unten transparent, oben deckend</option>
+        </select>
+      </div>
+      <button class="admin-btn" onclick="saveSectionBg('${sectionId}')">Speichern</button>
+    </div>
     <div class="admin-section">
       <div class="admin-section-title">Medien — rechte Spalte der Rubrikseite</div>
       <div id="sm-list-${sectionId}"></div>
@@ -755,6 +810,17 @@ function addSectionMedia(sectionId){
   document.getElementById('sm-url-'+sectionId).value='';
   document.getElementById('sm-cap-'+sectionId).value='';
   renderSectionMediaAdmin(sectionId);
+  if(currentSection===sectionId)renderSectionList(sectionId);
+  showSaveNotice();
+}
+function saveSectionBg(sectionId){
+  if(!data.sectionBg)data.sectionBg={};
+  if(!data.sectionBg[sectionId])data.sectionBg[sectionId]={};
+  data.sectionBg[sectionId].url=document.getElementById('sb-url-'+sectionId).value.trim();
+  data.sectionBg[sectionId].active=document.getElementById('sb-active-'+sectionId).value==='1';
+  data.sectionBg[sectionId].posX=document.getElementById('sb-posx-'+sectionId).value;
+  data.sectionBg[sectionId].posY=document.getElementById('sb-posy-'+sectionId).value;
+  data.sectionBg[sectionId].gradient=document.getElementById('sb-grad-'+sectionId).value;
   if(currentSection===sectionId)renderSectionList(sectionId);
   showSaveNotice();
 }
