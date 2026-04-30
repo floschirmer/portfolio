@@ -468,6 +468,12 @@ function migrateData(d){
   if(!d.sectionMedia)d.sectionMedia={};
   if(!d.sectionBg)d.sectionBg={};
   if(!d.eventsImage)d.eventsImage={url:'',active:false};
+  if(!d.homeBg)d.homeBg={url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
+  // Migrate legacy eventsImage into homeBg
+  if(!d.homeBg.url&&d.eventsImage&&d.eventsImage.url){
+    d.homeBg.url=d.eventsImage.url;
+    d.homeBg.active=d.eventsImage.active||false;
+  }
   if(!d.splashAudio)d.splashAudio={source:'tracks',bandcampSrc:'',soundcloudSrc:'',active:false};
   if(!d.splashAudio.tracks)d.splashAudio.tracks=[];
   if(d.splashAudio.source===undefined)d.splashAudio.source='tracks';
@@ -652,7 +658,18 @@ function isUpcoming(ev){return(new Date(ev.date+'T23:59:59')-new Date())/3600000
 function formatDate(d){if(!d)return'';try{return new Date(d+'T12:00:00').toLocaleDateString(lang==='en'?'en-GB':'de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});}catch(e){return d;}}
 function renderHomeEvents(){
   const bg=document.getElementById('home-bg');
-  if(bg){const ei=data.eventsImage||{};if(ei.active&&ei.url){bg.style.backgroundImage="url('"+escH(ei.url)+"')";bg.style.display='block';}else{bg.style.display='none';}}
+  if(bg){
+    const hb=data.homeBg||{};
+    // fallback to eventsImage for legacy data
+    const url=hb.url||(data.eventsImage||{}).url||'';
+    const active=hb.active!==undefined?hb.active:((data.eventsImage||{}).active||false);
+    if(active&&url){
+      bg.style.backgroundImage="url('"+escH(url)+"')";
+      bg.style.backgroundPosition=(hb.posX||'50')+'% '+(hb.posY||'50')+'%';
+      bg.style.opacity=hb.opacity||1;
+      bg.style.display='block';
+    }else{bg.style.display='none';}
+  }
   const el=document.getElementById('home-events');
   const events=data.events||[];if(!events.length){el.innerHTML='';return;}
   // isPast-Flag hat Priorität — dann nach Datum sortieren
@@ -1164,7 +1181,9 @@ function switchTab(id,el){
 
 // ALLGEMEIN
 function renderTabGeneral(){
-  document.getElementById('tab-general').innerHTML=`
+  const hb=data.homeBg||{url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
+  const homeBgBlock=bgAdminBlock('home_page',hb,'Hintergrundbild (Startseite)').replace(/saveSectionBg\('home_page'\)/g,"saveHomeBg()");
+  document.getElementById('tab-general').innerHTML=homeBgBlock+`
     <div class="admin-section">
       <div class="admin-section-title">Website-Infos</div>
       <div class="admin-field"><label>Name / Titel</label><input id="a-name" value="${escH(data.name||'')}"/></div>
@@ -1180,6 +1199,7 @@ function renderTabGeneral(){
       <div id="pw-msg" style="font-size:.73rem;color:#888;min-height:1rem;margin-bottom:.4rem;"></div>
       <button class="admin-btn" onclick="changePw()">Passwort ändern</button>
     </div>`;
+  setTimeout(()=>previewBg('home_page'),50);
 }
 function saveGeneral(){
   data.name=document.getElementById('a-name').value;
@@ -1187,6 +1207,17 @@ function saveGeneral(){
   data.homeText={de:document.getElementById('a-home-de').value,en:document.getElementById('a-home-en').value};
   data.footer=document.getElementById('a-footer').value;
   renderAll();showSaveNotice();
+}
+function saveHomeBg(){
+  if(!data.homeBg)data.homeBg={};
+  data.homeBg.url=(document.getElementById('sb-url-home_page')?.value||'').trim();
+  data.homeBg.active=document.getElementById('sb-active-home_page')?.value==='1';
+  data.homeBg.posX=document.getElementById('sb-posx-home_page')?.value||'50';
+  data.homeBg.posY=document.getElementById('sb-posy-home_page')?.value||'50';
+  data.homeBg.opacity=(parseInt(document.getElementById('sb-opacity-home_page')?.value||100)/100);
+  data.homeBg.glowStrength=parseInt(document.getElementById('sb-glow-home_page')?.value||70);
+  if(currentSection==='home'){renderHomeText();renderHomeEvents();updateBgState();}
+  showSaveNotice();
 }
 function changePw(){
   const p1=document.getElementById('a-pw1').value,p2=document.getElementById('a-pw2').value,msg=document.getElementById('pw-msg');
