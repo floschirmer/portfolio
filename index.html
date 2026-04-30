@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#ffffff;--text:#1a1a1a;--muted:#888;--line:#d0cdc8;}
+    :root{--bg:#ffffff;--text:#1a1a1a;--muted:#888;--line:#d0cdc8;--glow-shadow:0 0 10px rgba(255,255,255,1), 0 0 30px rgba(255,255,255,0.9), 0 0 70px rgba(255,255,255,0.5);}
     *{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
     body{background:var(--bg);color:var(--text);font-family:'Viaoda Libre',cursive;font-weight:300;min-height:100vh;text-transform:lowercase;}
@@ -111,7 +111,6 @@
     body.has-bg #app{background:transparent;}
     body.has-bg main{background:transparent;}
 
-    /* Leuchten-Effekt: schwarze Schrift mit weißem Lichtschein */
     body.has-bg .project-title,
     body.has-bg .project-short-desc,
     body.has-bg .project-year,
@@ -132,12 +131,7 @@
     body.has-bg .bio-text,
     body.has-bg footer{
       color:#1a1a1a;
-      text-shadow:
-        0 0 8px rgba(255,255,255,1),
-        0 0 18px rgba(255,255,255,1),
-        0 0 35px rgba(255,255,255,0.95),
-        0 0 60px rgba(255,255,255,0.7),
-        0 0 90px rgba(255,255,255,0.4);
+      text-shadow:var(--glow-shadow);
     }
 
     /* Schrift etwas größer wenn Hintergrundbild aktiv */
@@ -150,37 +144,22 @@
     body.has-bg .bio-text{font-size:1.15rem;}
     body.has-bg .contact-link-val a{font-size:1.15rem;}
 
-    /* Hover-Highlight: milchiger Hintergrund mit verstärktem Leuchten */
-    body.has-bg .project-item,
-    body.has-bg .event-item,
-    body.has-bg .home-intro,
-    body.has-bg .bio-text,
-    body.has-bg .contact-link-item,
-    body.has-bg .project-desc,
-    body.has-bg .project-heading,
-    body.has-bg .back-btn,
-    body.has-bg #project-content{
-      border-radius:6px;
-      transition:background 0.3s ease, box-shadow 0.3s ease;
-      padding-left:0.7rem;
-      padding-right:0.7rem;
-    }
-    body.has-bg .project-item:hover,
-    body.has-bg .event-item:hover,
-    body.has-bg .home-intro:hover,
-    body.has-bg .bio-text:hover,
-    body.has-bg .contact-link-item:hover,
-    body.has-bg .project-desc:hover,
-    body.has-bg .project-heading:hover,
-    body.has-bg .back-btn:hover,
-    body.has-bg #project-content:hover{
-      background:rgba(255,255,255,0.55);
-      backdrop-filter:blur(6px);
-      box-shadow:0 0 30px rgba(255,255,255,0.6), 0 0 60px rgba(255,255,255,0.3);
-    }
+    /* CD Icons auf Startseite */
+    .sound-circle{position:absolute;border-radius:50%;cursor:pointer;transition:transform 0.3s ease;animation:cd-spin 8s linear infinite;will-change:transform;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.18));}
+    .sound-circle:hover{filter:drop-shadow(0 4px 16px rgba(0,0,0,0.28)) brightness(1.08);}
+    .sound-circle.active{animation:cd-spin 2s linear infinite;filter:drop-shadow(0 6px 24px rgba(120,80,200,0.35)) brightness(1.1);}
+    @keyframes cd-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+    .sound-circle svg{width:100%;height:100%;display:block;}
+    .circle-player{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:200;width:320px;background:rgba(255,255,255,0.96);border-radius:12px;padding:1rem;box-shadow:0 8px 40px rgba(0,0,0,0.18);}
+    .circle-player.visible{display:block;}
+    .circle-player-close{position:absolute;top:.5rem;right:.7rem;background:none;border:none;font-size:1rem;cursor:pointer;color:#888;line-height:1;}
+    .circle-player iframe{width:100%;border:none;border-radius:6px;display:block;}
+    #circles-container{position:absolute;inset:0;pointer-events:none;z-index:2;}
+    #circles-container .sound-circle{pointer-events:all;}
+    #view-home{position:relative;}
+    #cd-player-overlay{display:none;position:fixed;inset:0;z-index:199;}
     .home-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;display:none;}
     #view-home .home-intro,#view-home #home-events{position:relative;z-index:1;}
-
     /* RUBRIK HINTERGRUNDBILD */
     .section-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-repeat:no-repeat;display:none;}
     .section-bg::after{content:'';position:absolute;inset:0;}
@@ -277,7 +256,7 @@
     #splash-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;}
     #splash-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.32);}
     /* VOLUME BAR */
-    #volume-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;gap:0.7rem;background:rgba(255,255,255,0.72);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 16px rgba(0,0,0,0.08);}
+    #volume-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;gap:0.7rem;background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
     #volume-bar svg{width:16px;height:16px;}
     #volume-slider{-webkit-appearance:none;appearance:none;width:110px;height:2px;border-radius:1px;background:var(--line);outline:none;cursor:pointer;}
     #volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--text);cursor:pointer;}
@@ -322,6 +301,12 @@
   <main>
     <div class="view active" id="view-home">
       <div class="home-bg" id="home-bg"></div>
+      <div id="circles-container"></div>
+      <div id="cd-player-overlay"></div>
+      <div id="cd-player-popup" class="circle-player">
+        <button class="circle-player-close" onclick="closeCdPlayer()">✕</button>
+        <div id="cd-player-inner"></div>
+      </div>
       <p class="home-intro" id="home-text">Willkommen.</p>
       <div id="home-events"></div>
     </div>
@@ -332,7 +317,12 @@
         <div class="section-media-col" id="section-media-col"></div>
       </div>
     </div>
-    <div class="view" id="view-project">
+    <div class="view" id="view-termine">
+      <div class="section-bg" id="termine-bg"></div>
+      <div style="position:relative;z-index:1;">
+        <div id="termine-content"></div>
+      </div>
+    </div>
       <div class="section-bg" id="project-bg"></div>
       <div style="position:relative;z-index:1;">
       <button class="back-btn" id="back-btn">← zurück</button>
@@ -340,7 +330,8 @@
       </div>
     </div>
     <div class="view" id="view-bio">
-      <div class="bio-grid">
+      <div class="section-bg" id="bio-bg"></div>
+      <div class="bio-grid" style="position:relative;z-index:1;">
         <div>
           <img class="bio-img" id="bio-img-el" src="" alt="" style="display:none"/>
           <div class="bio-img-placeholder" id="bio-img-placeholder">foto</div>
@@ -349,6 +340,8 @@
       </div>
     </div>
     <div class="view" id="view-kontakt">
+      <div class="section-bg" id="kontakt-bg"></div>
+      <div style="position:relative;z-index:1;">
       <div class="contact-links-grid" id="contact-links-list"></div>
       <div class="contact-section-title" id="cf-title">Nachricht senden</div>
       <div class="mail-form">
@@ -359,7 +352,8 @@
         <button onclick="sendMail()" id="cf-send-btn">Senden</button>
         <div class="form-status" id="form-status"></div>
       </div>
-    </div>
+      </div><!-- end z-index wrapper -->
+    </div><!-- end view-kontakt -->
   </main>
   <footer id="footer-text">© 2026</footer>
 </div>
@@ -427,20 +421,27 @@ function setLang(l){
   lang=l;localStorage.setItem('pf_lang',l);
   document.documentElement.lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
-  // Update splash hint text
   const hint=document.getElementById('splash-hint');
   if(hint)hint.textContent=l==='en'?'click to enter':'klicken um einzutreten';
   applyLangUI();
-  renderAll();
-  // Re-render whichever view is currently active
-  if(currentSection==='home'){renderHomeText();renderHomeEvents();}
-  else if(currentSection==='project'){
-    // back button text already handled in renderAll -> applyLangUI won't catch it
-    const bb=document.getElementById('back-btn');if(bb)bb.textContent=t('back');
-  }
+  buildNav();
+  // Re-render the currently active view immediately
+  if(currentSection==='home'){renderHomeText();renderHomeEvents();renderCircles();}
+  else if(currentSection==='termine'){renderTermineView();}
   else if(currentSection==='bio'){renderBio();}
   else if(currentSection==='kontakt'){renderKontakt();}
-  else if(currentSection&&currentSection!=='home'){renderSectionList(currentSection);}
+  else if(currentSection==='project'){
+    const bb=document.getElementById('back-btn');if(bb)bb.textContent=t('back');
+    // Re-render project content with new lang
+    const viewEl=document.getElementById('view-project');
+    if(viewEl&&viewEl._sectionId!==undefined)renderProject(viewEl._sectionId,viewEl._projectIdx);
+  }
+  else if(currentSection){renderSectionList(currentSection);}
+  // Sync header text
+  document.getElementById('header-name').textContent=data.name||'';
+  document.getElementById('header-sub').textContent=L(data.sub)||'';
+  document.getElementById('footer-text').textContent=data.footer||'© 2026';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
 }
 
 // HILFSFUNKTIONEN
@@ -455,6 +456,17 @@ function migrateData(d){
   if(!d.splashAudio)d.splashAudio={source:'tracks',bandcampSrc:'',soundcloudSrc:'',active:false};
   if(!d.splashAudio.tracks)d.splashAudio.tracks=[];
   if(d.splashAudio.source===undefined)d.splashAudio.source='tracks';
+  if(!d.soundCircles)d.soundCircles=[];
+  if(!d.bioBg)d.bioBg={url:'',active:false,opacity:1,glowStrength:70};
+  if(!d.kontaktBg)d.kontaktBg={url:'',active:false,opacity:1,glowStrength:70};
+  // Termine als eigene Rubrik
+  const hasTermine=(d.sections||[]).find(s=>s.id==='termine');
+  if(!hasTermine){
+    const bioIdx=(d.sections||[]).findIndex(s=>s.type==='bio');
+    const ins={id:'termine',label:{de:'termine',en:'dates'},type:'termine'};
+    if(bioIdx>-1)d.sections.splice(bioIdx,0,ins);
+    else d.sections.push(ins);
+  }
   if(typeof d.homeText==='string')d.homeText={de:d.homeText,en:''};
   if(typeof d.sub==='string')d.sub={de:d.sub,en:''};
   if(d.bio&&typeof d.bio.text==='string')d.bio.text={de:d.bio.text,en:''};
@@ -470,12 +482,18 @@ function migrateData(d){
     if(p.bgImg===undefined)p.bgImg='';
   }));
   (d.events||[]).forEach(ev=>{if(typeof ev.title==='string')ev.title={de:ev.title,en:ev.title};});
+  // Ensure sectionBg opacity/glow defaults
+  Object.values(d.sectionBg||{}).forEach(sb=>{
+    if(sb.opacity===undefined)sb.opacity=1;
+    if(sb.glowStrength===undefined)sb.glowStrength=70;
+  });
   return d;
 }
 function defaultSections(){return[
   {id:'musik',label:{de:'sound',en:'sound'},type:'projects'},
   {id:'theater',label:{de:'theater',en:'theatre'},type:'projects'},
   {id:'visuelles',label:{de:'visuelles',en:'visual'},type:'projects'},
+  {id:'termine',label:{de:'termine',en:'dates'},type:'termine'},
   {id:'bio',label:{de:'bio',en:'bio'},type:'bio'},
   {id:'kontakt',label:{de:'kontakt',en:'contact'},type:'kontakt'}
 ];}
@@ -505,32 +523,65 @@ function buildNav(){
 
 function navigate(sectionId,projectIdx){
   stopAllMedia();
-  // Hintergrundbilder verstecken
-  const bg=document.getElementById('section-bg');if(bg)bg.style.display='none';
-  const pbg=document.getElementById('project-bg');if(pbg)pbg.style.display='none';
-  const overlay=document.getElementById('section-bg-overlay');if(overlay)overlay.style.display='none';
+  // Hide all backgrounds
+  ['section-bg','project-bg','section-bg-overlay','home-bg','termine-bg','bio-bg','kontakt-bg'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
   if(sectionId==='home'){
     document.getElementById('view-home').classList.add('active');
-    renderHomeText();renderHomeEvents();currentSection='home';return;
+    renderHomeText();renderHomeEvents();renderCircles();currentSection='home';updateBgState();return;
   }
   const sec=(data.sections||[]).find(s=>s.id===sectionId);if(!sec)return;
   const navEl=document.querySelector(`nav a[data-view="${sectionId}"]`);if(navEl)navEl.classList.add('active');
   if(projectIdx!==undefined){
-    document.getElementById('view-project').classList.add('active');
+    const vp=document.getElementById('view-project');
+    vp.classList.add('active');
+    vp._sectionId=sectionId;vp._projectIdx=projectIdx;
     renderProject(sectionId,projectIdx);currentSection='project';
     document.getElementById('back-btn').onclick=()=>navigate(sectionId);
     document.getElementById('back-btn').textContent=t('back');
-    // Hintergrundbild: erst projekt-spezifisch prüfen, sonst Rubrik-Bild übernehmen
     applyProjectBg(sectionId,projectIdx);
-    return;
+    updateBgState();return;
   }
   currentSection=sectionId;
   if(sec.type==='projects'){document.getElementById('view-section').classList.add('active');renderSectionList(sectionId);}
-  else if(sec.type==='bio'){document.getElementById('view-bio').classList.add('active');renderBio();}
-  else if(sec.type==='kontakt'){document.getElementById('view-kontakt').classList.add('active');renderKontakt();}
+  else if(sec.type==='termine'){document.getElementById('view-termine').classList.add('active');renderTermineView();}
+  else if(sec.type==='bio'){document.getElementById('view-bio').classList.add('active');renderBio();applyPageBg('bio');}
+  else if(sec.type==='kontakt'){document.getElementById('view-kontakt').classList.add('active');renderKontakt();applyPageBg('kontakt');}
   updateBgState();
+}
+
+function applyPageBg(page){
+  const bgData=page==='bio'?data.bioBg:data.kontaktBg;
+  const bgEl=document.getElementById(page+'-bg');
+  if(!bgEl||!bgData||!bgData.active||!bgData.url){if(bgEl)bgEl.style.display='none';return;}
+  bgEl.style.backgroundImage="url('"+escH(bgData.url)+"')";
+  bgEl.style.backgroundSize='cover';
+  bgEl.style.backgroundPosition='50% 50%';
+  bgEl.style.opacity=bgData.opacity||1;
+  bgEl.style.display='block';
+}
+
+function renderTermineView(){
+  const sb=(data.sectionBg||{}).termine||{};
+  const tbg=document.getElementById('termine-bg');
+  if(tbg&&sb.active&&sb.url){
+    tbg.style.backgroundImage="url('"+escH(sb.url)+"')";
+    tbg.style.backgroundSize='cover';
+    tbg.style.backgroundPosition=(sb.posX||'50')+'% '+(sb.posY||'50')+'%';
+    tbg.style.opacity=sb.opacity||1;
+    tbg.style.display='block';
+  }else if(tbg){tbg.style.display='none';}
+  const events=data.events||[];
+  const upcoming=events.filter(e=>!e.isPast).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const past=events.filter(e=>e.isPast).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  let html='';
+  if(upcoming.length){html+=`<div class="events-section"><div class="events-heading">${t('upcoming')}</div>`;upcoming.forEach(ev=>{html+=`<div class="event-item"><span class="event-date">${formatDate(ev.date)}</span><span class="event-title">${ev.link?`<a href="${escH(ev.link)}" target="_blank">${escH(L(ev.title))}</a>`:escH(L(ev.title))}</span></div>`;});html+='</div>';}
+  if(past.length){html+=`<div class="events-section"><div class="events-heading">${t('past')}</div>`;past.forEach(ev=>{html+=`<div class="event-item event-past"><span class="event-date">${formatDate(ev.date)}</span><span class="event-title">${ev.link?`<a href="${escH(ev.link)}" target="_blank">${escH(L(ev.title))}</a>`:escH(L(ev.title))}</span></div>`;});html+='</div>';}
+  if(!upcoming.length&&!past.length)html='<p style="color:#888;font-size:.85rem;">Keine Termine.</p>';
+  document.getElementById('termine-content').innerHTML=html;
 }
 
 function applyProjectBg(sectionId,projectIdx){
@@ -569,7 +620,7 @@ function renderAll(){
   document.getElementById('header-sub').textContent=L(data.sub)||'';
   document.getElementById('site-title-tag').textContent=data.name||'';
   document.getElementById('footer-text').textContent=data.footer||'© 2026';
-  buildNav();renderHomeText();renderHomeEvents();applyLangUI();
+  buildNav();renderHomeText();renderHomeEvents();renderCircles();applyLangUI();
   if(currentSection&&currentSection!=='home'&&currentSection!=='project'){
     const sec=(data.sections||[]).find(s=>s.id===currentSection);
     if(sec){
@@ -851,15 +902,181 @@ function updateTokenStatus(){
   else{el.style.color='#c00';el.textContent='Kein Token — nur lokaler Download möglich.';}
 }
 
-// ADMIN TABS
+// CD SVG generator
+function cdSVG(size){
+  const s=size||90;
+  return`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="cdg${s}" cx="42%" cy="38%" r="60%">
+      <stop offset="0%" stop-color="#f0eeff"/>
+      <stop offset="20%" stop-color="#dce8ff"/>
+      <stop offset="40%" stop-color="#c8f0e8"/>
+      <stop offset="55%" stop-color="#f0d8f8"/>
+      <stop offset="70%" stop-color="#ffecd0"/>
+      <stop offset="85%" stop-color="#d8e8ff"/>
+      <stop offset="100%" stop-color="#e8d0f8"/>
+    </radialGradient>
+    <radialGradient id="cdhg${s}" cx="50%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+  </defs>
+  <!-- Outer rim -->
+  <circle cx="50" cy="50" r="49" fill="#1a1a1a"/>
+  <!-- Disc surface -->
+  <circle cx="50" cy="50" r="47" fill="url(#cdg${s})"/>
+  <!-- Highlight shimmer -->
+  <circle cx="50" cy="50" r="47" fill="url(#cdhg${s})" opacity="0.6"/>
+  <!-- Inner ring tracks (subtle) -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.4"/>
+  <circle cx="50" cy="50" r="33" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.4"/>
+  <circle cx="50" cy="50" r="26" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.4"/>
+  <!-- Hub area -->
+  <circle cx="50" cy="50" r="13" fill="#2a2a2a"/>
+  <circle cx="50" cy="50" r="11" fill="#e8e8f0"/>
+  <circle cx="50" cy="50" r="9" fill="#d0d0e0"/>
+  <circle cx="50" cy="50" r="7" fill="#f0f0f8"/>
+  <!-- Center hole -->
+  <circle cx="50" cy="50" r="4" fill="#1a1a1a"/>
+  <circle cx="50" cy="50" r="3.2" fill="#333"/>
+</svg>`;
+}
+
+// SOUND CIRCLES / CD ICONS
+function renderCircles(){
+  const container=document.getElementById('circles-container');
+  if(!container)return;
+  const circles=data.soundCircles||[];
+  container.innerHTML='';
+  circles.forEach((c,i)=>{
+    const size=c.size||90;
+    const div=document.createElement('div');
+    div.className='sound-circle';
+    div.style.cssText=`left:${c.x}%;top:${c.y}%;width:${size}px;height:${size}px;margin-left:-${size/2}px;margin-top:-${size/2}px;animation-delay:${-(i*2.1)}s;`;
+    div.innerHTML=cdSVG(size);
+    div.addEventListener('click',function(e){
+      e.stopPropagation();
+      openCdPlayer(c,this);
+    });
+    container.appendChild(div);
+  });
+}
+
+let _activeCd=null;
+function openCdPlayer(c,circleEl){
+  // Pause spinning of active cd briefly
+  if(_activeCd&&_activeCd!==circleEl)_activeCd.style.animationPlayState='running';
+  _activeCd=circleEl;
+  const popup=document.getElementById('cd-player-popup');
+  const inner=document.getElementById('cd-player-inner');
+  const overlay=document.getElementById('cd-player-overlay');
+  inner.innerHTML=buildCircleEmbed(c);
+  popup.classList.add('visible');
+  overlay.style.display='block';
+}
+function closeCdPlayer(){
+  document.getElementById('cd-player-popup').classList.remove('visible');
+  document.getElementById('cd-player-overlay').style.display='none';
+  // Clear iframe to stop audio
+  document.getElementById('cd-player-inner').innerHTML='';
+  _activeCd=null;
+}
+// Click overlay to close
+document.getElementById('cd-player-overlay')?.addEventListener('click',closeCdPlayer);
+
+function buildCircleEmbed(c){
+  if(!c.url)return'';
+  if(c.source==='soundcloud'){
+    const src=c.url.includes('w.soundcloud.com')?c.url:
+      'https://w.soundcloud.com/player/?url='+encodeURIComponent(c.url)+'&color=%231a1a1a&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false';
+    return`<iframe src="${escH(src)}" height="80" scrolling="no" frameborder="no" allow="autoplay" style="width:100%;border-radius:6px;"></iframe>`;
+  }
+  if(c.source==='bandcamp'){
+    let src=c.url;const m=c.url.match(/src=["']([^"']+)["']/);if(m)src=m[1];
+    return`<iframe src="${escH(src)}" style="width:100%;height:80px;border:0;border-radius:6px;" seamless></iframe>`;
+  }
+  return'';
+}
+
+// ADMIN TABS UPDATE
 function buildAdminTabs(){
   const tabsEl=document.getElementById('admin-tabs');
   const panelsEl=document.getElementById('admin-tab-panels');
   const projSecs=(data.sections||[]).filter(s=>s.type==='projects');
-  const allTabs=[{id:'general',label:'Allgemein'},{id:'splash',label:'Splash / Sound'},{id:'termine',label:'Termine'},...projSecs.map(s=>({id:'proj_'+s.id,label:L(s.label)})),{id:'bio',label:'Bio'},{id:'kontakt',label:'Kontakt'}];
+  const allTabs=[
+    {id:'general',label:'Allgemein'},
+    {id:'splash',label:'Splash / Sound'},
+    {id:'circles',label:'Startseiten-Kreise'},
+    {id:'termine',label:'Termine'},
+    ...projSecs.map(s=>({id:'proj_'+s.id,label:L(s.label)})),
+    {id:'bio',label:'Bio'},
+    {id:'kontakt',label:'Kontakt'}
+  ];
   tabsEl.innerHTML=allTabs.map((t,i)=>`<div class="tab${i===0?' active':''}" onclick="switchTab('${t.id}',this)">${escH(t.label)}</div>`).join('');
   panelsEl.innerHTML=allTabs.map((t,i)=>`<div class="tab-panel${i===0?' active':''}" id="tab-${t.id}"></div>`).join('');
-  renderTabGeneral();renderTabSplash();renderTabTermine();projSecs.forEach(s=>renderTabProjects(s.id));renderTabBio();renderTabKontakt();
+  renderTabGeneral();renderTabSplash();renderTabCircles();renderTabTermine();
+  projSecs.forEach(s=>renderTabProjects(s.id));renderTabBio();renderTabKontakt();
+}
+
+// CIRCLES BACKEND TAB
+function renderTabCircles(){
+  const circles=data.soundCircles||[];
+  document.getElementById('tab-circles').innerHTML=`
+    <div class="admin-section">
+      <div class="admin-section-title">Sound-Kreise auf der Startseite</div>
+      <p style="font-size:.75rem;color:#888;margin-bottom:.8rem;line-height:1.5;">Klicke auf der Startseite auf einen Kreis um Musik abzuspielen. Jeder Kreis bekommt eine zufällige Position und kann einen SoundCloud oder Bandcamp Link abspielen.</p>
+      <div id="circles-admin-list"></div>
+      <div style="border:1px solid #eee;padding:.8rem;margin-top:.5rem;background:#fafafa;">
+        <div class="admin-section-title">Neuer Kreis</div>
+        <div class="admin-field"><label>Quelle</label>
+          <select id="nc-source" style="border:1px solid #ddd;padding:.35rem;font-size:.8rem;font-family:'Viaoda Libre',cursive;background:#fafafa;outline:none;">
+            <option value="soundcloud">SoundCloud</option>
+            <option value="bandcamp">Bandcamp</option>
+          </select>
+        </div>
+        <div class="admin-field"><label>URL (SoundCloud Track-URL oder Bandcamp Embed-src)</label>
+          <input id="nc-url" placeholder="https://soundcloud.com/..." style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:'Viaoda Libre',cursive;outline:none;"/>
+        </div>
+        <div class="admin-field"><label>Größe (px)</label>
+          <input type="range" id="nc-size" min="60" max="200" value="90" oninput="document.getElementById('nc-size-val').textContent=this.value+'px'"/>
+          <span id="nc-size-val" style="font-size:.7rem;margin-left:.4rem;">90px</span>
+        </div>
+        <button class="admin-btn" onclick="addCircle()">+ Kreis hinzufügen (zufällige Position)</button>
+      </div>
+    </div>`;
+  renderCirclesAdmin();
+}
+
+function renderCirclesAdmin(){
+  const el=document.getElementById('circles-admin-list');if(!el)return;
+  const circles=data.soundCircles||[];
+  if(!circles.length){el.innerHTML='<p style="font-size:.73rem;color:#aaa;margin-bottom:.5rem;">Noch keine Kreise.</p>';return;}
+  el.innerHTML=circles.map((c,i)=>`
+    <div class="media-admin-item">
+      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.source==='soundcloud'?'🎵 SC':'🎵 BC'} — ${escH((c.url||'').substring(0,50))}</span>
+      <button class="admin-btn danger small" onclick="removeCircle(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addCircle(){
+  const url=document.getElementById('nc-url').value.trim();
+  const source=document.getElementById('nc-source').value;
+  const size=parseInt(document.getElementById('nc-size').value)||90;
+  if(!url){alert('Bitte URL eingeben.');return;}
+  if(!data.soundCircles)data.soundCircles=[];
+  // Random position avoiding existing circles
+  let x,y,attempts=0,ok=false;
+  while(!ok&&attempts<50){
+    x=10+Math.random()*80;y=10+Math.random()*80;
+    ok=data.soundCircles.every(c=>Math.hypot(c.x-x,c.y-y)>12);
+    attempts++;
+  }
+  data.soundCircles.push({url,source,size,x:Math.round(x),y:Math.round(y)});
+  document.getElementById('nc-url').value='';
+  renderCirclesAdmin();renderCircles();showSaveNotice();
+}
+function removeCircle(i){
+  data.soundCircles.splice(i,1);renderCirclesAdmin();renderCircles();showSaveNotice();
 }
 function switchTab(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -906,14 +1123,10 @@ function changePw(){
 
 // TERMINE
 function renderTabTermine(){
+  const sb=(data.sectionBg||{}).termine||{url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
+  const bgBlock=bgAdminBlock('termine',sb,'Hintergrundbild (Termine-Seite)');
   const ei=data.eventsImage||{url:'',active:false};
-  document.getElementById('tab-termine').innerHTML=`
-    <div class="admin-section">
-      <div class="admin-section-title">Hintergrundbild (Startseite)</div>
-      <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="ev-img-url" value="${escH(ei.url||'')}" placeholder="https://i.ibb.co/..."/></div>
-      <div class="admin-field"><label>Sichtbar?</label><select id="ev-img-active"><option value="0"${!ei.active?' selected':''}>Nein – kein Bild</option><option value="1"${ei.active?' selected':''}>Ja – Bild anzeigen</option></select></div>
-      <button class="admin-btn" onclick="saveEventsImage()">Speichern</button>
-    </div>
+  document.getElementById('tab-termine').innerHTML=bgBlock+`
     <div class="admin-section">
       <div class="admin-section-title">Termine</div>
       <div id="ev-list"></div>
@@ -927,6 +1140,7 @@ function renderTabTermine(){
       </div>
     </div>`;
   renderEventsAdmin();
+  setTimeout(()=>previewBg('termine'),50);
 }
 function renderEventsAdmin(){
   const el=document.getElementById('ev-list');if(!el)return;
@@ -978,26 +1192,58 @@ function saveEventsImage(){
 }
 
 // PROJEKTE
+function bgAdminBlock(id,sb,label){
+  return`
+    <div class="admin-section">
+      <div class="admin-section-title">${label}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
+        <div>
+          <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="sb-url-${id}" value="${escH(sb.url||'')}" placeholder="https://i.ibb.co/..." oninput="previewBg('${id}')"/></div>
+          <div class="admin-field"><label>Sichtbar?</label><select id="sb-active-${id}" onchange="previewBg('${id}')"><option value="0"${!sb.active?' selected':''}>Nein</option><option value="1"${sb.active?' selected':''}>Ja</option></select></div>
+          <div class="admin-field"><label>Horizontal (${sb.posX||50}%)</label><input type="range" id="sb-posx-${id}" min="0" max="100" value="${sb.posX||50}" oninput="document.getElementById('sb-posx-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-posx-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${sb.posX||50}%</span></div>
+          <div class="admin-field"><label>Vertikal (${sb.posY||50}%)</label><input type="range" id="sb-posy-${id}" min="0" max="100" value="${sb.posY||50}" oninput="document.getElementById('sb-posy-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-posy-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${sb.posY||50}%</span></div>
+          <div class="admin-field"><label>Deckkraft (${Math.round((sb.opacity||1)*100)}%)</label><input type="range" id="sb-opacity-${id}" min="10" max="100" value="${Math.round((sb.opacity||1)*100)}" oninput="document.getElementById('sb-opacity-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-opacity-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${Math.round((sb.opacity||1)*100)}%</span></div>
+          <div class="admin-field"><label>Leuchtstärke der Schrift (${sb.glowStrength||70}%)</label><input type="range" id="sb-glow-${id}" min="0" max="100" value="${sb.glowStrength||70}" oninput="document.getElementById('sb-glow-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-glow-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${sb.glowStrength||70}%</span></div>
+          <button class="admin-btn" onclick="saveSectionBg('${id}')">Speichern</button>
+        </div>
+        <div>
+          <div style="font-size:.68rem;color:#aaa;margin-bottom:.4rem;">Vorschau</div>
+          <div id="bg-preview-${id}" style="position:relative;width:100%;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#eee;border:1px solid #ddd;">
+            <div id="bg-preview-img-${id}" style="position:absolute;inset:0;background-size:cover;background-position:50% 50%;"></div>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:1rem;">
+              <div id="bg-preview-text-${id}" style="font-family:'Viaoda Libre',cursive;font-size:.95rem;color:#1a1a1a;">Projektname</div>
+              <div id="bg-preview-sub-${id}" style="font-family:'Viaoda Libre',cursive;font-size:.72rem;color:#555;margin-top:.2rem;">Kurzbeschreibung</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function previewBg(id){
+  const url=(document.getElementById('sb-url-'+id)?.value||'').trim();
+  const opacity=(document.getElementById('sb-opacity-'+id)?.value||100)/100;
+  const glow=(document.getElementById('sb-glow-'+id)?.value||70);
+  const posX=document.getElementById('sb-posx-'+id)?.value||50;
+  const posY=document.getElementById('sb-posy-'+id)?.value||50;
+  const imgEl=document.getElementById('bg-preview-img-'+id);
+  const textEl=document.getElementById('bg-preview-text-'+id);
+  const subEl=document.getElementById('bg-preview-sub-'+id);
+  if(imgEl){
+    imgEl.style.backgroundImage=url?`url('${url}')`:'' ;
+    imgEl.style.backgroundPosition=`${posX}% ${posY}%`;
+    imgEl.style.opacity=url?opacity:0;
+  }
+  const g=glow/100;
+  const shadow=`0 0 ${8+g*12}px rgba(255,255,255,${g}), 0 0 ${20+g*40}px rgba(255,255,255,${g*0.85}), 0 0 ${50+g*60}px rgba(255,255,255,${g*0.5})`;
+  if(textEl)textEl.style.textShadow=shadow;
+  if(subEl)subEl.style.textShadow=shadow;
+}
+
 function renderTabProjects(sectionId){
   const el=document.getElementById('tab-proj_'+sectionId);if(!el)return;
-  const sb=(data.sectionBg||{})[sectionId]||{url:'',active:false,posX:'50',posY:'50',gradient:'to left'};
-  el.innerHTML=`
-    <div class="admin-section">
-      <div class="admin-section-title">Hintergrundbild der Rubrik-Seite</div>
-      <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="sb-url-${sectionId}" value="${escH(sb.url||'')}" placeholder="https://i.ibb.co/..."/></div>
-      <div class="admin-field"><label>Sichtbar?</label><select id="sb-active-${sectionId}"><option value="0"${!sb.active?' selected':''}>Nein – kein Bild</option><option value="1"${sb.active?' selected':''}>Ja – Bild anzeigen</option></select></div>
-      <div class="admin-field"><label>Bildausschnitt horizontal (0 = ganz links, 50 = mitte, 100 = ganz rechts)</label><input type="range" id="sb-posx-${sectionId}" min="0" max="100" value="${escH(sb.posX||'50')}" oninput="document.getElementById('sb-posx-val-${sectionId}').textContent=this.value+'%'"/><span id="sb-posx-val-${sectionId}" style="font-size:.7rem;margin-left:.4rem;">${escH(sb.posX||'50')}%</span></div>
-      <div class="admin-field"><label>Bildausschnitt vertikal (0 = ganz oben, 50 = mitte, 100 = ganz unten)</label><input type="range" id="sb-posy-${sectionId}" min="0" max="100" value="${escH(sb.posY||'50')}" oninput="document.getElementById('sb-posy-val-${sectionId}').textContent=this.value+'%'"/><span id="sb-posy-val-${sectionId}" style="font-size:.7rem;margin-left:.4rem;">${escH(sb.posY||'50')}%</span></div>
-      <div class="admin-field"><label>Gradient-Richtung (wo ist der Text lesbar?)</label>
-        <select id="sb-grad-${sectionId}">
-          <option value="to left"${sb.gradient==='to left'?' selected':''}>← Links transparent, rechts deckend</option>
-          <option value="to right"${sb.gradient==='to right'?' selected':''}>→ Rechts transparent, links deckend</option>
-          <option value="to bottom"${sb.gradient==='to bottom'?' selected':''}>↓ Oben transparent, unten deckend</option>
-          <option value="to top"${sb.gradient==='to top'?' selected':''}>↑ Unten transparent, oben deckend</option>
-        </select>
-      </div>
-      <button class="admin-btn" onclick="saveSectionBg('${sectionId}')">Speichern</button>
-    </div>
+  const sb=(data.sectionBg||{})[sectionId]||{url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
+  el.innerHTML=bgAdminBlock(sectionId,sb,'Hintergrundbild der Rubrik-Seite')+`
     <div class="admin-section">
       <div class="admin-section-title">Medien — rechte Spalte der Rubrikseite</div>
       <div id="sm-list-${sectionId}"></div>
@@ -1019,6 +1265,7 @@ function renderTabProjects(sectionId){
     <div class="admin-section"><div class="admin-section-title">Projekte</div><div id="pa-${sectionId}"></div><button class="admin-btn" style="margin-top:.6rem;" onclick="addProject('${sectionId}')">+ Projekt hinzufügen</button></div>`;
   renderSectionMediaAdmin(sectionId);
   renderProjectCards(sectionId);
+  setTimeout(()=>previewBg(sectionId),50);
 }
 function renderSectionMediaAdmin(sectionId){
   const el=document.getElementById('sm-list-'+sectionId);if(!el)return;
@@ -1040,16 +1287,25 @@ function addSectionMedia(sectionId){
   if(currentSection===sectionId)renderSectionList(sectionId);
   showSaveNotice();
 }
-function saveSectionBg(sectionId){
+function saveSectionBg(id){
   if(!data.sectionBg)data.sectionBg={};
-  if(!data.sectionBg[sectionId])data.sectionBg[sectionId]={};
-  data.sectionBg[sectionId].url=document.getElementById('sb-url-'+sectionId).value.trim();
-  data.sectionBg[sectionId].active=document.getElementById('sb-active-'+sectionId).value==='1';
-  data.sectionBg[sectionId].posX=document.getElementById('sb-posx-'+sectionId).value;
-  data.sectionBg[sectionId].posY=document.getElementById('sb-posy-'+sectionId).value;
-  data.sectionBg[sectionId].gradient=document.getElementById('sb-grad-'+sectionId).value;
-  if(currentSection===sectionId)renderSectionList(sectionId);
+  if(!data.sectionBg[id])data.sectionBg[id]={};
+  data.sectionBg[id].url=(document.getElementById('sb-url-'+id)?.value||'').trim();
+  data.sectionBg[id].active=document.getElementById('sb-active-'+id)?.value==='1';
+  data.sectionBg[id].posX=document.getElementById('sb-posx-'+id)?.value||'50';
+  data.sectionBg[id].posY=document.getElementById('sb-posy-'+id)?.value||'50';
+  data.sectionBg[id].opacity=(parseInt(document.getElementById('sb-opacity-'+id)?.value||100)/100);
+  data.sectionBg[id].glowStrength=parseInt(document.getElementById('sb-glow-'+id)?.value||70);
+  // Apply glow to page if currently viewing this section
+  applyGlowStrength(data.sectionBg[id].glowStrength);
+  if(currentSection===id)renderSectionList(id);
+  if(currentSection==='termine'&&id==='termine')renderTermineView();
   showSaveNotice();
+}
+function applyGlowStrength(pct){
+  const g=pct/100;
+  const shadow=`0 0 ${Math.round(8+g*12)}px rgba(255,255,255,${g.toFixed(2)}), 0 0 ${Math.round(20+g*40)}px rgba(255,255,255,${(g*0.85).toFixed(2)}), 0 0 ${Math.round(50+g*60)}px rgba(255,255,255,${(g*0.5).toFixed(2)})`;
+  document.documentElement.style.setProperty('--glow-shadow',shadow);
 }
 function removeSectionMedia(sectionId,idx){
   data.sectionMedia[sectionId].splice(idx,1);
@@ -1138,13 +1394,27 @@ function saveProject(sectionId,idx){
 
 // BIO
 function renderTabBio(){
-  document.getElementById('tab-bio').innerHTML=`
+  const bb=data.bioBg||{url:'',active:false,opacity:1,glowStrength:70};
+  const bbBlock=bgAdminBlock('bio_page',bb,'Hintergrundbild (Bio-Seite)').replace(/saveSectionBg\('bio_page'\)/g,"saveBioBg()");
+  document.getElementById('tab-bio').innerHTML=bbBlock+`
     <div class="admin-section">
       <div class="admin-section-title">Bio</div>
       <div class="admin-field"><label>Foto-URL (von imgbb.com — Direct link)</label><input id="a-bio-img" value="${escH((data.bio||{}).img||'')}" placeholder="https://i.ibb.co/..."/></div>
       <div class="admin-field"><label>Text DE / EN</label><div class="bilingual"><div><div class="bilingual-label">🇩🇪</div><textarea id="a-bio-de" style="height:150px;">${escH(((data.bio||{}).text||{}).de||'')}</textarea></div><div><div class="bilingual-label">🇬🇧</div><textarea id="a-bio-en" style="height:150px;">${escH(((data.bio||{}).text||{}).en||'')}</textarea></div></div></div>
       <button class="admin-btn" onclick="saveBio()">Speichern</button>
     </div>`;
+  setTimeout(()=>previewBg('bio_page'),50);
+}
+function saveBioBg(){
+  if(!data.bioBg)data.bioBg={};
+  data.bioBg.url=(document.getElementById('sb-url-bio_page')?.value||'').trim();
+  data.bioBg.active=document.getElementById('sb-active-bio_page')?.value==='1';
+  data.bioBg.posX=document.getElementById('sb-posx-bio_page')?.value||'50';
+  data.bioBg.posY=document.getElementById('sb-posy-bio_page')?.value||'50';
+  data.bioBg.opacity=(parseInt(document.getElementById('sb-opacity-bio_page')?.value||100)/100);
+  data.bioBg.glowStrength=parseInt(document.getElementById('sb-glow-bio_page')?.value||70);
+  if(currentSection==='bio'){applyPageBg('bio');updateBgState();}
+  showSaveNotice();
 }
 function saveBio(){
   if(!data.bio)data.bio={};
@@ -1155,7 +1425,9 @@ function saveBio(){
 
 // KONTAKT
 function renderTabKontakt(){
-  document.getElementById('tab-kontakt').innerHTML=`
+  const kb=data.kontaktBg||{url:'',active:false,opacity:1,glowStrength:70};
+  const kbBlock=bgAdminBlock('kontakt_page',kb,'Hintergrundbild (Kontakt-Seite)').replace(/saveSectionBg\('kontakt_page'\)/g,"saveKontaktBg()");
+  document.getElementById('tab-kontakt').innerHTML=kbBlock+`
     <div class="admin-section">
       <div class="admin-section-title">Links</div>
       <div id="contact-admin-list"></div>
@@ -1167,6 +1439,18 @@ function renderTabKontakt(){
       </div>
     </div>`;
   renderContactAdmin();
+  setTimeout(()=>previewBg('kontakt_page'),50);
+}
+function saveKontaktBg(){
+  if(!data.kontaktBg)data.kontaktBg={};
+  data.kontaktBg.url=(document.getElementById('sb-url-kontakt_page')?.value||'').trim();
+  data.kontaktBg.active=document.getElementById('sb-active-kontakt_page')?.value==='1';
+  data.kontaktBg.posX=document.getElementById('sb-posx-kontakt_page')?.value||'50';
+  data.kontaktBg.posY=document.getElementById('sb-posy-kontakt_page')?.value||'50';
+  data.kontaktBg.opacity=(parseInt(document.getElementById('sb-opacity-kontakt_page')?.value||100)/100);
+  data.kontaktBg.glowStrength=parseInt(document.getElementById('sb-glow-kontakt_page')?.value||70);
+  if(currentSection==='kontakt'){applyPageBg('kontakt');updateBgState();}
+  showSaveNotice();
 }
 function renderContactAdmin(){
   const el=document.getElementById('contact-admin-list');if(!el)return;
@@ -1415,39 +1699,35 @@ function saveSplash(){
 }
 
 function updateBgState(){
-  const hasBg=document.getElementById('section-bg')?.style.display==='block'||
-               document.getElementById('project-bg')?.style.display==='block'||
-               document.getElementById('home-bg')?.style.display==='block';
+  const hasBg=['section-bg','project-bg','home-bg','termine-bg','bio-bg','kontakt-bg']
+    .some(id=>document.getElementById(id)?.style.display==='block');
   document.body.classList.toggle('has-bg',hasBg);
-  // Retrigger scroll check
   window.dispatchEvent(new Event('scroll'));
 }
 
-// HEADER SCROLL TRANSPARENCY — graduell transparent werden
+// HEADER SCROLL TRANSPARENCY — throttled via requestAnimationFrame
+let _scrollRAF=false;
 window.addEventListener('scroll',()=>{
-  const header=document.querySelector('header');
-  if(!header)return;
-  const hasBg=document.getElementById('section-bg')?.style.display==='block'||
-               document.getElementById('project-bg')?.style.display==='block'||
-               document.getElementById('home-bg')?.style.display==='block';
-  if(!hasBg){header.classList.remove('scrolled');header.style.background='';header.style.opacity='';return;}
-  const scrollY=window.scrollY;
-  const fadeStart=20;
-  const fadeEnd=140;
-  if(scrollY<=fadeStart){
-    header.style.background='var(--bg)';
-    header.style.opacity='1';
-    header.classList.remove('scrolled');
-  }else if(scrollY>=fadeEnd){
-    header.style.background='transparent';
-    header.style.opacity='1';
-    header.classList.add('scrolled');
-  }else{
-    const progress=(scrollY-fadeStart)/(fadeEnd-fadeStart);
-    const alpha=1-progress;
-    header.style.background=`rgba(255,255,255,${alpha})`;
-    header.classList.add('scrolled');
-  }
+  if(_scrollRAF)return;
+  _scrollRAF=true;
+  requestAnimationFrame(()=>{
+    _scrollRAF=false;
+    const header=document.querySelector('header');
+    if(!header)return;
+    const hasBg=['section-bg','project-bg','home-bg','termine-bg','bio-bg','kontakt-bg']
+      .some(id=>document.getElementById(id)?.style.display==='block');
+    if(!hasBg){header.classList.remove('scrolled');header.style.background='';return;}
+    const scrollY=window.scrollY;
+    const fadeStart=20,fadeEnd=140;
+    if(scrollY<=fadeStart){
+      header.style.background='var(--bg)';header.classList.remove('scrolled');
+    }else if(scrollY>=fadeEnd){
+      header.style.background='transparent';header.classList.add('scrolled');
+    }else{
+      const alpha=1-(scrollY-fadeStart)/(fadeEnd-fadeStart);
+      header.style.background=`rgba(255,255,255,${alpha})`;header.classList.add('scrolled');
+    }
+  });
 },{ passive:true });
 
 // SOUNDCLOUD PRELOAD — load iframe silently at page start so iOS allows playback on click
