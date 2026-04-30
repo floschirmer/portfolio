@@ -190,9 +190,35 @@
       .backend-wrap{padding:1.5rem 1rem;}
       .tabs{overflow-x:auto;flex-wrap:nowrap;}
     }
+
+    /* SPLASH SCREEN */
+    #splash{position:fixed;inset:0;z-index:1000;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.8s ease;}
+    #splash.fade-out{opacity:0;pointer-events:none;}
+    #splash-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;}
+    #splash-overlay{position:absolute;inset:0;background:rgba(255,255,255,0.18);}
+    #splash-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Viaoda Libre',cursive;font-size:1rem;letter-spacing:0.2em;color:rgba(255,255,255,0.85);text-shadow:0 1px 8px rgba(0,0,0,0.4);pointer-events:none;user-select:none;text-transform:lowercase;}
+    /* VOLUME BAR */
+    #volume-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;gap:0.7rem;background:rgba(255,255,255,0.72);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 16px rgba(0,0,0,0.08);}
+    #volume-bar svg{width:16px;height:16px;opacity:0.5;flex-shrink:0;}
+    #volume-slider{-webkit-appearance:none;appearance:none;width:110px;height:2px;border-radius:1px;background:var(--line);outline:none;cursor:pointer;}
+    #volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--text);cursor:pointer;}
+    #volume-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--text);border:none;cursor:pointer;}
   </style>
 </head>
 <body>
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <img id="splash-img" src="" alt="" style="display:none;"/>
+  <div id="splash-overlay"></div>
+  <div id="splash-hint">berühren um einzutreten</div>
+</div>
+
+<!-- VOLUME BAR (always visible after splash, when audio active) -->
+<div id="volume-bar">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5"/>
+</div>
+
 <div id="app">
   <header>
     <div class="header-left">
@@ -286,7 +312,7 @@
 
 <script>
 // DATA — wird beim Export mit aktuellen Inhalten ersetzt
-var _DATA_ = {"name":"FLO SCHIRMER","sub":{"de":"komposition | klanggestaltung","en":"composition | sound design"},"homeText":{"de":"","en":""},"footer":"© 2026","bio":{"img":"https://i.ibb.co/pvM9XtB3/DSC00352.jpg","text":{"de":"Flo Schirmer (*1995), komponiert, spielt und performt in unterschiedlichen Gruppen und Kontexten Musik. Elektronische fast technoide Stücke mit L-Tryptophan, rohen Post-Punk mit Spa Boys, zarten und zuweilen treibenden Indie mit Timbeau und allerlei klangliche Experimente für Theater und Film. Von Ambient-Klanglandschaften über rhythmuslastige elektronische Kompositionen bis hin zu von Lofi-Ästhetik inspirierten Songs findet sich hier einiges.\nDarüber hinaus spiegelt sich in Flos Arbeiten zunehmend eine Leidenschaft für Field Recordings. \nFlos künstlerisches Schaffen wird stets davon begleitet, neue Klangwelten zu entdecken und gewohnte in Frage zu stellen.\nFlo lebt in Freiburg und studierte dort Interdisziplinäre Anthropologie M.A. mit einem besonderen Fokus auf die Schnittstelle von Kunst und Wissenschaft und einem großen Interesse an künstlerischer Forschung.","en":"Flo Schirmer (*1995) composes, plays, and performs music in various groups and contexts. Electronic, almost techno-inspired pieces with L-Tryptophan, raw post-punk with Spa Boys, delicate and at times driving indie with Timbeau, and all kinds of sonic experiments for theater and film. From ambient soundscapes to rhythm-heavy electronic compositions to songs inspired by lo-fi aesthetics, there’s plenty to discover here.\nFurthermore, Flo’s work increasingly reflects a passion for field recordings. \nFlo’s artistic practice is always accompanied by a desire to discover new soundscapes and to question familiar ones. \nFlo lives in Freiburg, where they earned an M.A. in Interdisciplinary Anthropology with a special focus on the intersection of art and science and a keen interest in artistic research."}},"sections":[{"id":"musik","label":{"de":"musik","en":"music"},"type":"projects"},{"id":"theater","label":{"de":"theater","en":"theatre"},"type":"projects"},{"id":"visuelles","label":{"de":"visuelles","en":"visual"},"type":"projects"},{"id":"bio","label":{"de":"bio","en":"bio"},"type":"bio"},{"id":"kontakt","label":{"de":"kontakt","en":"contact"},"type":"kontakt"}],"projects":{"musik":[{"title":{"de":"Timbeau","en":"Timbeau"},"year":"Pop | Indie | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Tim Bohner (Vocals/Drums), Mari Schwingel (Gitarre), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)","en":"Tim Bohner (Vocals/Drums), Mari Schwingel (Guitar), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)"},"media":[{"type":"instagram","url":"https://www.instagram.com/timbeau_musik/","caption":""},{"type":"youtube","url":"https://www.youtube.com/watch?v=PpQmygQaeG8&list=RDPpQmygQaeG8&start_radio=1","caption":""},{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/album=4140139320/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://treibenderteppichrecords.bandcamp.com/album/sensitiv\">Sensitiv by Timbeau</a></iframe>","caption":""}]},{"title":{"de":"L-Tryptophan ","en":"L-Tryptophan"},"year":"Electronic | Dark Wave | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!","en":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!"},"media":[{"type":"bandcamp","url":"https://bandcamp.com/EmbeddedPlayer/album=3953312219/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/","caption":""},{"type":"instagram","url":"https://www.instagram.com/ltryptophan_band/","caption":""}]},{"title":{"de":"Spa Boys","en":"Spa Boys"},"year":"Post Punk | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"David Huss (Gitarre), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)","en":"David Huss (Guitar), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)"},"media":[{"type":"instagram","url":"https://www.instagram.com/spaboys_wellness/","caption":""},{"type":"link","url":"https://open.spotify.com/intl-de/track/2eHtMHLTRtvocwyyqpQdZa","caption":""}]},{"title":{"de":"Lost and Found ","en":"Lost and Found "},"year":"Sketches","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Unterschiedliche musikalische Sketches ","en":"Various musical sketches "},"media":[{"type":"soundcloud","url":"https://soundcloud.com/floschirmer/sketch-iii","caption":""}]},{"title":{"de":"field recording","en":"field recording "},"year":"field recording | ambient ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Eine Sammlung meiner Field Recordings, die ich über die Seite Radio Aporee hochgeladen habe. Diese Sammlung wächst stetig. ","en":"A collection of my field recordings that I've uploaded via the Radio Aporee website. This collection is constantly growing."},"media":[{"type":"link","url":"https://aporee.org/maps/?loc=71930&snd=84002","caption":""}]}],"theater":[{"title":{"de":"Komposition | Veritas: Eine Hexenjagd","en":"Composition | Veritas: A Witch Hunt"},"year":"2026","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nRegie: Katharina Kohler\nBühne, Kostüm & Video: Jodie Fox\nLicht: Ronny Bergmann\nMusik: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgie: Annabelle Leschke","en":"With\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nDirector: Katharina Kohler\nStage, Kostüm & Video: Jodie Fox\nLight: Ronny Bergmann\nMusic: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgy: Annabelle Leschke"},"media":[{"type":"link","url":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","caption":""}]},{"title":{"de":"Komposition | Galileo Galilei","en":"Composition | Galileo Galilei"},"year":"2025","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition"},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nRegie: Katharina Kohler\nBühne/Kostüm: Lea Stöcker \nMusik: Flo Schirmer","en":"With\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nDirector: Katharina Kohler\nStage/Costume: Lea Stöcker \nMusic: Flo Schirmer"},"media":[]},{"title":{"de":"Komposition | Garland ","en":"Composition | Garland "},"year":"2024","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}]},{"title":{"de":"Komposition | Penthesilea","en":"Composition | Penthesilea "},"year":"2023","tags":{"de":"Theater | Komposition","en":"Theatre | Komposition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}]}],"visuelles":[{"title":{"de":"Ewige Leidenschaft | Carla Hartmann & Juno Bogner","en":"Eternal Passion | Carla Hartmann & Juno Bogner"},"year":"2022","tags":{"de":"Film | Soundtrack","en":"Movie | Soundtrack"},"shortDesc":{"de":"","en":""},"desc":{"de":"Komposition und Sounddesign für den Kurzfilm Ewige Leidenschaft","en":"Composition and sounddesign for the short film Eternal Passion "},"media":[{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/track=3467911813/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://sexygamba.bandcamp.com/track/sexy-gamba-official-soundtrack\">Sexy Gamba (Official Soundtrack) by Sexy Gamba</a></iframe>","caption":""}]}]},"contactLinks":[{"label":"Instagram","url":"https://www.instagram.com/flo.schirmer/"}],"events":[{"date":"2026-04-22","title":{"de":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim","en":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim"},"link":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","isPast":true},{"date":"2025-06-26","title":{"de":"Konzert | L-Tryptophan | Fusion Festival","en":"Concert | L-Tryptophan | Fusion Festival"},"link":"https://fusion-festival.de/de/program#l-tryptophan","isPast":true},{"date":"2025-12-05","title":{"de":"Konzert | L-Tryptophan | Sunny High Stuttgart","en":"Concert | L-Tryptophan | Sunny High Stuttgart"},"link":"https://www.instagram.com/reel/DRgu1FZjLpb/","isPast":true},{"date":"2026-05-15","title":{"de":"Konzert | Spa Boys | Hannover Garage Nord","en":"Concert | Spa Boys | Hannover Garage Nord"},"link":"https://www.instagram.com/garagenord/","isPast":false},{"date":"2026-05-16","title":{"de":"Konzert | Spa Boys | Köln Stereo Wonderland","en":"Concert | Spa Boys | Köln Stereo Wonderland"},"link":"https://www.instagram.com/stereo_wonderland_koeln/","isPast":false},{"date":"2026-05-17","title":{"de":"Konzert | Spa Boys | Würzburg L Club","en":"Concert | Spa Boys | Würzburg L Club"},"link":"https://www.instagram.com/lclubwuerzburg/","isPast":false},{"date":"2026-05-20","title":{"de":"Konzert | Spa Boys | Darmstadt Sumpf","en":"Concert | Spa Boys | Darmstadt Sumpf"},"link":"https://www.instagram.com/sumpfindarmstadt/","isPast":false},{"date":"2026-05-21","title":{"de":"Konzert | Spa Boys | München Olga","en":"Concert | Spa Boys | München Olga"},"link":"https://www.instagram.com/stattpark_olga_e.v/","isPast":false},{"date":"2026-05-22","title":{"de":"Konzert | Spa Boys | Mannheim Contra N","en":"Concert | Spa Boys | Mannheim Contra N"},"link":"https://www.instagram.com/contra.n.mannheim/","isPast":false},{"date":"2026-05-23","title":{"de":"Konzert | Spa Boys | Stuttgart Kap Tormentoso","en":"Concert | Spa Boys | Stuttgart Kap Tormentoso"},"link":"https://www.instagram.com/kap_tormentoso/","isPast":false},{"date":"2025-12-27","title":{"de":"Konzert | Spa Boys | Entenbrunnen","en":"Concert | Spa Boys | Entenbrunnen"},"link":"","isPast":true},{"date":"2025-08-02","title":{"de":"Konzert | Spa Boys | Glashaus Festival","en":"Concert | Spa Boys | Glashaus Festival"},"link":"https://www.instagram.com/p/DMnuNa_sLJ-/?img_index=1","isPast":true},{"date":"2024-09-27","title":{"de":"Konzert | L-Tryptophan | Horst Klub Kreuzlingen","en":"Concert | L-Tryptophan | Horst Klub Kreuzlingen"},"link":"https://www.instagram.com/p/DAd66pXqEwv/?img_index=2","isPast":true},{"date":"2024-09-20","title":{"de":"Konzert | L-Tryptophan | Obergeschoss Hell Berlin","en":"Concert | L-Tryptophan | Obergeschoss Hell Berlin"},"link":"https://decolonoize.com/?page_id=69","isPast":true},{"date":"2024-08-10","title":{"de":"Konzert | L-Tryptophan | Slow Club Freiburg","en":"Concert | L-Tryptophan | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/horror-vacui-l-tryptophan-aftershow-party-w-dj-bleakphil","isPast":true},{"date":"2020-11-27","title":{"de":"Konzert | Timbeau | Komma Esslingen Album Release","en":"Concert | Timbeau | Komma Esslingen Album Release"},"link":"https://www.youtube.com/watch?v=RFvMvBhblU4","isPast":true},{"date":"2021-07-23","title":{"de":"Konzert | Timbeau | Club Manufaktur Schorndorf","en":"Concert | Timbeau | Club Manufaktur Schorndorf"},"link":"https://www.club-manufaktur.de/event/timbeau-d-open-air/","isPast":true},{"date":"2022-10-29","title":{"de":"Konzert | Timbeau | Merlin Stuttgart","en":"Concert | Timbeau | Merlin Stuttgart"},"link":"https://merlinstuttgart.de/programm/die-wande/","isPast":true},{"date":"2022-11-05","title":{"de":"Konzert | Timbeau | Schokoladen Berlin","en":"Concert | Timbeau | Schokoladen Berlin"},"link":"https://schokoladen.tickettoaster.de/produkte/51257-tickets-timbeau-sanmao-schokoladen-berlin-am-05-11-2022","isPast":true},{"date":"2024-05-19","title":{"de":"Konzert | Timbeau | Slow Club Freiburg","en":"Concert | Timbeau | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/dives-timbeau","isPast":true},{"date":"2024-05-18","title":{"de":"Konzert | Timbeau | About Pop Festival Stuttgart","en":"Concert | Timbeau | About Pop Festival Stuttgart"},"link":"https://www.aboutpop.de/artist/timbeau/","isPast":true},{"date":"2025-03-08","title":{"de":"Konzert | Timbeau | Substage Karlsruhe","en":"Concert | Timbeau | Substage Karlsruhe"},"link":"https://substage.de/programm/3677/","isPast":true},{"date":"2025-03-07","title":{"de":"Konzert | Timbeau | Ilses Erika Leipzig","en":"Concert | Timbeau | Ilses Erika Leipzig"},"link":"https://www.ilseserika.de/termine-65/timbeau-ger-live-ilses-erika-support-superpositivity-ger-schwerer-kuehler-nndw-party-w-indie-tonne-details-weiter-unten.html","isPast":true},{"date":"2024-01-13","title":{"de":"Premiere | Pethesilea | Schall & Rauch Freiburg","en":"Premiere | Pethesilea | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/12832","isPast":true},{"date":"2024-07-27","title":{"de":"Premiere | Garland | Schall & Rauch Freiburg","en":"Premiere | Garland | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/14089","isPast":true},{"date":"2025-02-05","title":{"de":"Premiere | Galileo Galilei | Nationaltheater Mannheim","en":"Premiere | Galileo Galilei | Nationaltheater Mannheim"},"link":"","isPast":true}],"sectionMedia":{},"sectionBg":{"musik":{"url":"","active":false,"posX":"50","posY":"50","gradient":"to left"}},"eventsImage":{"url":"","active":false}};
+var _DATA_ = {"name":"FLO SCHIRMER","sub":{"de":"komposition | klanggestaltung","en":"composition | sound design"},"homeText":{"de":"","en":""},"footer":"© 2026","bio":{"img":"https://i.ibb.co/pvM9XtB3/DSC00352.jpg","text":{"de":"Flo Schirmer (*1995), komponiert, spielt und performt in unterschiedlichen Gruppen und Kontexten Musik. Elektronische fast technoide Stücke mit L-Tryptophan, rohen Post-Punk mit Spa Boys, zarten und zuweilen treibenden Indie mit Timbeau und allerlei klangliche Experimente für Theater und Film. Von Ambient-Klanglandschaften über rhythmuslastige elektronische Kompositionen bis hin zu von Lofi-Ästhetik inspirierten Songs findet sich hier einiges.\nDarüber hinaus spiegelt sich in Flos Arbeiten zunehmend eine Leidenschaft für Field Recordings. \nFlos künstlerisches Schaffen wird stets davon begleitet, neue Klangwelten zu entdecken und gewohnte in Frage zu stellen.\nFlo lebt in Freiburg und studierte dort Interdisziplinäre Anthropologie M.A. mit einem besonderen Fokus auf die Schnittstelle von Kunst und Wissenschaft und einem großen Interesse an künstlerischer Forschung.","en":"Flo Schirmer (*1995) composes, plays, and performs music in various groups and contexts. Electronic, almost techno-inspired pieces with L-Tryptophan, raw post-punk with Spa Boys, delicate and at times driving indie with Timbeau, and all kinds of sonic experiments for theater and film. From ambient soundscapes to rhythm-heavy electronic compositions to songs inspired by lo-fi aesthetics, there’s plenty to discover here.\nFurthermore, Flo’s work increasingly reflects a passion for field recordings. \nFlo’s artistic practice is always accompanied by a desire to discover new soundscapes and to question familiar ones. \nFlo lives in Freiburg, where they earned an M.A. in Interdisciplinary Anthropology with a special focus on the intersection of art and science and a keen interest in artistic research."}},"sections":[{"id":"musik","label":{"de":"sound","en":"sound"},"type":"projects"},{"id":"theater","label":{"de":"theater","en":"theatre"},"type":"projects"},{"id":"visuelles","label":{"de":"visuelles","en":"visual"},"type":"projects"},{"id":"bio","label":{"de":"bio","en":"bio"},"type":"bio"},{"id":"kontakt","label":{"de":"kontakt","en":"contact"},"type":"kontakt"}],"projects":{"musik":[{"title":{"de":"Timbeau","en":"Timbeau"},"year":"Pop | Indie | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Tim Bohner (Vocals/Drums), Mari Schwingel (Gitarre), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)","en":"Tim Bohner (Vocals/Drums), Mari Schwingel (Guitar), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)"},"media":[{"type":"instagram","url":"https://www.instagram.com/timbeau_musik/","caption":""},{"type":"youtube","url":"https://www.youtube.com/watch?v=PpQmygQaeG8&list=RDPpQmygQaeG8&start_radio=1","caption":""},{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/album=4140139320/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://treibenderteppichrecords.bandcamp.com/album/sensitiv\">Sensitiv by Timbeau</a></iframe>","caption":""}]},{"title":{"de":"L-Tryptophan ","en":"L-Tryptophan"},"year":"Electronic | Dark Wave | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!","en":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!"},"media":[{"type":"bandcamp","url":"https://bandcamp.com/EmbeddedPlayer/album=3953312219/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/","caption":""},{"type":"instagram","url":"https://www.instagram.com/ltryptophan_band/","caption":""}]},{"title":{"de":"Spa Boys","en":"Spa Boys"},"year":"Post Punk | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"David Huss (Gitarre), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)","en":"David Huss (Guitar), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)"},"media":[{"type":"instagram","url":"https://www.instagram.com/spaboys_wellness/","caption":""},{"type":"link","url":"https://open.spotify.com/intl-de/track/2eHtMHLTRtvocwyyqpQdZa","caption":""}]},{"title":{"de":"Lost and Found ","en":"Lost and Found "},"year":"Sketches","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Unterschiedliche musikalische Sketches ","en":"Various musical sketches "},"media":[{"type":"soundcloud","url":"https://soundcloud.com/floschirmer/sketch-iii","caption":""}]},{"title":{"de":"field recording","en":"field recording "},"year":"field recording | ambient ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Eine Sammlung meiner Field Recordings, die ich über die Seite Radio Aporee hochgeladen habe. Diese Sammlung wächst stetig. ","en":"A collection of my field recordings that I've uploaded via the Radio Aporee website. This collection is constantly growing."},"media":[{"type":"link","url":"https://aporee.org/maps/?loc=71930&snd=84002","caption":""}]}],"theater":[{"title":{"de":"Komposition | Veritas: Eine Hexenjagd","en":"Composition | Veritas: A Witch Hunt"},"year":"2026","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nRegie: Katharina Kohler\nBühne, Kostüm & Video: Jodie Fox\nLicht: Ronny Bergmann\nMusik: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgie: Annabelle Leschke","en":"With\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nDirector: Katharina Kohler\nStage, Kostüm & Video: Jodie Fox\nLight: Ronny Bergmann\nMusic: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgy: Annabelle Leschke"},"media":[{"type":"link","url":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","caption":""}]},{"title":{"de":"Komposition | Galileo Galilei","en":"Composition | Galileo Galilei"},"year":"2025","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition"},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nRegie: Katharina Kohler\nBühne/Kostüm: Lea Stöcker \nMusik: Flo Schirmer","en":"With\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nDirector: Katharina Kohler\nStage/Costume: Lea Stöcker \nMusic: Flo Schirmer"},"media":[]},{"title":{"de":"Komposition | Garland ","en":"Composition | Garland "},"year":"2024","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}]},{"title":{"de":"Komposition | Penthesilea","en":"Composition | Penthesilea "},"year":"2023","tags":{"de":"Theater | Komposition","en":"Theatre | Komposition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}]}],"visuelles":[{"title":{"de":"Ewige Leidenschaft | Carla Hartmann & Juno Bogner","en":"Eternal Passion | Carla Hartmann & Juno Bogner"},"year":"2022","tags":{"de":"Film | Soundtrack","en":"Movie | Soundtrack"},"shortDesc":{"de":"","en":""},"desc":{"de":"Komposition und Sounddesign für den Kurzfilm Ewige Leidenschaft","en":"Composition and sounddesign for the short film Eternal Passion "},"media":[{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/track=3467911813/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://sexygamba.bandcamp.com/track/sexy-gamba-official-soundtrack\">Sexy Gamba (Official Soundtrack) by Sexy Gamba</a></iframe>","caption":""}]}]},"contactLinks":[{"label":"Instagram","url":"https://www.instagram.com/flo.schirmer/"}],"events":[{"date":"2026-04-22","title":{"de":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim","en":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim"},"link":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","isPast":true},{"date":"2025-06-26","title":{"de":"Konzert | L-Tryptophan | Fusion Festival","en":"Concert | L-Tryptophan | Fusion Festival"},"link":"https://fusion-festival.de/de/program#l-tryptophan","isPast":true},{"date":"2025-12-05","title":{"de":"Konzert | L-Tryptophan | Sunny High Stuttgart","en":"Concert | L-Tryptophan | Sunny High Stuttgart"},"link":"https://www.instagram.com/reel/DRgu1FZjLpb/","isPast":true},{"date":"2026-05-15","title":{"de":"Konzert | Spa Boys | Hannover Garage Nord","en":"Concert | Spa Boys | Hannover Garage Nord"},"link":"https://www.instagram.com/garagenord/","isPast":false},{"date":"2026-05-16","title":{"de":"Konzert | Spa Boys | Köln Stereo Wonderland","en":"Concert | Spa Boys | Köln Stereo Wonderland"},"link":"https://www.instagram.com/stereo_wonderland_koeln/","isPast":false},{"date":"2026-05-17","title":{"de":"Konzert | Spa Boys | Würzburg L Club","en":"Concert | Spa Boys | Würzburg L Club"},"link":"https://www.instagram.com/lclubwuerzburg/","isPast":false},{"date":"2026-05-20","title":{"de":"Konzert | Spa Boys | Darmstadt Sumpf","en":"Concert | Spa Boys | Darmstadt Sumpf"},"link":"https://www.instagram.com/sumpfindarmstadt/","isPast":false},{"date":"2026-05-21","title":{"de":"Konzert | Spa Boys | München Olga","en":"Concert | Spa Boys | München Olga"},"link":"https://www.instagram.com/stattpark_olga_e.v/","isPast":false},{"date":"2026-05-22","title":{"de":"Konzert | Spa Boys | Mannheim Contra N","en":"Concert | Spa Boys | Mannheim Contra N"},"link":"https://www.instagram.com/contra.n.mannheim/","isPast":false},{"date":"2026-05-23","title":{"de":"Konzert | Spa Boys | Stuttgart Kap Tormentoso","en":"Concert | Spa Boys | Stuttgart Kap Tormentoso"},"link":"https://www.instagram.com/kap_tormentoso/","isPast":false},{"date":"2025-12-27","title":{"de":"Konzert | Spa Boys | Entenbrunnen","en":"Concert | Spa Boys | Entenbrunnen"},"link":"","isPast":true},{"date":"2025-08-02","title":{"de":"Konzert | Spa Boys | Glashaus Festival","en":"Concert | Spa Boys | Glashaus Festival"},"link":"https://www.instagram.com/p/DMnuNa_sLJ-/?img_index=1","isPast":true},{"date":"2024-09-27","title":{"de":"Konzert | L-Tryptophan | Horst Klub Kreuzlingen","en":"Concert | L-Tryptophan | Horst Klub Kreuzlingen"},"link":"https://www.instagram.com/p/DAd66pXqEwv/?img_index=2","isPast":true},{"date":"2024-09-20","title":{"de":"Konzert | L-Tryptophan | Obergeschoss Hell Berlin","en":"Concert | L-Tryptophan | Obergeschoss Hell Berlin"},"link":"https://decolonoize.com/?page_id=69","isPast":true},{"date":"2024-08-10","title":{"de":"Konzert | L-Tryptophan | Slow Club Freiburg","en":"Concert | L-Tryptophan | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/horror-vacui-l-tryptophan-aftershow-party-w-dj-bleakphil","isPast":true},{"date":"2020-11-27","title":{"de":"Konzert | Timbeau | Komma Esslingen Album Release","en":"Concert | Timbeau | Komma Esslingen Album Release"},"link":"https://www.youtube.com/watch?v=RFvMvBhblU4","isPast":true},{"date":"2021-07-23","title":{"de":"Konzert | Timbeau | Club Manufaktur Schorndorf","en":"Concert | Timbeau | Club Manufaktur Schorndorf"},"link":"https://www.club-manufaktur.de/event/timbeau-d-open-air/","isPast":true},{"date":"2022-10-29","title":{"de":"Konzert | Timbeau | Merlin Stuttgart","en":"Concert | Timbeau | Merlin Stuttgart"},"link":"https://merlinstuttgart.de/programm/die-wande/","isPast":true},{"date":"2022-11-05","title":{"de":"Konzert | Timbeau | Schokoladen Berlin","en":"Concert | Timbeau | Schokoladen Berlin"},"link":"https://schokoladen.tickettoaster.de/produkte/51257-tickets-timbeau-sanmao-schokoladen-berlin-am-05-11-2022","isPast":true},{"date":"2024-05-19","title":{"de":"Konzert | Timbeau | Slow Club Freiburg","en":"Concert | Timbeau | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/dives-timbeau","isPast":true},{"date":"2024-05-18","title":{"de":"Konzert | Timbeau | About Pop Festival Stuttgart","en":"Concert | Timbeau | About Pop Festival Stuttgart"},"link":"https://www.aboutpop.de/artist/timbeau/","isPast":true},{"date":"2025-03-08","title":{"de":"Konzert | Timbeau | Substage Karlsruhe","en":"Concert | Timbeau | Substage Karlsruhe"},"link":"https://substage.de/programm/3677/","isPast":true},{"date":"2025-03-07","title":{"de":"Konzert | Timbeau | Ilses Erika Leipzig","en":"Concert | Timbeau | Ilses Erika Leipzig"},"link":"https://www.ilseserika.de/termine-65/timbeau-ger-live-ilses-erika-support-superpositivity-ger-schwerer-kuehler-nndw-party-w-indie-tonne-details-weiter-unten.html","isPast":true},{"date":"2024-01-13","title":{"de":"Premiere | Pethesilea | Schall & Rauch Freiburg","en":"Premiere | Pethesilea | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/12832","isPast":true},{"date":"2024-07-27","title":{"de":"Premiere | Garland | Schall & Rauch Freiburg","en":"Premiere | Garland | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/14089","isPast":true},{"date":"2025-02-05","title":{"de":"Premiere | Galileo Galilei | Nationaltheater Mannheim","en":"Premiere | Galileo Galilei | Nationaltheater Mannheim"},"link":"","isPast":true}],"sectionMedia":{},"sectionBg":{"musik":{"url":"","active":false,"posX":"50","posY":"50","gradient":"to left"}},"eventsImage":{"url":"","active":false}};
 var data = JSON.parse(JSON.stringify(_DATA_));
 
 // PASSWORT
@@ -305,8 +331,20 @@ function setLang(l){
   lang=l;localStorage.setItem('pf_lang',l);
   document.documentElement.lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  // Update splash hint text
+  const hint=document.getElementById('splash-hint');
+  if(hint)hint.textContent=l==='en'?'touch to enter':'berühren um einzutreten';
   applyLangUI();
   renderAll();
+  // Re-render whichever view is currently active
+  if(currentSection==='home'){renderHomeText();renderHomeEvents();}
+  else if(currentSection==='project'){
+    // back button text already handled in renderAll -> applyLangUI won't catch it
+    const bb=document.getElementById('back-btn');if(bb)bb.textContent=t('back');
+  }
+  else if(currentSection==='bio'){renderBio();}
+  else if(currentSection==='kontakt'){renderKontakt();}
+  else if(currentSection&&currentSection!=='home'){renderSectionList(currentSection);}
 }
 
 // HILFSFUNKTIONEN
@@ -318,6 +356,7 @@ function migrateData(d){
   if(!d.sectionMedia)d.sectionMedia={};
   if(!d.sectionBg)d.sectionBg={};
   if(!d.eventsImage)d.eventsImage={url:'',active:false};
+  if(!d.splashAudio)d.splashAudio={source:'bandcamp',bandcampSrc:'',soundcloudSrc:'',active:false};
   if(typeof d.homeText==='string')d.homeText={de:d.homeText,en:''};
   if(typeof d.sub==='string')d.sub={de:d.sub,en:''};
   if(d.bio&&typeof d.bio.text==='string')d.bio.text={de:d.bio.text,en:''};
@@ -335,7 +374,7 @@ function migrateData(d){
   return d;
 }
 function defaultSections(){return[
-  {id:'musik',label:{de:'musik',en:'music'},type:'projects'},
+  {id:'musik',label:{de:'sound',en:'sound'},type:'projects'},
   {id:'theater',label:{de:'theater',en:'theatre'},type:'projects'},
   {id:'visuelles',label:{de:'visuelles',en:'visual'},type:'projects'},
   {id:'bio',label:{de:'bio',en:'bio'},type:'bio'},
@@ -438,9 +477,9 @@ function renderSectionList(sectionId){
       const dir=sb.gradient||'to left';
       bg.querySelector? null : null;
       bg.style.display='block';
-      // Gradient via ::after simulieren wir über ein Overlay-div
+      // Gradient via Overlay-div
       let overlay=document.getElementById('section-bg-overlay');
-      if(!overlay){overlay=document.createElement('div');overlay.id='section-bg-overlay';overlay.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;';document.getElementById('view-section').prepend(overlay);}
+      if(!overlay){overlay=document.createElement('div');overlay.id='section-bg-overlay';overlay.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;';document.body.appendChild(overlay);}
       const gradMap={
         'to left':'linear-gradient(to left,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.80) 55%,rgba(255,255,255,0.97) 100%)',
         'to right':'linear-gradient(to right,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.08) 30%,rgba(255,255,255,0.80) 55%,rgba(255,255,255,0.97) 100%)',
@@ -629,10 +668,10 @@ function buildAdminTabs(){
   const tabsEl=document.getElementById('admin-tabs');
   const panelsEl=document.getElementById('admin-tab-panels');
   const projSecs=(data.sections||[]).filter(s=>s.type==='projects');
-  const allTabs=[{id:'general',label:'Allgemein'},{id:'termine',label:'Termine'},...projSecs.map(s=>({id:'proj_'+s.id,label:L(s.label)})),{id:'bio',label:'Bio'},{id:'kontakt',label:'Kontakt'}];
+  const allTabs=[{id:'general',label:'Allgemein'},{id:'splash',label:'Splash / Sound'},{id:'termine',label:'Termine'},...projSecs.map(s=>({id:'proj_'+s.id,label:L(s.label)})),{id:'bio',label:'Bio'},{id:'kontakt',label:'Kontakt'}];
   tabsEl.innerHTML=allTabs.map((t,i)=>`<div class="tab${i===0?' active':''}" onclick="switchTab('${t.id}',this)">${escH(t.label)}</div>`).join('');
   panelsEl.innerHTML=allTabs.map((t,i)=>`<div class="tab-panel${i===0?' active':''}" id="tab-${t.id}"></div>`).join('');
-  renderTabGeneral();renderTabTermine();projSecs.forEach(s=>renderTabProjects(s.id));renderTabBio();renderTabKontakt();
+  renderTabGeneral();renderTabSplash();renderTabTermine();projSecs.forEach(s=>renderTabProjects(s.id));renderTabBio();renderTabKontakt();
 }
 function switchTab(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -715,13 +754,13 @@ function editEvent(idx){
   card.innerHTML=`
     <div class="eac-info" style="width:100%;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;margin-bottom:.4rem;">
-        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">🇩🇪 Titel</div><input id="ee-tde-${idx}" value="${escH((ev.title||{}).de||'')}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;width:100%;font-family:Karla,sans-serif;outline:none;"/></div>
-        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">🇬🇧 Title</div><input id="ee-ten-${idx}" value="${escH((ev.title||{}).en||'')}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;width:100%;font-family:Karla,sans-serif;outline:none;"/></div>
+        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">🇩🇪 Titel</div><input id="ee-tde-${idx}" value="${escH((ev.title||{}).de||'')}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;width:100%;font-family:'Viaoda Libre',cursive;outline:none;"/></div>
+        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">🇬🇧 Title</div><input id="ee-ten-${idx}" value="${escH((ev.title||{}).en||'')}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;width:100%;font-family:'Viaoda Libre',cursive;outline:none;"/></div>
       </div>
       <div style="display:flex;gap:.4rem;margin-bottom:.4rem;flex-wrap:wrap;">
-        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">Datum</div><input type="date" id="ee-date-${idx}" value="${escH(ev.date||'')}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;font-family:Karla,sans-serif;outline:none;"/></div>
-        <div style="flex:1;min-width:120px;"><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">Link (optional)</div><input id="ee-link-${idx}" value="${escH(ev.link||'')}" placeholder="https://..." style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;width:100%;font-family:Karla,sans-serif;outline:none;"/></div>
-        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">Status</div><select id="ee-past-${idx}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;font-family:Karla,sans-serif;outline:none;background:#fafafa;"><option value="0"${!ev.isPast?' selected':''}>Kommend</option><option value="1"${ev.isPast?' selected':''}>Vergangen</option></select></div>
+        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">Datum</div><input type="date" id="ee-date-${idx}" value="${escH(ev.date||'')}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;font-family:'Viaoda Libre',cursive;outline:none;"/></div>
+        <div style="flex:1;min-width:120px;"><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">Link (optional)</div><input id="ee-link-${idx}" value="${escH(ev.link||'')}" placeholder="https://..." style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;width:100%;font-family:'Viaoda Libre',cursive;outline:none;"/></div>
+        <div><div style="font-size:.6rem;color:#aaa;margin-bottom:.15rem;">Status</div><select id="ee-past-${idx}" style="border:1px solid #ddd;padding:.3rem .4rem;font-size:.75rem;font-family:'Viaoda Libre',cursive;outline:none;background:#fafafa;"><option value="0"${!ev.isPast?' selected':''}>Kommend</option><option value="1"${ev.isPast?' selected':''}>Vergangen</option></select></div>
       </div>
       <button class="admin-btn small" onclick="saveEvent(${idx})" style="margin-right:4px;">Speichern</button>
       <button class="admin-btn secondary small" onclick="renderEventsAdmin()">Abbrechen</button>
@@ -969,12 +1008,120 @@ function dDrop(e,type,targetIdx,sectionId){
 }
 function cleanup(){_dt=null;_di=null;_ds=null;document.querySelectorAll('.dragging').forEach(el=>el.classList.remove('dragging'));}
 
+// SPLASH SCREEN & AUDIO
+let splashAudio=null;
+let splashDismissed=false;
+
+function buildSplashAudioPlayer(){
+  const sa=data.splashAudio||{};
+  if(!sa.active)return;
+  // Create hidden iframe for audio (no visible embed)
+  const existing=document.getElementById('splash-audio-frame');
+  if(existing)existing.remove();
+  const src=sa.source==='soundcloud'?sa.soundcloudSrc:sa.bandcampSrc;
+  if(!src)return;
+  const iframe=document.createElement('iframe');
+  iframe.id='splash-audio-frame';
+  iframe.style.cssText='display:none;position:absolute;width:0;height:0;';
+  iframe.allow='autoplay';
+  // For SoundCloud: use widget URL with auto_play=true
+  // For Bandcamp: use embed src with autoplay
+  if(sa.source==='soundcloud'){
+    const base=src.includes('w.soundcloud.com')?src:
+      'https://w.soundcloud.com/player/?url='+encodeURIComponent(src)+'&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&color=%231a1a1a';
+    iframe.src=base.replace('auto_play=false','auto_play=true').includes('auto_play=')?
+      base.replace('auto_play=false','auto_play=true'):base+'&auto_play=true';
+  }else{
+    // Bandcamp: append autoplay=1
+    let bsrc=src;
+    bsrc+=bsrc.includes('?')?'&autoplay=1':'autoplay=1';
+    iframe.src=bsrc;
+  }
+  document.body.appendChild(iframe);
+  splashAudio=iframe;
+}
+
+function initSplash(){
+  const splash=document.getElementById('splash');
+  const sa=data.splashAudio||{};
+  const ei=data.eventsImage||{};
+  // Splash image = same as eventsImage or dedicated splashImg
+  const imgEl=document.getElementById('splash-img');
+  const splashImgUrl=data.splashImg||ei.url||'';
+  if(splashImgUrl){imgEl.src=splashImgUrl;imgEl.style.display='block';}
+  // Update hint text for lang
+  const hint=document.getElementById('splash-hint');
+  if(hint)hint.textContent=lang==='en'?'touch to enter':'berühren um einzutreten';
+
+  function dismiss(){
+    if(splashDismissed)return;
+    splashDismissed=true;
+    splash.classList.add('fade-out');
+    setTimeout(()=>{splash.style.display='none';},850);
+    // Show volume bar if audio active
+    if(sa.active){
+      const vb=document.getElementById('volume-bar');
+      if(vb)vb.style.display='flex';
+      buildSplashAudioPlayer();
+    }
+  }
+  splash.addEventListener('click',dismiss);
+  // Auto-dismiss after 8s if no image
+  if(!splashImgUrl){setTimeout(dismiss,300);}
+}
+
+// VOLUME CONTROL (controls iframe via postMessage for SoundCloud, or via Web Audio if possible)
+document.getElementById('volume-slider').addEventListener('input',function(){
+  const vol=parseFloat(this.value);
+  const iframe=document.getElementById('splash-audio-frame');
+  if(!iframe)return;
+  // SoundCloud Widget API volume
+  iframe.contentWindow&&iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:vol*100}),'*');
+  // Bandcamp: no standard postMessage API — we adjust iframe opacity as visual hint (audio unchanged)
+});
+
+// BACKEND TAB: SPLASH/AUDIO CONFIG
+function renderTabSplash(){
+  const sa=data.splashAudio||{source:'bandcamp',bandcampSrc:'',soundcloudSrc:'',active:false};
+  const si=data.splashImg||'';
+  document.getElementById('tab-splash').innerHTML=`
+    <div class="admin-section">
+      <div class="admin-section-title">Splash-Screen Bild</div>
+      <div class="admin-field"><label>Bild-URL (imgbb Direct link — wird beim Öffnen der Seite angezeigt)</label>
+        <input id="sp-img" value="${escH(si)}" placeholder="https://i.ibb.co/..."/></div>
+      <button class="admin-btn" onclick="saveSplash()">Speichern</button>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">Hintergrundmusik (Splash)</div>
+      <div class="admin-field"><label>Aktiv?</label>
+        <select id="sp-active"><option value="0"${!sa.active?' selected':''}>Nein – kein Sound</option><option value="1"${sa.active?' selected':''}>Ja – Sound abspielen</option></select></div>
+      <div class="admin-field"><label>Quelle</label>
+        <select id="sp-source"><option value="bandcamp"${sa.source==='bandcamp'?' selected':''}>Bandcamp</option><option value="soundcloud"${sa.source==='soundcloud'?' selected':''}>SoundCloud</option></select></div>
+      <div class="admin-field"><label>Bandcamp Embed-src URL (nur die src="…" URL aus dem Embed-Code)</label>
+        <input id="sp-bc" value="${escH(sa.bandcampSrc||'')}" placeholder="https://bandcamp.com/EmbeddedPlayer/..."/></div>
+      <div class="admin-field"><label>SoundCloud Track-URL oder Widget-URL</label>
+        <input id="sp-sc" value="${escH(sa.soundcloudSrc||'')}" placeholder="https://soundcloud.com/user/track"/></div>
+      <button class="admin-btn" onclick="saveSplash()">Speichern</button>
+    </div>`;
+}
+function saveSplash(){
+  data.splashImg=document.getElementById('sp-img').value.trim();
+  if(!data.splashAudio)data.splashAudio={};
+  data.splashAudio.active=document.getElementById('sp-active').value==='1';
+  data.splashAudio.source=document.getElementById('sp-source').value;
+  data.splashAudio.bandcampSrc=document.getElementById('sp-bc').value.trim();
+  data.splashAudio.soundcloudSrc=document.getElementById('sp-sc').value.trim();
+  showSaveNotice();
+}
+
 // INIT
 function init(){
   data=migrateData(data);
   renderAll();
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
-  // Erst prüfen ob #backend in URL, dann Hash entfernen
+  // Splash
+  initSplash();
+  // Backend hash
   if(window.location.hash==='#backend'){
     openBackend();
   }
