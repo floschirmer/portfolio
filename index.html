@@ -24,14 +24,15 @@
     html{scroll-behavior:smooth;}
     body{background:var(--bg);color:var(--text);font-family:'Viaoda Libre',cursive;font-weight:300;min-height:100vh;text-transform:lowercase;}
     #app{display:flex;flex-direction:column;min-height:100vh;}
-    header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);transition:background 0.4s ease,backdrop-filter 0.4s ease;}
-    header.scrolled{background:transparent;backdrop-filter:none;}
-    header.scrolled .site-name,header.scrolled nav a,header.scrolled .lang-btn,header.scrolled .site-sub{text-shadow:0 1px 6px rgba(0,0,0,0.35);}
-    header.scrolled nav a{color:rgba(255,255,255,0.75);}
-    header.scrolled nav a:hover,header.scrolled nav a.active{color:#fff;border-bottom-color:#fff;}
-    header.scrolled .site-name{color:var(--text);}
-    header.scrolled .lang-btn{color:rgba(255,255,255,0.6);}
-    header.scrolled .lang-btn.active{color:#fff;}
+    header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);transition:background 0.5s ease, opacity 0.4s ease;}
+    header.scrolled{background:rgba(255,255,255,0);}
+    header.scrolled .site-name,header.scrolled nav a,header.scrolled .lang-btn,header.scrolled .site-sub{
+      text-shadow:0 0 12px rgba(255,255,255,1),0 0 28px rgba(255,255,255,0.9),0 1px 4px rgba(0,0,0,0.15);
+    }
+    header.scrolled nav a{color:var(--text);}
+    header.scrolled nav a:hover,header.scrolled nav a.active{color:#000;border-bottom-color:#000;}
+    header.scrolled .lang-btn{color:var(--muted);}
+    header.scrolled .lang-btn.active{color:var(--text);}
     /* Push content below fixed header */
     #app{padding-top:7rem;}
     .site-name{font-family:'Viaoda Libre',cursive;font-size:1.4rem;font-weight:400;letter-spacing:0.05em;text-transform:lowercase;color:var(--text);cursor:pointer;display:block;}
@@ -110,35 +111,7 @@
     body.has-bg #app{background:transparent;}
     body.has-bg main{background:transparent;}
 
-    /* Hover-Highlight für Textblöcke bei aktivem Hintergrundbild */
-    body.has-bg .project-item,
-    body.has-bg .event-item,
-    body.has-bg .home-intro,
-    body.has-bg .bio-text,
-    body.has-bg .contact-link-item,
-    body.has-bg .project-desc,
-    body.has-bg .project-heading,
-    body.has-bg .back-btn,
-    body.has-bg #project-content{
-      border-radius:4px;
-      transition:background 0.25s ease, padding 0.25s ease;
-      padding-left:0.6rem;
-      padding-right:0.6rem;
-    }
-    body.has-bg .project-item:hover,
-    body.has-bg .event-item:hover,
-    body.has-bg .home-intro:hover,
-    body.has-bg .bio-text:hover,
-    body.has-bg .contact-link-item:hover,
-    body.has-bg .project-desc:hover,
-    body.has-bg .project-heading:hover,
-    body.has-bg .back-btn:hover,
-    body.has-bg #project-content:hover{
-      background:rgba(255,255,255,0.65);
-      backdrop-filter:blur(4px);
-    }
-
-    /* Text shadow for readability without white overlay */
+    /* Leuchten-Effekt: schwarze Schrift mit weißem Lichtschein */
     body.has-bg .project-title,
     body.has-bg .project-short-desc,
     body.has-bg .project-year,
@@ -147,6 +120,7 @@
     body.has-bg .project-desc,
     body.has-bg .project-meta,
     body.has-bg .event-title,
+    body.has-bg .event-date,
     body.has-bg .home-intro,
     body.has-bg .site-name,
     body.has-bg nav a,
@@ -157,7 +131,52 @@
     body.has-bg .contact-link-val a,
     body.has-bg .bio-text,
     body.has-bg footer{
-      text-shadow:0 1px 6px rgba(255,255,255,0.95),0 0 16px rgba(255,255,255,0.8);
+      color:#1a1a1a;
+      text-shadow:
+        0 0 8px rgba(255,255,255,1),
+        0 0 18px rgba(255,255,255,1),
+        0 0 35px rgba(255,255,255,0.95),
+        0 0 60px rgba(255,255,255,0.7),
+        0 0 90px rgba(255,255,255,0.4);
+    }
+
+    /* Schrift etwas größer wenn Hintergrundbild aktiv */
+    body.has-bg .project-title{font-size:1.35rem;}
+    body.has-bg .project-short-desc{font-size:0.95rem;}
+    body.has-bg .project-heading{font-size:2.3rem;}
+    body.has-bg .project-desc{font-size:1.05rem;}
+    body.has-bg .event-title{font-size:1.1rem;}
+    body.has-bg .home-intro{font-size:1.2rem;}
+    body.has-bg .bio-text{font-size:1.15rem;}
+    body.has-bg .contact-link-val a{font-size:1.15rem;}
+
+    /* Hover-Highlight: milchiger Hintergrund mit verstärktem Leuchten */
+    body.has-bg .project-item,
+    body.has-bg .event-item,
+    body.has-bg .home-intro,
+    body.has-bg .bio-text,
+    body.has-bg .contact-link-item,
+    body.has-bg .project-desc,
+    body.has-bg .project-heading,
+    body.has-bg .back-btn,
+    body.has-bg #project-content{
+      border-radius:6px;
+      transition:background 0.3s ease, box-shadow 0.3s ease;
+      padding-left:0.7rem;
+      padding-right:0.7rem;
+    }
+    body.has-bg .project-item:hover,
+    body.has-bg .event-item:hover,
+    body.has-bg .home-intro:hover,
+    body.has-bg .bio-text:hover,
+    body.has-bg .contact-link-item:hover,
+    body.has-bg .project-desc:hover,
+    body.has-bg .project-heading:hover,
+    body.has-bg .back-btn:hover,
+    body.has-bg #project-content:hover{
+      background:rgba(255,255,255,0.55);
+      backdrop-filter:blur(6px);
+      box-shadow:0 0 30px rgba(255,255,255,0.6), 0 0 60px rgba(255,255,255,0.3);
     }
     .home-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;display:none;}
     #view-home .home-intro,#view-home #home-events{position:relative;z-index:1;}
@@ -1404,16 +1423,31 @@ function updateBgState(){
   window.dispatchEvent(new Event('scroll'));
 }
 
-// HEADER SCROLL TRANSPARENCY
+// HEADER SCROLL TRANSPARENCY — graduell transparent werden
 window.addEventListener('scroll',()=>{
   const header=document.querySelector('header');
   if(!header)return;
-  // Only go transparent when a background image is active
   const hasBg=document.getElementById('section-bg')?.style.display==='block'||
                document.getElementById('project-bg')?.style.display==='block'||
                document.getElementById('home-bg')?.style.display==='block';
-  if(hasBg&&window.scrollY>60){header.classList.add('scrolled');}
-  else{header.classList.remove('scrolled');}
+  if(!hasBg){header.classList.remove('scrolled');header.style.background='';header.style.opacity='';return;}
+  const scrollY=window.scrollY;
+  const fadeStart=20;
+  const fadeEnd=140;
+  if(scrollY<=fadeStart){
+    header.style.background='var(--bg)';
+    header.style.opacity='1';
+    header.classList.remove('scrolled');
+  }else if(scrollY>=fadeEnd){
+    header.style.background='transparent';
+    header.style.opacity='1';
+    header.classList.add('scrolled');
+  }else{
+    const progress=(scrollY-fadeStart)/(fadeEnd-fadeStart);
+    const alpha=1-progress;
+    header.style.background=`rgba(255,255,255,${alpha})`;
+    header.classList.add('scrolled');
+  }
 },{ passive:true });
 
 // SOUNDCLOUD PRELOAD — load iframe silently at page start so iOS allows playback on click
