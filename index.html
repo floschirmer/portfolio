@@ -137,7 +137,7 @@
 
     /* CD Icons auf Startseite */
     .sound-circle{position:absolute;border-radius:50%;cursor:pointer;animation:cd-spin 18s linear infinite;will-change:transform;}
-    .sound-circle::after{content:'';position:absolute;inset:-6px;border-radius:50%;box-shadow:0 4px 14px rgba(0,0,0,0.22);pointer-events:none;z-index:-1;}
+    .sound-circle::after{content:'';position:absolute;inset:0;border-radius:50%;box-shadow:0 4px 14px rgba(0,0,0,0.22);pointer-events:none;z-index:-1;}
     .sound-circle:hover::after{box-shadow:0 6px 20px rgba(0,0,0,0.32);}
     .sound-circle.expanded{animation:cd-spin 12s linear infinite;}
     .sound-circle.expanded::after{box-shadow:0 10px 40px rgba(0,0,0,0.35);}
@@ -1058,7 +1058,7 @@ function cdSVG(){
   <circle cx="100" cy="100" r="96" fill="url(#cd_rainbow)" clip-path="url(#cd_clip)" opacity="0.9"/>
   <circle cx="100" cy="100" r="96" fill="url(#cd_shine)" clip-path="url(#cd_clip)"/>
   <circle cx="100" cy="100" r="96" fill="url(#cd_ref)" clip-path="url(#cd_clip)"/>
-  <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(160,160,180,0.5)" stroke-width="1"/>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(160,160,180,0.15)" stroke-width="0.5"/>
   <circle cx="100" cy="100" r="26" fill="url(#cd_hub)"/>
   <circle cx="100" cy="100" r="26" fill="none" stroke="rgba(180,180,200,0.4)" stroke-width="0.8"/>
   <circle cx="100" cy="100" r="7" fill="#888898"/>
