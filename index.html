@@ -423,8 +423,8 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
           <button class="export-btn-dl admin-btn secondary" onclick="exportSite()" style="background:#888;">⬇ Nur herunterladen</button>
         </div>
       </div>
-      <div class="tabs" id="admin-tabs"><div class="tab" onclick="switchTab('general',this)">Allgemein</div><div class="tab" onclick="switchTab('splash',this)">Splash / Sound</div><div class="tab" onclick="switchTab('circles',this)">Startseiten-Kreise</div><div class="tab active" onclick="switchTab('termine',this)">Termine</div><div class="tab" onclick="switchTab('proj_musik',this)">sound</div><div class="tab" onclick="switchTab('proj_theater',this)">theater</div><div class="tab" onclick="switchTab('proj_visuelles',this)">visuelles</div><div class="tab" onclick="switchTab('bio',this)">Bio</div><div class="tab" onclick="switchTab('kontakt',this)">Kontakt</div></div>
-      <div id="admin-tab-panels"><div class="tab-panel" id="tab-general">
+      <div class="tabs" id="admin-tabs"><div class="tab active" onclick="switchTab('general',this)">Allgemein</div><div class="tab" onclick="switchTab('splash',this)">Splash / Sound</div><div class="tab" onclick="switchTab('circles',this)">Startseiten-Kreise</div><div class="tab" onclick="switchTab('termine',this)">Termine</div><div class="tab" onclick="switchTab('proj_musik',this)">sound</div><div class="tab" onclick="switchTab('proj_theater',this)">theater</div><div class="tab" onclick="switchTab('proj_visuelles',this)">visuelles</div><div class="tab" onclick="switchTab('bio',this)">Bio</div><div class="tab" onclick="switchTab('kontakt',this)">Kontakt</div></div>
+      <div id="admin-tab-panels"><div class="tab-panel active" id="tab-general">
     <div class="admin-section">
       <div class="admin-section-title">Hintergrundbild (Startseite)</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
@@ -515,7 +515,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         </div>
         <button class="admin-btn" onclick="addCircle()">+ CD hinzufügen</button>
       </div>
-    </div></div><div class="tab-panel active" id="tab-termine">
+    </div></div><div class="tab-panel" id="tab-termine">
     <div class="admin-section">
       <div class="admin-section-title">Hintergrundbild (Termine-Seite)</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
@@ -2473,4 +2473,4 @@ try{init();}catch(e){
     <filter id="cd_shadow" x="-15%" y="-15%" width="130%" height="140%">
       <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="rgba(0,0,0,0.28)"/>
     </filter>
-  </defs></svg></body></html>
+  </defs></svg><div popover="manual" style="z-index: 2147483647 !important; padding: 0px !important; margin: 0px !important; border-radius: 8px !important; position: fixed !important; color-scheme: normal !important; box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 4px 0px, rgba(0, 0, 0, 0.18) 0px 8px 15px 6px !important; border: 1px solid rgba(0, 0, 0, 0.2) !important; overflow: hidden !important; backdrop-filter: blur(20px) !important; background-color: rgba(230, 230, 230, 0.8) !important; top: 240px !important; left: -999999px !important; opacity: 0 !important; visibility: hidden !important; height: 106.5px !important; width: 305px !important;"></div></body></html>
