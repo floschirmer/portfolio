@@ -658,6 +658,13 @@ function renderAll(){
 }
 
 // HOME
+function renderHomeText(){
+  const el=document.getElementById('home-text');
+  if(!el)return;
+  const text=L(data.homeText)||'';
+  el.innerHTML=escH(text).replace(/\n/g,'<br>');
+}
+
 function renderHomeBg(){
   const bg=document.getElementById('home-bg');
   if(!bg)return;
