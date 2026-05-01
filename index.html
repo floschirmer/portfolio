@@ -1100,6 +1100,40 @@ function buildAdminTabs(){
   projSecs.forEach(s=>renderTabProjects(s.id));renderTabBio();renderTabKontakt();
 }
 
+// Single shared drag state + listeners — defined BEFORE renderCdCanvas uses them
+let _cdDrag=null;
+function _cdMouseMove(e){
+  if(!_cdDrag)return;
+  const {dot,c,startX,startY,origX,origY,canvas}=_cdDrag;
+  const rect=canvas.getBoundingClientRect();
+  let nx=origX+((e.clientX-startX)/rect.width*100);
+  let ny=origY+((e.clientY-startY)/rect.height*100);
+  nx=Math.max(3,Math.min(97,nx));ny=Math.max(3,Math.min(97,ny));
+  c.x=Math.round(nx*10)/10;c.y=Math.round(ny*10)/10;
+  dot.style.left=(c.x/100)*rect.width+'px';
+  dot.style.top=(c.y/100)*rect.height+'px';
+}
+function _cdMouseUp(){
+  if(!_cdDrag)return;
+  _cdDrag.dot.style.cursor='grab';_cdDrag=null;
+  renderCircles();showSaveNotice();
+}
+function _cdTouchMove(e){
+  if(!_cdDrag)return;
+  const {dot,c,startX,startY,origX,origY,canvas}=_cdDrag;
+  const rect=canvas.getBoundingClientRect();
+  let nx=origX+((e.touches[0].clientX-startX)/rect.width*100);
+  let ny=origY+((e.touches[0].clientY-startY)/rect.height*100);
+  nx=Math.max(3,Math.min(97,nx));ny=Math.max(3,Math.min(97,ny));
+  c.x=Math.round(nx*10)/10;c.y=Math.round(ny*10)/10;
+  dot.style.left=(c.x/100)*rect.width+'px';
+  dot.style.top=(c.y/100)*rect.height+'px';
+  e.preventDefault();
+}
+function _cdTouchEnd(){_cdDrag=null;renderCircles();showSaveNotice();}
+window.addEventListener('mousemove',_cdMouseMove,{passive:true});
+window.addEventListener('mouseup',_cdMouseUp);
+
 // CIRCLES BACKEND TAB
 function renderTabCircles(){
   const circles=data.soundCircles||[];
@@ -1185,41 +1219,6 @@ function renderCdCanvas(){
   previewDot.style.cssText=`position:absolute;right:8px;bottom:8px;width:${Math.max(16,previewSize*0.28)}px;height:${Math.max(16,previewSize*0.28)}px;border-radius:50%;background:rgba(26,26,26,0.1);border:1px dashed #aaa;pointer-events:none;`;
   canvas.appendChild(previewDot);
 }
-
-// Single shared drag state + listeners (no memory leak)
-let _cdDrag=null;
-function _cdMouseMove(e){
-  if(!_cdDrag)return;
-  const {dot,c,startX,startY,origX,origY,canvas}=_cdDrag;
-  const rect=canvas.getBoundingClientRect();
-  let nx=origX+((e.clientX-startX)/rect.width*100);
-  let ny=origY+((e.clientY-startY)/rect.height*100);
-  nx=Math.max(3,Math.min(97,nx));ny=Math.max(3,Math.min(97,ny));
-  c.x=Math.round(nx*10)/10;c.y=Math.round(ny*10)/10;
-  dot.style.left=(c.x/100)*rect.width+'px';
-  dot.style.top=(c.y/100)*rect.height+'px';
-}
-function _cdMouseUp(){
-  if(!_cdDrag)return;
-  _cdDrag.dot.style.cursor='grab';_cdDrag=null;
-  renderCircles();showSaveNotice();
-}
-function _cdTouchMove(e){
-  if(!_cdDrag)return;
-  const {dot,c,startX,startY,origX,origY,canvas}=_cdDrag;
-  const rect=canvas.getBoundingClientRect();
-  let nx=origX+((e.touches[0].clientX-startX)/rect.width*100);
-  let ny=origY+((e.touches[0].clientY-startY)/rect.height*100);
-  nx=Math.max(3,Math.min(97,nx));ny=Math.max(3,Math.min(97,ny));
-  c.x=Math.round(nx*10)/10;c.y=Math.round(ny*10)/10;
-  dot.style.left=(c.x/100)*rect.width+'px';
-  dot.style.top=(c.y/100)*rect.height+'px';
-  e.preventDefault();
-}
-function _cdTouchEnd(){_cdDrag=null;renderCircles();showSaveNotice();}
-window.addEventListener('mousemove',_cdMouseMove,{passive:true});
-window.addEventListener('mouseup',_cdMouseUp);
-
 function renderCirclesAdmin(){
   const el=document.getElementById('circles-admin-list');if(!el)return;
   const circles=data.soundCircles||[];
