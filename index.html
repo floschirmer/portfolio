@@ -981,13 +981,26 @@ function saveGhToken(){
   document.getElementById('gh-token-input').value='';
   updateTokenStatus();
 }
-function updateTokenStatus(){
+async function updateTokenStatus(){
   const el=document.getElementById('gh-token-status');if(!el)return;
   const stored=localStorage.getItem('pf_gh_token');
   const inputVal=document.getElementById('gh-token-input')?.value.trim();
-  if(inputVal){el.style.color='#888';el.textContent='Noch nicht gespeichert — klicke „Token speichern".';}
-  else if(stored){el.style.color='green';el.textContent='✓ Token gespeichert. Veröffentlichen mit einem Klick möglich.';}
-  else{el.style.color='#c00';el.textContent='Kein Token — Veröffentlichen nicht möglich.';}
+  if(inputVal){el.style.color='#888';el.textContent='Noch nicht gespeichert — klicke „Token speichern“.';return;}
+  if(!stored){el.style.color='#c00';el.textContent='Kein Token — Veröffentlichen nicht möglich.';return;}
+  el.style.color='#888';el.textContent='⧗ Prüfe Token…';
+  try{
+    const res=await fetch('https://api.github.com/user',{headers:{'Authorization':'token '+stored,'Accept':'application/vnd.github.v3+json'}});
+    if(res.ok){
+      const u=await res.json();
+      el.style.color='green';el.textContent='✓ Token gültig ('+u.login+'). Veröffentlichen möglich.';
+    }else if(res.status===401){
+      el.style.color='#c00';el.textContent='✗ Token ungültig oder abgelaufen — bitte neuen Token eintragen.';
+    }else{
+      el.style.color='#c00';el.textContent='✗ GitHub antwortet nicht (Status '+res.status+').';
+    }
+  }catch(e){
+    el.style.color='#888';el.textContent='⚠ Keine Verbindung zu GitHub — Token-Status unbekannt.';
+  }
 }
 
 // Shared SVG defs injected once into DOM — avoids repeating gradients per CD
