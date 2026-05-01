@@ -322,7 +322,7 @@
     <div class="view active" id="view-home">
       <div class="home-bg" id="home-bg"></div>
       <div id="circles-container"></div>
-      <p class="home-intro" id="home-text">Willkommen.</p>
+      <p class="home-intro" id="home-text"></p>
     </div>
     <div class="view" id="view-section">
       <div class="section-bg" id="section-bg"></div>
@@ -856,24 +856,21 @@ async function exportSite(){
   const btn=document.querySelector('.export-btn');
   const dlBtn=document.querySelector('.export-btn-dl');
 
-  // Baue neue HTML direkt aus dem aktuellen DOM — kein fetch nötig
+  // Baue neue HTML — holt saubere Kopie vom Server und ersetzt nur _DATA_
   async function buildNewHtml(){
-    // Get the current page HTML
-    const originalHtml=document.documentElement.outerHTML;
+    let originalHtml;
+    try{
+      const resp=await fetch(window.location.pathname,{cache:'no-store'});
+      if(resp.ok)originalHtml=await resp.text();
+    }catch(e){}
+    // Fallback: outerHTML (weniger zuverlässig aber besser als gar nichts)
+    if(!originalHtml)originalHtml=document.documentElement.outerHTML;
     const dataJson=JSON.stringify(data);
     const marker='var _DATA_ = ';
     const markerEnd=';\nvar data = JSON.parse';
     const start=originalHtml.indexOf(marker);
     const end=originalHtml.indexOf(markerEnd);
-    if(start===-1||end===-1){
-      // Fallback: fetch from server
-      const resp=await fetch(window.location.pathname,{cache:'no-store'});
-      const fetchedHtml=await resp.text();
-      const s2=fetchedHtml.indexOf(marker);
-      const e2=fetchedHtml.indexOf(markerEnd);
-      if(s2===-1||e2===-1)throw new Error('Daten-Marker nicht gefunden.');
-      return fetchedHtml.substring(0,s2)+marker+dataJson+fetchedHtml.substring(e2);
-    }
+    if(start===-1||end===-1)throw new Error('Daten-Marker nicht gefunden. Bitte Seite neu laden.');
     return originalHtml.substring(0,start)+marker+dataJson+originalHtml.substring(end);
   }
 
@@ -1713,28 +1710,35 @@ function buildSplashAudioPlayer(){
       if(vb)vb.style.display='flex';
     }
   }else{
-    // Reuse preloaded iframe if it exists (SoundCloud), otherwise create new (Bandcamp)
+    // SoundCloud or Bandcamp via iframe
+    const url=sa.source==='soundcloud'?sa.soundcloudSrc:sa.bandcampSrc;
+    if(!url)return;
     let iframe=document.getElementById('splash-audio-frame');
-    if(!iframe){
-      const url=sa.source==='soundcloud'?sa.soundcloudSrc:sa.bandcampSrc;
-      if(!url)return;
+    if(iframe){
+      // Already preloaded — just trigger play
+      try{
+        iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(currentVolume*100)}),'*');
+        iframe.contentWindow.postMessage(JSON.stringify({method:'play'}),'*');
+      }catch(e){}
+    }else{
+      // Create fresh with autoplay=true
       iframe=document.createElement('iframe');
       iframe.id='splash-audio-frame';
       iframe.style.cssText='display:none;position:absolute;width:0;height:0;';
       iframe.allow='autoplay';
       if(sa.source==='soundcloud'){
         let scUrl=url;
-        if(!scUrl.includes('w.soundcloud.com')){scUrl='https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false';}
-        else{scUrl=scUrl.replace('auto_play=false','auto_play=true');if(!scUrl.includes('auto_play='))scUrl+='&auto_play=true';}
+        if(!scUrl.includes('w.soundcloud.com')){
+          scUrl='https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false';
+        }else{
+          scUrl=scUrl.replace('auto_play=false','auto_play=true');
+          if(!scUrl.includes('auto_play='))scUrl+='&auto_play=true';
+        }
         iframe.src=scUrl;
-      }else{let b=url;b+=b.includes('?')?'&autoplay=1':'?autoplay=1';iframe.src=b;}
+      }else{
+        let b=url;b+=b.includes('?')?'&autoplay=1':'?autoplay=1';iframe.src=b;
+      }
       document.body.appendChild(iframe);
-    }else{
-      // Unmute and play preloaded SC iframe
-      try{
-        iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(currentVolume*100)}),'*');
-        iframe.contentWindow.postMessage(JSON.stringify({method:'play'}),'*');
-      }catch(e){}
     }
     splashAudio=iframe;
     const vb=document.getElementById('volume-bar');
@@ -1764,29 +1768,57 @@ function applyVolume(vol){
 
 function initSplash(){
   const splash=document.getElementById('splash');
+  if(!splash)return;
   const sa=data.splashAudio||{};
-  const imgEl=document.getElementById('splash-img');
   const splashImgUrl=data.splashImg||'';
-  if(splashImgUrl){imgEl.src=splashImgUrl;imgEl.style.display='block';}
+
+  // Set image immediately
+  const imgEl=document.getElementById('splash-img');
+  if(splashImgUrl&&imgEl){imgEl.src=splashImgUrl;imgEl.style.display='block';}
+
+  // Set hint text
   const hint=document.getElementById('splash-hint');
   if(hint)hint.textContent=lang==='en'?'click to enter':'klicken um einzutreten';
-  // Always show splash — hide it only if both image AND audio are missing
+
+  // If nothing configured, skip splash entirely
   if(!splashImgUrl&&!sa.active){splash.style.display='none';return;}
-  // Preload SoundCloud if needed
-  if(sa.active&&sa.source==='soundcloud')preloadSoundcloudIfNeeded();
+
+  // Preload SoundCloud iframe silently so it's ready on first click
+  if(sa.active&&sa.source==='soundcloud'&&sa.soundcloudSrc){
+    const existing=document.getElementById('splash-audio-frame');
+    if(!existing){
+      const iframe=document.createElement('iframe');
+      iframe.id='splash-audio-frame';
+      iframe.style.cssText='display:none;position:absolute;width:0;height:0;';
+      iframe.allow='autoplay';
+      let scUrl=sa.soundcloudSrc;
+      if(!scUrl.includes('w.soundcloud.com')){
+        scUrl='https://w.soundcloud.com/player/?url='+encodeURIComponent(scUrl)+'&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false';
+      }else{
+        scUrl=scUrl.replace('auto_play=true','auto_play=false');
+      }
+      iframe.src=scUrl;
+      document.body.appendChild(iframe);
+    }
+  }
+
   let clicked=false;
   splash.addEventListener('click',function(){
     if(!clicked){
+      // FIRST CLICK: show text + start sound
       clicked=true;
+      if(hint)hint.style.opacity='0';
       const ctaWrap=document.getElementById('splash-cta');
       const ctaText=document.getElementById('splash-cta-text');
-      if(hint)hint.style.opacity='0';
       if(ctaWrap)ctaWrap.style.display='block';
       if(ctaText)setTimeout(()=>{ctaText.style.opacity='1';},50);
+      // Start audio
       if(sa.active)buildSplashAudioPlayer();
+      // Show volume bar
       const vb=document.getElementById('volume-bar');
       if(vb&&sa.active)vb.style.display='flex';
     }else{
+      // SECOND CLICK: enter the site
       splash.classList.add('fade-out');
       setTimeout(()=>{splash.style.display='none';},1000);
     }
@@ -1954,6 +1986,7 @@ function preloadSoundcloudIfNeeded(){
 function init(){
   data=migrateData(data);
   renderAll();
+  renderHomeBg();
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
   initSplash();
   if(window.location.hash==='#backend'){openBackend();}
