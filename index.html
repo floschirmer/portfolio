@@ -19,20 +19,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#ffffff;--text:#1a1a1a;--muted:#888;--line:#d0cdc8;--glow-shadow:0 0 10px rgba(255,255,255,1), 0 0 30px rgba(255,255,255,0.9), 0 0 70px rgba(255,255,255,0.5);}
+    :root{--bg:#ffffff;--text:#1a1a1a;--muted:#888;--line:#d0cdc8;}
     *{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
     body{background:var(--bg);color:var(--text);font-family:'Viaoda Libre',cursive;font-weight:300;min-height:100vh;text-transform:lowercase;}
     #app{display:flex;flex-direction:column;min-height:100vh;}
-    header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);transition:background 0.5s ease, opacity 0.4s ease;}
-    header.scrolled{background:rgba(255,255,255,0);}
-    header.scrolled .site-name,header.scrolled nav a,header.scrolled .lang-btn,header.scrolled .site-sub{
-      text-shadow:0 0 12px rgba(255,255,255,1),0 0 28px rgba(255,255,255,0.9),0 1px 4px rgba(0,0,0,0.15);
-    }
-    header.scrolled nav a{color:var(--text);}
-    header.scrolled nav a:hover,header.scrolled nav a.active{color:#000;border-bottom-color:#000;}
-    header.scrolled .lang-btn{color:var(--muted);}
-    header.scrolled .lang-btn.active{color:var(--text);}
+    header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);transition:background 0.4s ease,backdrop-filter 0.4s ease;}
+    header.scrolled{background:transparent;backdrop-filter:none;}
+    header.scrolled .site-name,header.scrolled nav a,header.scrolled .lang-btn,header.scrolled .site-sub{text-shadow:0 1px 6px rgba(0,0,0,0.35);}
+    header.scrolled nav a{color:rgba(255,255,255,0.75);}
+    header.scrolled nav a:hover,header.scrolled nav a.active{color:#fff;border-bottom-color:#fff;}
+    header.scrolled .site-name{color:var(--text);}
+    header.scrolled .lang-btn{color:rgba(255,255,255,0.6);}
+    header.scrolled .lang-btn.active{color:#fff;}
     /* Push content below fixed header */
     #app{padding-top:7rem;}
     .site-name{font-family:'Viaoda Libre',cursive;font-size:1.4rem;font-weight:400;letter-spacing:0.05em;text-transform:lowercase;color:var(--text);cursor:pointer;display:block;}
@@ -111,6 +110,35 @@
     body.has-bg #app{background:transparent;}
     body.has-bg main{background:transparent;}
 
+    /* Hover-Highlight für Textblöcke bei aktivem Hintergrundbild */
+    body.has-bg .project-item,
+    body.has-bg .event-item,
+    body.has-bg .home-intro,
+    body.has-bg .bio-text,
+    body.has-bg .contact-link-item,
+    body.has-bg .project-desc,
+    body.has-bg .project-heading,
+    body.has-bg .back-btn,
+    body.has-bg #project-content{
+      border-radius:4px;
+      transition:background 0.25s ease, padding 0.25s ease;
+      padding-left:0.6rem;
+      padding-right:0.6rem;
+    }
+    body.has-bg .project-item:hover,
+    body.has-bg .event-item:hover,
+    body.has-bg .home-intro:hover,
+    body.has-bg .bio-text:hover,
+    body.has-bg .contact-link-item:hover,
+    body.has-bg .project-desc:hover,
+    body.has-bg .project-heading:hover,
+    body.has-bg .back-btn:hover,
+    body.has-bg #project-content:hover{
+      background:rgba(255,255,255,0.65);
+      backdrop-filter:blur(4px);
+    }
+
+    /* Text shadow for readability without white overlay */
     body.has-bg .project-title,
     body.has-bg .project-short-desc,
     body.has-bg .project-year,
@@ -119,7 +147,6 @@
     body.has-bg .project-desc,
     body.has-bg .project-meta,
     body.has-bg .event-title,
-    body.has-bg .event-date,
     body.has-bg .home-intro,
     body.has-bg .site-name,
     body.has-bg nav a,
@@ -130,56 +157,11 @@
     body.has-bg .contact-link-val a,
     body.has-bg .bio-text,
     body.has-bg footer{
-      color:#1a1a1a;
-      text-shadow:var(--glow-shadow);
+      text-shadow:0 1px 6px rgba(255,255,255,0.95),0 0 16px rgba(255,255,255,0.8);
     }
-
-    /* Schrift etwas größer wenn Hintergrundbild aktiv */
-    body.has-bg .project-title{font-size:1.35rem;}
-    body.has-bg .project-short-desc{font-size:0.95rem;}
-    body.has-bg .project-heading{font-size:2.3rem;}
-    body.has-bg .project-desc{font-size:1.05rem;}
-    body.has-bg .event-title{font-size:1.1rem;}
-    body.has-bg .home-intro{font-size:1.2rem;}
-    body.has-bg .bio-text{font-size:1.15rem;}
-    body.has-bg .contact-link-val a{font-size:1.15rem;}
-
-    /* CD Icons auf Startseite */
-    .sound-circle{position:absolute;border-radius:50%;cursor:pointer;animation:cd-spin 18s linear infinite;will-change:transform;}
-    .sound-circle::after{content:'';position:absolute;inset:-6px;border-radius:50%;box-shadow:0 4px 14px rgba(0,0,0,0.22);pointer-events:none;z-index:-1;}
-    .sound-circle:hover::after{box-shadow:0 6px 20px rgba(0,0,0,0.32);}
-    .sound-circle.expanded{animation:cd-spin 12s linear infinite;}
-    .sound-circle.expanded::after{box-shadow:0 10px 40px rgba(0,0,0,0.35);}
-    @keyframes cd-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-    /* SVG layer — always fills the circle */
-    .sound-circle .cd-svg-wrap{position:absolute;inset:0;border-radius:50%;overflow:hidden;pointer-events:none;}
-    .sound-circle .cd-svg-wrap svg{width:100%;height:100%;display:block;}
-    .sound-circle .cd-inner-player{
-      position:absolute;inset:0;border-radius:50%;
-      display:none;align-items:center;justify-content:center;
-      overflow:hidden;pointer-events:none;
-    }
-    .sound-circle.expanded .cd-inner-player{display:flex;pointer-events:all;}
-    .sound-circle .cd-inner-player iframe{
-      width:82%;border:none;border-radius:8px;
-      box-shadow:0 2px 12px rgba(0,0,0,0.18);background:#fff;
-    }
-    .sound-circle .cd-close{
-      display:none;position:absolute;top:12%;right:12%;
-      background:rgba(255,255,255,0.85);border:none;border-radius:50%;
-      width:22px;height:22px;font-size:12px;cursor:pointer;
-      align-items:center;justify-content:center;z-index:10;
-      box-shadow:0 1px 4px rgba(0,0,0,0.2);
-    }
-    .sound-circle.expanded .cd-close{display:flex;}
-    /* Expand via scale — compositor only, no layout reflow */
-    .sound-circle{transform-origin:center center;}
-    .sound-circle.expanded{z-index:50;}
-    #circles-container{position:absolute;inset:0;pointer-events:none;z-index:2;}
-    #circles-container .sound-circle{pointer-events:all;}
-    #view-home{position:relative;min-height:60vh;}
     .home-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;display:none;}
     #view-home .home-intro,#view-home #home-events{position:relative;z-index:1;}
+
     /* RUBRIK HINTERGRUNDBILD */
     .section-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-repeat:no-repeat;display:none;}
     .section-bg::after{content:'';position:absolute;inset:0;}
@@ -276,7 +258,7 @@
     #splash-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;}
     #splash-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.32);}
     /* VOLUME BAR */
-    #volume-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;gap:0.7rem;background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
+    #volume-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;gap:0.7rem;background:rgba(255,255,255,0.72);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 16px rgba(0,0,0,0.08);}
     #volume-bar svg{width:16px;height:16px;}
     #volume-slider{-webkit-appearance:none;appearance:none;width:110px;height:2px;border-radius:1px;background:var(--line);outline:none;cursor:pointer;}
     #volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--text);cursor:pointer;}
@@ -321,20 +303,14 @@
   <main>
     <div class="view active" id="view-home">
       <div class="home-bg" id="home-bg"></div>
-      <div id="circles-container"></div>
-      <p class="home-intro" id="home-text"></p>
+      <p class="home-intro" id="home-text">Willkommen.</p>
+      <div id="home-events"></div>
     </div>
     <div class="view" id="view-section">
       <div class="section-bg" id="section-bg"></div>
       <div class="section-two-col">
         <ul class="project-list" id="section-list"></ul>
         <div class="section-media-col" id="section-media-col"></div>
-      </div>
-    </div>
-    <div class="view" id="view-termine">
-      <div class="section-bg" id="termine-bg"></div>
-      <div style="position:relative;z-index:1;">
-        <div id="termine-content"></div>
       </div>
     </div>
     <div class="view" id="view-project">
@@ -345,8 +321,7 @@
       </div>
     </div>
     <div class="view" id="view-bio">
-      <div class="section-bg" id="bio-bg"></div>
-      <div class="bio-grid" style="position:relative;z-index:1;">
+      <div class="bio-grid">
         <div>
           <img class="bio-img" id="bio-img-el" src="" alt="" style="display:none"/>
           <div class="bio-img-placeholder" id="bio-img-placeholder">foto</div>
@@ -355,8 +330,6 @@
       </div>
     </div>
     <div class="view" id="view-kontakt">
-      <div class="section-bg" id="kontakt-bg"></div>
-      <div style="position:relative;z-index:1;">
       <div class="contact-links-grid" id="contact-links-list"></div>
       <div class="contact-section-title" id="cf-title">Nachricht senden</div>
       <div class="mail-form">
@@ -367,8 +340,7 @@
         <button onclick="sendMail()" id="cf-send-btn">Senden</button>
         <div class="form-status" id="form-status"></div>
       </div>
-      </div><!-- end z-index wrapper -->
-    </div><!-- end view-kontakt -->
+    </div>
   </main>
   <footer id="footer-text">© 2026</footer>
 </div>
@@ -417,7 +389,7 @@
 
 <script>
 // DATA — wird beim Export mit aktuellen Inhalten ersetzt
-var _DATA_ = {"name":"FLO SCHIRMER","sub":{"de":"komposition | klanggestaltung","en":"composition | sound design"},"homeText":{"de":"","en":""},"footer":"© 2026","bio":{"img":"https://i.ibb.co/pvM9XtB3/DSC00352.jpg","text":{"de":"Flo Schirmer (*1995), komponiert, spielt und performt in unterschiedlichen Gruppen und Kontexten Musik. Elektronische fast technoide Stücke mit L-Tryptophan, rohen Post-Punk mit Spa Boys, zarten und zuweilen treibenden Indie mit Timbeau und allerlei klangliche Experimente für Theater und Film. Von Ambient-Klanglandschaften über rhythmuslastige elektronische Kompositionen bis hin zu von Lofi-Ästhetik inspirierten Songs findet sich hier einiges.\nDarüber hinaus spiegelt sich in Flos Arbeiten zunehmend eine Leidenschaft für Field Recordings. \nFlos künstlerisches Schaffen wird stets davon begleitet, neue Klangwelten zu entdecken und gewohnte in Frage zu stellen.\nFlo lebt in Freiburg und studierte dort Interdisziplinäre Anthropologie M.A. mit einem besonderen Fokus auf die Schnittstelle von Kunst und Wissenschaft und einem großen Interesse an künstlerischer Forschung.","en":"Flo Schirmer (*1995) composes, plays, and performs music in various groups and contexts. Electronic, almost techno-inspired pieces with L-Tryptophan, raw post-punk with Spa Boys, delicate and at times driving indie with Timbeau, and all kinds of sonic experiments for theater and film. From ambient soundscapes to rhythm-heavy electronic compositions to songs inspired by lo-fi aesthetics, there’s plenty to discover here.\nFurthermore, Flo’s work increasingly reflects a passion for field recordings. \nFlo’s artistic practice is always accompanied by a desire to discover new soundscapes and to question familiar ones. \nFlo lives in Freiburg, where they earned an M.A. in Interdisciplinary Anthropology with a special focus on the intersection of art and science and a keen interest in artistic research."}},"sections":[{"id":"musik","label":{"de":"sound","en":"sound"},"type":"projects"},{"id":"theater","label":{"de":"theater","en":"theatre"},"type":"projects"},{"id":"visuelles","label":{"de":"visuelles","en":"visual"},"type":"projects"},{"id":"termine","label":{"de":"termine","en":"dates"},"type":"termine"},{"id":"bio","label":{"de":"bio","en":"bio"},"type":"bio"},{"id":"kontakt","label":{"de":"kontakt","en":"contact"},"type":"kontakt"}],"projects":{"musik":[{"title":{"de":"Timbeau","en":"Timbeau"},"year":"Pop | Indie | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Tim Bohner (Vocals/Drums), Mari Schwingel (Gitarre), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)","en":"Tim Bohner (Vocals/Drums), Mari Schwingel (Guitar), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)"},"media":[{"type":"instagram","url":"https://www.instagram.com/timbeau_musik/","caption":""},{"type":"youtube","url":"https://www.youtube.com/watch?v=PpQmygQaeG8&list=RDPpQmygQaeG8&start_radio=1","caption":""},{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/album=4140139320/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://treibenderteppichrecords.bandcamp.com/album/sensitiv\">Sensitiv by Timbeau</a></iframe>","caption":""}],"bgImg":""},{"title":{"de":"L-Tryptophan ","en":"L-Tryptophan"},"year":"Electronic | Dark Wave | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!","en":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!"},"media":[{"type":"bandcamp","url":"https://bandcamp.com/EmbeddedPlayer/album=3953312219/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/","caption":""},{"type":"instagram","url":"https://www.instagram.com/ltryptophan_band/","caption":""}],"bgImg":""},{"title":{"de":"Spa Boys","en":"Spa Boys"},"year":"Post Punk | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"David Huss (Gitarre), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)","en":"David Huss (Guitar), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)"},"media":[{"type":"instagram","url":"https://www.instagram.com/spaboys_wellness/","caption":""},{"type":"link","url":"https://open.spotify.com/intl-de/track/2eHtMHLTRtvocwyyqpQdZa","caption":""}],"bgImg":""},{"title":{"de":"Lost and Found ","en":"Lost and Found "},"year":"Sketches","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Unterschiedliche musikalische Sketches ","en":"Various musical sketches "},"media":[{"type":"soundcloud","url":"https://soundcloud.com/floschirmer/sketch-iii","caption":""}],"bgImg":""},{"title":{"de":"field recording","en":"field recording "},"year":"field recording | ambient ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Eine Sammlung meiner Field Recordings, die ich über die Seite Radio Aporee hochgeladen habe. Diese Sammlung wächst stetig. ","en":"A collection of my field recordings that I've uploaded via the Radio Aporee website. This collection is constantly growing."},"media":[{"type":"link","url":"https://aporee.org/maps/?loc=71930&snd=84002","caption":""}],"bgImg":""}],"theater":[{"title":{"de":"Komposition | Veritas: Eine Hexenjagd","en":"Composition | Veritas: A Witch Hunt"},"year":"2026","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nRegie: Katharina Kohler\nBühne, Kostüm & Video: Jodie Fox\nLicht: Ronny Bergmann\nMusik: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgie: Annabelle Leschke","en":"With\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nDirector: Katharina Kohler\nStage, Kostüm & Video: Jodie Fox\nLight: Ronny Bergmann\nMusic: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgy: Annabelle Leschke"},"media":[{"type":"link","url":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","caption":""}],"bgImg":""},{"title":{"de":"Komposition | Galileo Galilei","en":"Composition | Galileo Galilei"},"year":"2025","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition"},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nRegie: Katharina Kohler\nBühne/Kostüm: Lea Stöcker \nMusik: Flo Schirmer","en":"With\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nDirector: Katharina Kohler\nStage/Costume: Lea Stöcker \nMusic: Flo Schirmer"},"media":[],"bgImg":""},{"title":{"de":"Komposition | Garland ","en":"Composition | Garland "},"year":"2024","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}],"bgImg":""},{"title":{"de":"Komposition | Penthesilea","en":"Composition | Penthesilea "},"year":"2023","tags":{"de":"Theater | Komposition","en":"Theatre | Komposition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}],"bgImg":""}],"visuelles":[{"title":{"de":"Ewige Leidenschaft | Carla Hartmann & Juno Bogner","en":"Eternal Passion | Carla Hartmann & Juno Bogner"},"year":"2022","tags":{"de":"Film | Soundtrack","en":"Movie | Soundtrack"},"shortDesc":{"de":"","en":""},"desc":{"de":"Komposition und Sounddesign für den Kurzfilm Ewige Leidenschaft","en":"Composition and sounddesign for the short film Eternal Passion "},"media":[{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/track=3467911813/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://sexygamba.bandcamp.com/track/sexy-gamba-official-soundtrack\">Sexy Gamba (Official Soundtrack) by Sexy Gamba</a></iframe>","caption":""}],"bgImg":""}]},"contactLinks":[{"label":"Instagram","url":"https://www.instagram.com/flo.schirmer/"}],"events":[{"date":"2026-04-22","title":{"de":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim","en":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim"},"link":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","isPast":true},{"date":"2025-06-26","title":{"de":"Konzert | L-Tryptophan | Fusion Festival","en":"Concert | L-Tryptophan | Fusion Festival"},"link":"https://fusion-festival.de/de/program#l-tryptophan","isPast":true},{"date":"2025-12-05","title":{"de":"Konzert | L-Tryptophan | Sunny High Stuttgart","en":"Concert | L-Tryptophan | Sunny High Stuttgart"},"link":"https://www.instagram.com/reel/DRgu1FZjLpb/","isPast":true},{"date":"2026-05-15","title":{"de":"Konzert | Spa Boys | Hannover Garage Nord","en":"Concert | Spa Boys | Hannover Garage Nord"},"link":"https://www.instagram.com/garagenord/","isPast":false},{"date":"2026-05-16","title":{"de":"Konzert | Spa Boys | Köln Stereo Wonderland","en":"Concert | Spa Boys | Köln Stereo Wonderland"},"link":"https://www.instagram.com/stereo_wonderland_koeln/","isPast":false},{"date":"2026-05-17","title":{"de":"Konzert | Spa Boys | Würzburg L Club","en":"Concert | Spa Boys | Würzburg L Club"},"link":"https://www.instagram.com/lclubwuerzburg/","isPast":false},{"date":"2026-05-20","title":{"de":"Konzert | Spa Boys | Darmstadt Sumpf","en":"Concert | Spa Boys | Darmstadt Sumpf"},"link":"https://www.instagram.com/sumpfindarmstadt/","isPast":false},{"date":"2026-05-21","title":{"de":"Konzert | Spa Boys | München Olga","en":"Concert | Spa Boys | München Olga"},"link":"https://www.instagram.com/stattpark_olga_e.v/","isPast":false},{"date":"2026-05-22","title":{"de":"Konzert | Spa Boys | Mannheim Contra N","en":"Concert | Spa Boys | Mannheim Contra N"},"link":"https://www.instagram.com/contra.n.mannheim/","isPast":false},{"date":"2026-05-23","title":{"de":"Konzert | Spa Boys | Stuttgart Kap Tormentoso","en":"Concert | Spa Boys | Stuttgart Kap Tormentoso"},"link":"https://www.instagram.com/kap_tormentoso/","isPast":false},{"date":"2025-12-27","title":{"de":"Konzert | Spa Boys | Entenbrunnen","en":"Concert | Spa Boys | Entenbrunnen"},"link":"","isPast":true},{"date":"2025-08-02","title":{"de":"Konzert | Spa Boys | Glashaus Festival","en":"Concert | Spa Boys | Glashaus Festival"},"link":"https://www.instagram.com/p/DMnuNa_sLJ-/?img_index=1","isPast":true},{"date":"2024-09-27","title":{"de":"Konzert | L-Tryptophan | Horst Klub Kreuzlingen","en":"Concert | L-Tryptophan | Horst Klub Kreuzlingen"},"link":"https://www.instagram.com/p/DAd66pXqEwv/?img_index=2","isPast":true},{"date":"2024-09-20","title":{"de":"Konzert | L-Tryptophan | Obergeschoss Hell Berlin","en":"Concert | L-Tryptophan | Obergeschoss Hell Berlin"},"link":"https://decolonoize.com/?page_id=69","isPast":true},{"date":"2024-08-10","title":{"de":"Konzert | L-Tryptophan | Slow Club Freiburg","en":"Concert | L-Tryptophan | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/horror-vacui-l-tryptophan-aftershow-party-w-dj-bleakphil","isPast":true},{"date":"2020-11-27","title":{"de":"Konzert | Timbeau | Komma Esslingen Album Release","en":"Concert | Timbeau | Komma Esslingen Album Release"},"link":"https://www.youtube.com/watch?v=RFvMvBhblU4","isPast":true},{"date":"2021-07-23","title":{"de":"Konzert | Timbeau | Club Manufaktur Schorndorf","en":"Concert | Timbeau | Club Manufaktur Schorndorf"},"link":"https://www.club-manufaktur.de/event/timbeau-d-open-air/","isPast":true},{"date":"2022-10-29","title":{"de":"Konzert | Timbeau | Merlin Stuttgart","en":"Concert | Timbeau | Merlin Stuttgart"},"link":"https://merlinstuttgart.de/programm/die-wande/","isPast":true},{"date":"2022-11-05","title":{"de":"Konzert | Timbeau | Schokoladen Berlin","en":"Concert | Timbeau | Schokoladen Berlin"},"link":"https://schokoladen.tickettoaster.de/produkte/51257-tickets-timbeau-sanmao-schokoladen-berlin-am-05-11-2022","isPast":true},{"date":"2024-05-19","title":{"de":"Konzert | Timbeau | Slow Club Freiburg","en":"Concert | Timbeau | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/dives-timbeau","isPast":true},{"date":"2024-05-18","title":{"de":"Konzert | Timbeau | About Pop Festival Stuttgart","en":"Concert | Timbeau | About Pop Festival Stuttgart"},"link":"https://www.aboutpop.de/artist/timbeau/","isPast":true},{"date":"2025-03-08","title":{"de":"Konzert | Timbeau | Substage Karlsruhe","en":"Concert | Timbeau | Substage Karlsruhe"},"link":"https://substage.de/programm/3677/","isPast":true},{"date":"2025-03-07","title":{"de":"Konzert | Timbeau | Ilses Erika Leipzig","en":"Concert | Timbeau | Ilses Erika Leipzig"},"link":"https://www.ilseserika.de/termine-65/timbeau-ger-live-ilses-erika-support-superpositivity-ger-schwerer-kuehler-nndw-party-w-indie-tonne-details-weiter-unten.html","isPast":true},{"date":"2024-01-13","title":{"de":"Premiere | Pethesilea | Schall & Rauch Freiburg","en":"Premiere | Pethesilea | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/12832","isPast":true},{"date":"2024-07-27","title":{"de":"Premiere | Garland | Schall & Rauch Freiburg","en":"Premiere | Garland | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/14089","isPast":true},{"date":"2025-02-05","title":{"de":"Premiere | Galileo Galilei | Nationaltheater Mannheim","en":"Premiere | Galileo Galilei | Nationaltheater Mannheim"},"link":"","isPast":true}],"sectionMedia":{},"sectionBg":{"musik":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true,"posX":"50","posY":"50","gradient":"to left","opacity":0.5,"glowStrength":70},"theater":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true,"posX":"50","posY":"50","gradient":"to left","opacity":0.5,"glowStrength":70},"visuelles":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true,"posX":"50","posY":"50","gradient":"to left","opacity":0.5,"glowStrength":70},"termine":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true,"posX":"50","posY":"50","opacity":0.39,"glowStrength":70}},"eventsImage":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true},"splashAudio":{"source":"soundcloud","bandcampSrc":"","soundcloudSrc":"https://soundcloud.com/floschirmer/waves-of-prado","active":true,"tracks":[]},"splashImg":"https://i.ibb.co/Zz26fyB4/fr-bearbeotet.jpg","homeBg":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true,"posX":"50","posY":"50","opacity":0.35,"glowStrength":70},"soundCircles":[],"bioBg":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true,"opacity":0.27,"glowStrength":70,"posX":"50","posY":"50"},"kontaktBg":{"url":"https://i.ibb.co/6R3PG5W4/hintergrund-webseite-reduced.jpg","active":true,"opacity":0.3,"glowStrength":70,"posX":"50","posY":"50"}};
+var _DATA_ = {"name":"FLO SCHIRMER","sub":{"de":"komposition | klanggestaltung","en":"composition | sound design"},"homeText":{"de":"","en":""},"footer":"© 2026","bio":{"img":"https://i.ibb.co/pvM9XtB3/DSC00352.jpg","text":{"de":"Flo Schirmer (*1995), komponiert, spielt und performt in unterschiedlichen Gruppen und Kontexten Musik. Elektronische fast technoide Stücke mit L-Tryptophan, rohen Post-Punk mit Spa Boys, zarten und zuweilen treibenden Indie mit Timbeau und allerlei klangliche Experimente für Theater und Film. Von Ambient-Klanglandschaften über rhythmuslastige elektronische Kompositionen bis hin zu von Lofi-Ästhetik inspirierten Songs findet sich hier einiges.\nDarüber hinaus spiegelt sich in Flos Arbeiten zunehmend eine Leidenschaft für Field Recordings. \nFlos künstlerisches Schaffen wird stets davon begleitet, neue Klangwelten zu entdecken und gewohnte in Frage zu stellen.\nFlo lebt in Freiburg und studierte dort Interdisziplinäre Anthropologie M.A. mit einem besonderen Fokus auf die Schnittstelle von Kunst und Wissenschaft und einem großen Interesse an künstlerischer Forschung.","en":"Flo Schirmer (*1995) composes, plays, and performs music in various groups and contexts. Electronic, almost techno-inspired pieces with L-Tryptophan, raw post-punk with Spa Boys, delicate and at times driving indie with Timbeau, and all kinds of sonic experiments for theater and film. From ambient soundscapes to rhythm-heavy electronic compositions to songs inspired by lo-fi aesthetics, there’s plenty to discover here.\nFurthermore, Flo’s work increasingly reflects a passion for field recordings. \nFlo’s artistic practice is always accompanied by a desire to discover new soundscapes and to question familiar ones. \nFlo lives in Freiburg, where they earned an M.A. in Interdisciplinary Anthropology with a special focus on the intersection of art and science and a keen interest in artistic research."}},"sections":[{"id":"musik","label":{"de":"sound","en":"sound"},"type":"projects"},{"id":"theater","label":{"de":"theater","en":"theatre"},"type":"projects"},{"id":"visuelles","label":{"de":"visuelles","en":"visual"},"type":"projects"},{"id":"bio","label":{"de":"bio","en":"bio"},"type":"bio"},{"id":"kontakt","label":{"de":"kontakt","en":"contact"},"type":"kontakt"}],"projects":{"musik":[{"title":{"de":"Timbeau","en":"Timbeau"},"year":"Pop | Indie | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Tim Bohner (Vocals/Drums), Mari Schwingel (Gitarre), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)","en":"Tim Bohner (Vocals/Drums), Mari Schwingel (Guitar), Hannes Scherf (Bass), Flo Schirmer (Keys/Vocals)"},"media":[{"type":"instagram","url":"https://www.instagram.com/timbeau_musik/","caption":""},{"type":"youtube","url":"https://www.youtube.com/watch?v=PpQmygQaeG8&list=RDPpQmygQaeG8&start_radio=1","caption":""},{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/album=4140139320/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://treibenderteppichrecords.bandcamp.com/album/sensitiv\">Sensitiv by Timbeau</a></iframe>","caption":""}]},{"title":{"de":"L-Tryptophan ","en":"L-Tryptophan"},"year":"Electronic | Dark Wave | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!","en":"Dark Wave//Dark Techno Duo from Berlin/Freiburg (Elli: Vocals | Flo: Electronics).\n\nWe'll redeem you. Promised!"},"media":[{"type":"bandcamp","url":"https://bandcamp.com/EmbeddedPlayer/album=3953312219/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/","caption":""},{"type":"instagram","url":"https://www.instagram.com/ltryptophan_band/","caption":""}]},{"title":{"de":"Spa Boys","en":"Spa Boys"},"year":"Post Punk | Band ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"David Huss (Gitarre), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)","en":"David Huss (Guitar), Lorenz Mack (Drums), Hannes Scherf (Bass), Flo Schirmer (Synth)"},"media":[{"type":"instagram","url":"https://www.instagram.com/spaboys_wellness/","caption":""},{"type":"link","url":"https://open.spotify.com/intl-de/track/2eHtMHLTRtvocwyyqpQdZa","caption":""}]},{"title":{"de":"Lost and Found ","en":"Lost and Found "},"year":"Sketches","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Unterschiedliche musikalische Sketches ","en":"Various musical sketches "},"media":[{"type":"soundcloud","url":"https://soundcloud.com/floschirmer/sketch-iii","caption":""}]},{"title":{"de":"field recording","en":"field recording "},"year":"field recording | ambient ","tags":{"de":"","en":""},"shortDesc":{"de":"","en":""},"desc":{"de":"Eine Sammlung meiner Field Recordings, die ich über die Seite Radio Aporee hochgeladen habe. Diese Sammlung wächst stetig. ","en":"A collection of my field recordings that I've uploaded via the Radio Aporee website. This collection is constantly growing."},"media":[{"type":"link","url":"https://aporee.org/maps/?loc=71930&snd=84002","caption":""}]}],"theater":[{"title":{"de":"Komposition | Veritas: Eine Hexenjagd","en":"Composition | Veritas: A Witch Hunt"},"year":"2026","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nRegie: Katharina Kohler\nBühne, Kostüm & Video: Jodie Fox\nLicht: Ronny Bergmann\nMusik: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgie: Annabelle Leschke","en":"With\nSarah Zastrau, Paul Simon, Maria Munkert, Ragna Pitoll, Maria Helena Bretschneider, Barış Özbük\n \nDirector: Katharina Kohler\nStage, Kostüm & Video: Jodie Fox\nLight: Ronny Bergmann\nMusic: Flo Schirmer\nBodypercussion: Jakob Boudgoust\nDramaturgy: Annabelle Leschke"},"media":[{"type":"link","url":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","caption":""}]},{"title":{"de":"Komposition | Galileo Galilei","en":"Composition | Galileo Galilei"},"year":"2025","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition"},"shortDesc":{"de":"Am Nationaltheater Mannheim","en":"At Nationaltheatre Mannheim"},"desc":{"de":"Mit\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nRegie: Katharina Kohler\nBühne/Kostüm: Lea Stöcker \nMusik: Flo Schirmer","en":"With\nSarah Zastrau, Dominika Hebel, Daniel Krimsky, Ann-Kathrin Kuppel \n\nDirector: Katharina Kohler\nStage/Costume: Lea Stöcker \nMusic: Flo Schirmer"},"media":[]},{"title":{"de":"Komposition | Garland ","en":"Composition | Garland "},"year":"2024","tags":{"de":"Theater | Komposition ","en":"Theatre | Composition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}]},{"title":{"de":"Komposition | Penthesilea","en":"Composition | Penthesilea "},"year":"2023","tags":{"de":"Theater | Komposition","en":"Theatre | Komposition "},"shortDesc":{"de":"Schall & Rauch Freiburg ","en":"Schall & Rauch Freiburg "},"desc":{"de":"","en":""},"media":[{"type":"link","url":"https://schallundrauchfreiburg.de/Produktionen/","caption":""}]}],"visuelles":[{"title":{"de":"Ewige Leidenschaft | Carla Hartmann & Juno Bogner","en":"Eternal Passion | Carla Hartmann & Juno Bogner"},"year":"2022","tags":{"de":"Film | Soundtrack","en":"Movie | Soundtrack"},"shortDesc":{"de":"","en":""},"desc":{"de":"Komposition und Sounddesign für den Kurzfilm Ewige Leidenschaft","en":"Composition and sounddesign for the short film Eternal Passion "},"media":[{"type":"bandcamp","url":"<iframe style=\"border: 0; width: 100%; height: 120px;\" src=\"https://bandcamp.com/EmbeddedPlayer/track=3467911813/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/\" seamless><a href=\"https://sexygamba.bandcamp.com/track/sexy-gamba-official-soundtrack\">Sexy Gamba (Official Soundtrack) by Sexy Gamba</a></iframe>","caption":""}]}]},"contactLinks":[{"label":"Instagram","url":"https://www.instagram.com/flo.schirmer/"}],"events":[{"date":"2026-04-22","title":{"de":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim","en":"Premiere | Veritas: Eine Hexenjagd | Nationaltheater Mannheim"},"link":"https://www.nationaltheater-mannheim.de/spielplan/a-z/veritas-eine-hexenjagd/","isPast":true},{"date":"2025-06-26","title":{"de":"Konzert | L-Tryptophan | Fusion Festival","en":"Concert | L-Tryptophan | Fusion Festival"},"link":"https://fusion-festival.de/de/program#l-tryptophan","isPast":true},{"date":"2025-12-05","title":{"de":"Konzert | L-Tryptophan | Sunny High Stuttgart","en":"Concert | L-Tryptophan | Sunny High Stuttgart"},"link":"https://www.instagram.com/reel/DRgu1FZjLpb/","isPast":true},{"date":"2026-05-15","title":{"de":"Konzert | Spa Boys | Hannover Garage Nord","en":"Concert | Spa Boys | Hannover Garage Nord"},"link":"https://www.instagram.com/garagenord/","isPast":false},{"date":"2026-05-16","title":{"de":"Konzert | Spa Boys | Köln Stereo Wonderland","en":"Concert | Spa Boys | Köln Stereo Wonderland"},"link":"https://www.instagram.com/stereo_wonderland_koeln/","isPast":false},{"date":"2026-05-17","title":{"de":"Konzert | Spa Boys | Würzburg L Club","en":"Concert | Spa Boys | Würzburg L Club"},"link":"https://www.instagram.com/lclubwuerzburg/","isPast":false},{"date":"2026-05-20","title":{"de":"Konzert | Spa Boys | Darmstadt Sumpf","en":"Concert | Spa Boys | Darmstadt Sumpf"},"link":"https://www.instagram.com/sumpfindarmstadt/","isPast":false},{"date":"2026-05-21","title":{"de":"Konzert | Spa Boys | München Olga","en":"Concert | Spa Boys | München Olga"},"link":"https://www.instagram.com/stattpark_olga_e.v/","isPast":false},{"date":"2026-05-22","title":{"de":"Konzert | Spa Boys | Mannheim Contra N","en":"Concert | Spa Boys | Mannheim Contra N"},"link":"https://www.instagram.com/contra.n.mannheim/","isPast":false},{"date":"2026-05-23","title":{"de":"Konzert | Spa Boys | Stuttgart Kap Tormentoso","en":"Concert | Spa Boys | Stuttgart Kap Tormentoso"},"link":"https://www.instagram.com/kap_tormentoso/","isPast":false},{"date":"2025-12-27","title":{"de":"Konzert | Spa Boys | Entenbrunnen","en":"Concert | Spa Boys | Entenbrunnen"},"link":"","isPast":true},{"date":"2025-08-02","title":{"de":"Konzert | Spa Boys | Glashaus Festival","en":"Concert | Spa Boys | Glashaus Festival"},"link":"https://www.instagram.com/p/DMnuNa_sLJ-/?img_index=1","isPast":true},{"date":"2024-09-27","title":{"de":"Konzert | L-Tryptophan | Horst Klub Kreuzlingen","en":"Concert | L-Tryptophan | Horst Klub Kreuzlingen"},"link":"https://www.instagram.com/p/DAd66pXqEwv/?img_index=2","isPast":true},{"date":"2024-09-20","title":{"de":"Konzert | L-Tryptophan | Obergeschoss Hell Berlin","en":"Concert | L-Tryptophan | Obergeschoss Hell Berlin"},"link":"https://decolonoize.com/?page_id=69","isPast":true},{"date":"2024-08-10","title":{"de":"Konzert | L-Tryptophan | Slow Club Freiburg","en":"Concert | L-Tryptophan | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/horror-vacui-l-tryptophan-aftershow-party-w-dj-bleakphil","isPast":true},{"date":"2020-11-27","title":{"de":"Konzert | Timbeau | Komma Esslingen Album Release","en":"Concert | Timbeau | Komma Esslingen Album Release"},"link":"https://www.youtube.com/watch?v=RFvMvBhblU4","isPast":true},{"date":"2021-07-23","title":{"de":"Konzert | Timbeau | Club Manufaktur Schorndorf","en":"Concert | Timbeau | Club Manufaktur Schorndorf"},"link":"https://www.club-manufaktur.de/event/timbeau-d-open-air/","isPast":true},{"date":"2022-10-29","title":{"de":"Konzert | Timbeau | Merlin Stuttgart","en":"Concert | Timbeau | Merlin Stuttgart"},"link":"https://merlinstuttgart.de/programm/die-wande/","isPast":true},{"date":"2022-11-05","title":{"de":"Konzert | Timbeau | Schokoladen Berlin","en":"Concert | Timbeau | Schokoladen Berlin"},"link":"https://schokoladen.tickettoaster.de/produkte/51257-tickets-timbeau-sanmao-schokoladen-berlin-am-05-11-2022","isPast":true},{"date":"2024-05-19","title":{"de":"Konzert | Timbeau | Slow Club Freiburg","en":"Concert | Timbeau | Slow Club Freiburg"},"link":"https://www.slowclub-freiburg.de/veranstaltungen/dives-timbeau","isPast":true},{"date":"2024-05-18","title":{"de":"Konzert | Timbeau | About Pop Festival Stuttgart","en":"Concert | Timbeau | About Pop Festival Stuttgart"},"link":"https://www.aboutpop.de/artist/timbeau/","isPast":true},{"date":"2025-03-08","title":{"de":"Konzert | Timbeau | Substage Karlsruhe","en":"Concert | Timbeau | Substage Karlsruhe"},"link":"https://substage.de/programm/3677/","isPast":true},{"date":"2025-03-07","title":{"de":"Konzert | Timbeau | Ilses Erika Leipzig","en":"Concert | Timbeau | Ilses Erika Leipzig"},"link":"https://www.ilseserika.de/termine-65/timbeau-ger-live-ilses-erika-support-superpositivity-ger-schwerer-kuehler-nndw-party-w-indie-tonne-details-weiter-unten.html","isPast":true},{"date":"2024-01-13","title":{"de":"Premiere | Pethesilea | Schall & Rauch Freiburg","en":"Premiere | Pethesilea | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/12832","isPast":true},{"date":"2024-07-27","title":{"de":"Premiere | Garland | Schall & Rauch Freiburg","en":"Premiere | Garland | Schall & Rauch Freiburg"},"link":"https://tacker.fr/node/14089","isPast":true},{"date":"2025-02-05","title":{"de":"Premiere | Galileo Galilei | Nationaltheater Mannheim","en":"Premiere | Galileo Galilei | Nationaltheater Mannheim"},"link":"","isPast":true}],"sectionMedia":{},"sectionBg":{"musik":{"url":"","active":false,"posX":"50","posY":"50","gradient":"to left"}},"eventsImage":{"url":"","active":false}};
 var data = JSON.parse(JSON.stringify(_DATA_));
 
 // PASSWORT
@@ -436,27 +408,20 @@ function setLang(l){
   lang=l;localStorage.setItem('pf_lang',l);
   document.documentElement.lang=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  // Update splash hint text
   const hint=document.getElementById('splash-hint');
   if(hint)hint.textContent=l==='en'?'click to enter':'klicken um einzutreten';
   applyLangUI();
-  buildNav();
-  // Re-render the currently active view immediately
-  if(currentSection==="home"){renderHomeText();renderHomeBg();renderCircles();}
-  else if(currentSection==='termine'){renderTermineView();}
+  renderAll();
+  // Re-render whichever view is currently active
+  if(currentSection==='home'){renderHomeText();renderHomeEvents();}
+  else if(currentSection==='project'){
+    // back button text already handled in renderAll -> applyLangUI won't catch it
+    const bb=document.getElementById('back-btn');if(bb)bb.textContent=t('back');
+  }
   else if(currentSection==='bio'){renderBio();}
   else if(currentSection==='kontakt'){renderKontakt();}
-  else if(currentSection==='project'){
-    const bb=document.getElementById('back-btn');if(bb)bb.textContent=t('back');
-    // Re-render project content with new lang
-    const viewEl=document.getElementById('view-project');
-    if(viewEl&&viewEl._sectionId!==undefined)renderProject(viewEl._sectionId,viewEl._projectIdx);
-  }
-  else if(currentSection){renderSectionList(currentSection);}
-  // Sync header text
-  document.getElementById('header-name').textContent=data.name||'';
-  document.getElementById('header-sub').textContent=L(data.sub)||'';
-  document.getElementById('footer-text').textContent=data.footer||'© 2026';
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  else if(currentSection&&currentSection!=='home'){renderSectionList(currentSection);}
 }
 
 // HILFSFUNKTIONEN
@@ -468,26 +433,9 @@ function migrateData(d){
   if(!d.sectionMedia)d.sectionMedia={};
   if(!d.sectionBg)d.sectionBg={};
   if(!d.eventsImage)d.eventsImage={url:'',active:false};
-  if(!d.homeBg)d.homeBg={url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
-  // Migrate legacy eventsImage into homeBg
-  if(!d.homeBg.url&&d.eventsImage&&d.eventsImage.url){
-    d.homeBg.url=d.eventsImage.url;
-    d.homeBg.active=d.eventsImage.active||false;
-  }
   if(!d.splashAudio)d.splashAudio={source:'tracks',bandcampSrc:'',soundcloudSrc:'',active:false};
   if(!d.splashAudio.tracks)d.splashAudio.tracks=[];
   if(d.splashAudio.source===undefined)d.splashAudio.source='tracks';
-  if(!d.soundCircles)d.soundCircles=[];
-  if(!d.bioBg)d.bioBg={url:'',active:false,opacity:1,glowStrength:70};
-  if(!d.kontaktBg)d.kontaktBg={url:'',active:false,opacity:1,glowStrength:70};
-  // Termine als eigene Rubrik
-  const hasTermine=(d.sections||[]).find(s=>s.id==='termine');
-  if(!hasTermine){
-    const bioIdx=(d.sections||[]).findIndex(s=>s.type==='bio');
-    const ins={id:'termine',label:{de:'termine',en:'dates'},type:'termine'};
-    if(bioIdx>-1)d.sections.splice(bioIdx,0,ins);
-    else d.sections.push(ins);
-  }
   if(typeof d.homeText==='string')d.homeText={de:d.homeText,en:''};
   if(typeof d.sub==='string')d.sub={de:d.sub,en:''};
   if(d.bio&&typeof d.bio.text==='string')d.bio.text={de:d.bio.text,en:''};
@@ -503,18 +451,12 @@ function migrateData(d){
     if(p.bgImg===undefined)p.bgImg='';
   }));
   (d.events||[]).forEach(ev=>{if(typeof ev.title==='string')ev.title={de:ev.title,en:ev.title};});
-  // Ensure sectionBg opacity/glow defaults
-  Object.values(d.sectionBg||{}).forEach(sb=>{
-    if(sb.opacity===undefined)sb.opacity=0.5;
-    if(sb.glowStrength===undefined)sb.glowStrength=70;
-  });
   return d;
 }
 function defaultSections(){return[
   {id:'musik',label:{de:'sound',en:'sound'},type:'projects'},
   {id:'theater',label:{de:'theater',en:'theatre'},type:'projects'},
   {id:'visuelles',label:{de:'visuelles',en:'visual'},type:'projects'},
-  {id:'termine',label:{de:'termine',en:'dates'},type:'termine'},
   {id:'bio',label:{de:'bio',en:'bio'},type:'bio'},
   {id:'kontakt',label:{de:'kontakt',en:'contact'},type:'kontakt'}
 ];}
@@ -544,65 +486,32 @@ function buildNav(){
 
 function navigate(sectionId,projectIdx){
   stopAllMedia();
-  // Hide all backgrounds
-  ['section-bg','project-bg','section-bg-overlay','home-bg','termine-bg','bio-bg','kontakt-bg'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.style.display='none';
-  });
+  // Hintergrundbilder verstecken
+  const bg=document.getElementById('section-bg');if(bg)bg.style.display='none';
+  const pbg=document.getElementById('project-bg');if(pbg)pbg.style.display='none';
+  const overlay=document.getElementById('section-bg-overlay');if(overlay)overlay.style.display='none';
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
   if(sectionId==='home'){
     document.getElementById('view-home').classList.add('active');
-    renderHomeText();renderHomeBg();renderCircles();currentSection='home';updateBgState();return;
+    renderHomeText();renderHomeEvents();currentSection='home';return;
   }
   const sec=(data.sections||[]).find(s=>s.id===sectionId);if(!sec)return;
   const navEl=document.querySelector(`nav a[data-view="${sectionId}"]`);if(navEl)navEl.classList.add('active');
   if(projectIdx!==undefined){
-    const vp=document.getElementById('view-project');
-    vp.classList.add('active');
-    vp._sectionId=sectionId;vp._projectIdx=projectIdx;
+    document.getElementById('view-project').classList.add('active');
     renderProject(sectionId,projectIdx);currentSection='project';
     document.getElementById('back-btn').onclick=()=>navigate(sectionId);
     document.getElementById('back-btn').textContent=t('back');
+    // Hintergrundbild: erst projekt-spezifisch prüfen, sonst Rubrik-Bild übernehmen
     applyProjectBg(sectionId,projectIdx);
-    updateBgState();return;
+    return;
   }
   currentSection=sectionId;
   if(sec.type==='projects'){document.getElementById('view-section').classList.add('active');renderSectionList(sectionId);}
-  else if(sec.type==='termine'){document.getElementById('view-termine').classList.add('active');renderTermineView();}
-  else if(sec.type==='bio'){document.getElementById('view-bio').classList.add('active');renderBio();applyPageBg('bio');}
-  else if(sec.type==='kontakt'){document.getElementById('view-kontakt').classList.add('active');renderKontakt();applyPageBg('kontakt');}
+  else if(sec.type==='bio'){document.getElementById('view-bio').classList.add('active');renderBio();}
+  else if(sec.type==='kontakt'){document.getElementById('view-kontakt').classList.add('active');renderKontakt();}
   updateBgState();
-}
-
-function applyPageBg(page){
-  const bgData=page==='bio'?data.bioBg:data.kontaktBg;
-  const bgEl=document.getElementById(page+'-bg');
-  if(!bgEl||!bgData||!bgData.active||!bgData.url){if(bgEl)bgEl.style.display='none';return;}
-  bgEl.style.backgroundImage="url('"+escH(bgData.url)+"')";
-  bgEl.style.backgroundSize='cover';
-  bgEl.style.backgroundPosition='50% 50%';
-  bgEl.style.opacity=bgData.opacity||1;
-  bgEl.style.display='block';
-}
-
-function renderTermineView(){
-  const sb=(data.sectionBg||{}).termine||{};
-  const tbg=document.getElementById('termine-bg');
-  if(tbg&&sb.active&&sb.url){
-    tbg.style.backgroundImage="url('"+escH(sb.url)+"')";
-    tbg.style.backgroundSize='cover';
-    tbg.style.backgroundPosition=(sb.posX||'50')+'% '+(sb.posY||'50')+'%';
-    tbg.style.opacity=sb.opacity||1;
-    tbg.style.display='block';
-  }else if(tbg){tbg.style.display='none';}
-  const events=data.events||[];
-  const upcoming=events.filter(e=>!e.isPast).sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const past=events.filter(e=>e.isPast).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  let html='';
-  if(upcoming.length){html+=`<div class="events-section"><div class="events-heading">${t('upcoming')}</div>`;upcoming.forEach(ev=>{html+=`<div class="event-item"><span class="event-date">${formatDate(ev.date)}</span><span class="event-title">${ev.link?`<a href="${escH(ev.link)}" target="_blank">${escH(L(ev.title))}</a>`:escH(L(ev.title))}</span></div>`;});html+='</div>';}
-  if(past.length){html+=`<div class="events-section"><div class="events-heading">${t('past')}</div>`;past.forEach(ev=>{html+=`<div class="event-item event-past"><span class="event-date">${formatDate(ev.date)}</span><span class="event-title">${ev.link?`<a href="${escH(ev.link)}" target="_blank">${escH(L(ev.title))}</a>`:escH(L(ev.title))}</span></div>`;});html+='</div>';}
-  if(!upcoming.length&&!past.length)html='<p style="color:#888;font-size:.85rem;">Keine Termine.</p>';
-  document.getElementById('termine-content').innerHTML=html;
 }
 
 function applyProjectBg(sectionId,projectIdx){
@@ -622,7 +531,6 @@ function applyProjectBg(sectionId,projectIdx){
   pbg.style.backgroundSize='cover';
   pbg.style.backgroundRepeat='no-repeat';
   pbg.style.backgroundPosition=(sb.posX||'50')+'% '+(sb.posY||'50')+'%';
-  pbg.style.opacity=sb.opacity||1;
   pbg.style.display='block';
 
   // Overlay gradient
@@ -642,7 +550,7 @@ function renderAll(){
   document.getElementById('header-sub').textContent=L(data.sub)||'';
   document.getElementById('site-title-tag').textContent=data.name||'';
   document.getElementById('footer-text').textContent=data.footer||'© 2026';
-  buildNav();renderHomeText();renderHomeBg();renderCircles();applyLangUI();
+  buildNav();renderHomeText();renderHomeEvents();applyLangUI();
   if(currentSection&&currentSection!=='home'&&currentSection!=='project'){
     const sec=(data.sections||[]).find(s=>s.id===currentSection);
     if(sec){
@@ -654,35 +562,12 @@ function renderAll(){
 }
 
 // HOME
-function renderHomeBg(){
-  const bg=document.getElementById('home-bg');
-  if(!bg)return;
-  const hb=data.homeBg||{};
-  const url=hb.url||(data.eventsImage||{}).url||'';
-  const active=hb.active!==undefined?hb.active:((data.eventsImage||{}).active||false);
-  if(active&&url){
-    bg.style.backgroundImage="url('"+escH(url)+"')";
-    bg.style.backgroundPosition=(hb.posX||'50')+'% '+(hb.posY||'50')+'%';
-    bg.style.opacity=hb.opacity||1;
-    bg.style.display='block';
-  }else{bg.style.display='none';}
-}
+function renderHomeText(){document.getElementById('home-text').innerHTML=escH(L(data.homeText)).replace(/\n/g,'<br>');}
 function isUpcoming(ev){return(new Date(ev.date+'T23:59:59')-new Date())/3600000>-24;}
 function formatDate(d){if(!d)return'';try{return new Date(d+'T12:00:00').toLocaleDateString(lang==='en'?'en-GB':'de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});}catch(e){return d;}}
 function renderHomeEvents(){
   const bg=document.getElementById('home-bg');
-  if(bg){
-    const hb=data.homeBg||{};
-    // fallback to eventsImage for legacy data
-    const url=hb.url||(data.eventsImage||{}).url||'';
-    const active=hb.active!==undefined?hb.active:((data.eventsImage||{}).active||false);
-    if(active&&url){
-      bg.style.backgroundImage="url('"+escH(url)+"')";
-      bg.style.backgroundPosition=(hb.posX||'50')+'% '+(hb.posY||'50')+'%';
-      bg.style.opacity=hb.opacity||1;
-      bg.style.display='block';
-    }else{bg.style.display='none';}
-  }
+  if(bg){const ei=data.eventsImage||{};if(ei.active&&ei.url){bg.style.backgroundImage="url('"+escH(ei.url)+"')";bg.style.display='block';}else{bg.style.display='none';}}
   const el=document.getElementById('home-events');
   const events=data.events||[];if(!events.length){el.innerHTML='';return;}
   // isPast-Flag hat Priorität — dann nach Datum sortieren
@@ -696,17 +581,21 @@ function renderHomeEvents(){
 
 // PROJEKTLISTE
 function renderSectionList(sectionId){
+  // Hintergrundbild anwenden
   const bg=document.getElementById('section-bg');
   if(bg){
     const sb=(data.sectionBg||{})[sectionId]||{};
     if(sb.active&&sb.url){
       bg.style.backgroundImage="url('"+escH(sb.url)+"')";
       bg.style.backgroundPosition=(sb.posX||'50')+'% '+(sb.posY||'50')+'%';
-      bg.style.opacity=sb.opacity||1;
+      // Gradient
+      const dir=sb.gradient||'to left';
+      bg.querySelector? null : null;
       bg.style.display='block';
       let overlay=document.getElementById('section-bg-overlay');
       if(!overlay){overlay=document.createElement('div');overlay.id='section-bg-overlay';overlay.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;';document.body.appendChild(overlay);}
-      overlay.style.background='none';overlay.style.display='block';
+      overlay.style.background='none';
+      overlay.style.display='block';
     }else{
       bg.style.display='none';
       const overlay=document.getElementById('section-bg-overlay');
@@ -856,21 +745,16 @@ async function exportSite(){
   const btn=document.querySelector('.export-btn');
   const dlBtn=document.querySelector('.export-btn-dl');
 
-  // Baue neue HTML — holt saubere Kopie vom Server und ersetzt nur _DATA_
+  // Baue neue HTML
   async function buildNewHtml(){
-    let originalHtml;
-    try{
-      const resp=await fetch(window.location.pathname,{cache:'no-store'});
-      if(resp.ok)originalHtml=await resp.text();
-    }catch(e){}
-    // Fallback: outerHTML (weniger zuverlässig aber besser als gar nichts)
-    if(!originalHtml)originalHtml=document.documentElement.outerHTML;
+    const resp=await fetch(window.location.pathname,{cache:'no-store'});
+    const originalHtml=await resp.text();
     const dataJson=JSON.stringify(data);
     const marker='var _DATA_ = ';
     const markerEnd=';\nvar data = JSON.parse';
     const start=originalHtml.indexOf(marker);
     const end=originalHtml.indexOf(markerEnd);
-    if(start===-1||end===-1)throw new Error('Daten-Marker nicht gefunden. Bitte Seite neu laden.');
+    if(start===-1||end===-1)throw new Error('Daten-Marker nicht gefunden.');
     return originalHtml.substring(0,start)+marker+dataJson+originalHtml.substring(end);
   }
 
@@ -948,311 +832,15 @@ function updateTokenStatus(){
   else{el.style.color='#c00';el.textContent='Kein Token — nur lokaler Download möglich.';}
 }
 
-// Shared SVG defs injected once into DOM — avoids repeating gradients per CD
-function injectCdDefs(){
-  if(document.getElementById('cd-shared-defs'))return;
-  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.id='cd-shared-defs';
-  svg.style.cssText='position:absolute;width:0;height:0;overflow:hidden;';
-  svg.innerHTML=`<defs>
-    <radialGradient id="cd_silver" cx="50%" cy="45%" r="52%">
-      <stop offset="0%" stop-color="#f8f8f8"/><stop offset="35%" stop-color="#e0e0e8"/>
-      <stop offset="70%" stop-color="#c8c8d8"/><stop offset="100%" stop-color="#b0b0c0"/>
-    </radialGradient>
-    <linearGradient id="cd_rainbow" x1="0%" y1="50%" x2="100%" y2="50%">
-      <stop offset="0%"   stop-color="rgba(220,200,255,0)"/>
-      <stop offset="10%"  stop-color="rgba(180,140,255,0.55)"/>
-      <stop offset="22%"  stop-color="rgba(120,180,255,0.7)"/>
-      <stop offset="35%"  stop-color="rgba(140,240,200,0.65)"/>
-      <stop offset="48%"  stop-color="rgba(240,240,140,0.6)"/>
-      <stop offset="62%"  stop-color="rgba(255,180,120,0.55)"/>
-      <stop offset="75%"  stop-color="rgba(255,140,180,0.6)"/>
-      <stop offset="88%"  stop-color="rgba(200,120,255,0.5)"/>
-      <stop offset="100%" stop-color="rgba(180,160,255,0)"/>
-    </linearGradient>
-    <radialGradient id="cd_shine" cx="38%" cy="28%" r="45%">
-      <stop offset="0%" stop-color="rgba(255,255,255,0.85)"/>
-      <stop offset="40%" stop-color="rgba(255,255,255,0.3)"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-    </radialGradient>
-    <radialGradient id="cd_ref" cx="62%" cy="82%" r="40%">
-      <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-    </radialGradient>
-    <radialGradient id="cd_hub" cx="45%" cy="38%" r="60%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="50%" stop-color="#e8e8f0"/>
-      <stop offset="100%" stop-color="#d0d0dc"/>
-    </radialGradient>
-    <clipPath id="cd_clip"><circle cx="100" cy="100" r="96"/></clipPath>
-    <filter id="cd_shadow" x="-15%" y="-15%" width="130%" height="140%">
-      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="rgba(0,0,0,0.28)"/>
-    </filter>
-  </defs>`;
-  document.body.appendChild(svg);
-}
-
-// Lightweight CD SVG — references shared defs
-function cdSVG(){
-  return`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="100" cy="104" r="93" fill="rgba(0,0,0,0.15)" filter="url(#cd_shadow)"/>
-  <circle cx="100" cy="100" r="96" fill="url(#cd_silver)"/>
-  <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(200,200,215,0.2)" stroke-width="0.4"/>
-  <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(200,200,215,0.2)" stroke-width="0.4"/>
-  <circle cx="100" cy="100" r="65" fill="none" stroke="rgba(200,200,215,0.2)" stroke-width="0.4"/>
-  <circle cx="100" cy="100" r="96" fill="url(#cd_rainbow)" clip-path="url(#cd_clip)" opacity="0.9"/>
-  <circle cx="100" cy="100" r="96" fill="url(#cd_shine)" clip-path="url(#cd_clip)"/>
-  <circle cx="100" cy="100" r="96" fill="url(#cd_ref)" clip-path="url(#cd_clip)"/>
-  <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(160,160,180,0.5)" stroke-width="1"/>
-  <circle cx="100" cy="100" r="26" fill="url(#cd_hub)"/>
-  <circle cx="100" cy="100" r="26" fill="none" stroke="rgba(180,180,200,0.4)" stroke-width="0.8"/>
-  <circle cx="100" cy="100" r="7" fill="#888898"/>
-  <circle cx="100" cy="100" r="5.5" fill="#6a6a7a"/>
-  <circle cx="100" cy="100" r="4" fill="#444450"/>
-  <circle cx="97" cy="97" r="5" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="0.8"/>
-</svg>`;
-}
-
-// SOUND CIRCLES / CD ICONS
-function renderCircles(){
-  const container=document.getElementById('circles-container');
-  if(!container)return;
-  injectCdDefs();
-  const circles=data.soundCircles||[];
-  container.innerHTML='';
-  circles.forEach((c,i)=>{
-    const size=c.size||100;
-    const expandedSize=Math.max(280,size*2.6);
-    const div=document.createElement('div');
-    div.className='sound-circle';
-    div.dataset.baseSize=size;
-    div.dataset.expandedSize=expandedSize;
-    div.dataset.idx=i;
-    div.style.cssText=`left:${c.x}%;top:${c.y}%;width:${size}px;height:${size}px;margin-left:-${size/2}px;margin-top:-${size/2}px;animation-delay:${-(i*2.1)}s;`;
-    div.innerHTML=`<div class="cd-svg-wrap">${cdSVG()}</div>
-      <div class="cd-inner-player"><div id="cdp-${i}"></div></div>
-      <button class="cd-close" onclick="collapseCd(event,this.parentElement)">✕</button>`;
-    div.addEventListener('click',function(e){
-      if(e.target.closest('.cd-close'))return;
-      if(this.classList.contains('expanded')){
-        _collapseCdEl(this);
-      }else{
-        expandCd(this,c,i);
-      }
-    });
-    container.appendChild(div);
-  });
-}
-
-function expandCd(el,c,idx){
-  document.querySelectorAll('.sound-circle.expanded').forEach(other=>{
-    if(other!==el)_collapseCdEl(other);
-  });
-  const baseSize=parseInt(el.dataset.baseSize)||100;
-  const expandedSize=parseInt(el.dataset.expandedSize)||280;
-  const scale=expandedSize/baseSize;
-  el.classList.add('expanded');
-  el.style.transform=`scale(${scale})`;
-  const inner=document.getElementById('cdp-'+idx);
-  if(inner)inner.innerHTML=buildCircleEmbedExpanded(c,expandedSize);
-}
-
-function buildCircleEmbedExpanded(c,size){
-  const h=Math.round(size*0.26);
-  if(!c.url)return'';
-  if(c.source==='soundcloud'){
-    const src=c.url.includes('w.soundcloud.com')?c.url:
-      'https://w.soundcloud.com/player/?url='+encodeURIComponent(c.url)+'&color=%231a1a1a&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false';
-    return`<iframe src="${escH(src)}" height="${h}" scrolling="no" frameborder="no" allow="autoplay" style="width:82%;border-radius:8px;border:none;display:block;margin:0 auto;box-shadow:0 2px 12px rgba(0,0,0,0.15);"></iframe>`;
-  }
-  if(c.source==='bandcamp'){
-    let src=c.url;const m=c.url.match(/src=["']([^"']+)["']/);if(m)src=m[1];
-    return`<iframe src="${escH(src)}" style="width:82%;height:${h}px;border:0;border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 12px rgba(0,0,0,0.15);" seamless></iframe>`;
-  }
-  return'';
-}
-
-function collapseCd(e,el){e.stopPropagation();_collapseCdEl(el);}
-function _collapseCdEl(el){
-  const idx=el.dataset.idx;
-  el.classList.remove('expanded');
-  el.style.transform='scale(1)';
-  // Stop audio immediately by destroying iframe
-  if(idx!==undefined){
-    const inner=document.getElementById('cdp-'+idx);
-    if(inner)inner.innerHTML='';
-  }
-}
-
-
-// ADMIN TABS UPDATE
+// ADMIN TABS
 function buildAdminTabs(){
   const tabsEl=document.getElementById('admin-tabs');
   const panelsEl=document.getElementById('admin-tab-panels');
   const projSecs=(data.sections||[]).filter(s=>s.type==='projects');
-  const allTabs=[
-    {id:'general',label:'Allgemein'},
-    {id:'splash',label:'Splash / Sound'},
-    {id:'circles',label:'Startseiten-Kreise'},
-    {id:'termine',label:'Termine'},
-    ...projSecs.map(s=>({id:'proj_'+s.id,label:L(s.label)})),
-    {id:'bio',label:'Bio'},
-    {id:'kontakt',label:'Kontakt'}
-  ];
+  const allTabs=[{id:'general',label:'Allgemein'},{id:'splash',label:'Splash / Sound'},{id:'termine',label:'Termine'},...projSecs.map(s=>({id:'proj_'+s.id,label:L(s.label)})),{id:'bio',label:'Bio'},{id:'kontakt',label:'Kontakt'}];
   tabsEl.innerHTML=allTabs.map((t,i)=>`<div class="tab${i===0?' active':''}" onclick="switchTab('${t.id}',this)">${escH(t.label)}</div>`).join('');
   panelsEl.innerHTML=allTabs.map((t,i)=>`<div class="tab-panel${i===0?' active':''}" id="tab-${t.id}"></div>`).join('');
-  renderTabGeneral();renderTabSplash();renderTabCircles();renderTabTermine();
-  projSecs.forEach(s=>renderTabProjects(s.id));renderTabBio();renderTabKontakt();
-}
-
-// Single shared drag state + listeners — defined BEFORE renderCdCanvas uses them
-let _cdDrag=null;
-function _cdMouseMove(e){
-  if(!_cdDrag)return;
-  const {dot,c,startX,startY,origX,origY,canvas}=_cdDrag;
-  const rect=canvas.getBoundingClientRect();
-  let nx=origX+((e.clientX-startX)/rect.width*100);
-  let ny=origY+((e.clientY-startY)/rect.height*100);
-  nx=Math.max(3,Math.min(97,nx));ny=Math.max(3,Math.min(97,ny));
-  c.x=Math.round(nx*10)/10;c.y=Math.round(ny*10)/10;
-  dot.style.left=(c.x/100)*rect.width+'px';
-  dot.style.top=(c.y/100)*rect.height+'px';
-}
-function _cdMouseUp(){
-  if(!_cdDrag)return;
-  _cdDrag.dot.style.cursor='grab';_cdDrag=null;
-  renderCircles();showSaveNotice();
-}
-function _cdTouchMove(e){
-  if(!_cdDrag)return;
-  const {dot,c,startX,startY,origX,origY,canvas}=_cdDrag;
-  const rect=canvas.getBoundingClientRect();
-  let nx=origX+((e.touches[0].clientX-startX)/rect.width*100);
-  let ny=origY+((e.touches[0].clientY-startY)/rect.height*100);
-  nx=Math.max(3,Math.min(97,nx));ny=Math.max(3,Math.min(97,ny));
-  c.x=Math.round(nx*10)/10;c.y=Math.round(ny*10)/10;
-  dot.style.left=(c.x/100)*rect.width+'px';
-  dot.style.top=(c.y/100)*rect.height+'px';
-  e.preventDefault();
-}
-function _cdTouchEnd(){_cdDrag=null;renderCircles();showSaveNotice();}
-window.addEventListener('mousemove',_cdMouseMove,{passive:true});
-window.addEventListener('mouseup',_cdMouseUp);
-
-// CIRCLES BACKEND TAB
-function renderTabCircles(){
-  const circles=data.soundCircles||[];
-  document.getElementById('tab-circles').innerHTML=`
-    <div class="admin-section">
-      <div class="admin-section-title">Sound-CDs auf der Startseite</div>
-      <p style="font-size:.75rem;color:#888;margin-bottom:.8rem;line-height:1.5;">Klicke im Vorschau-Feld auf eine CD um sie zu verschieben. Neue CDs werden zufällig platziert und können danach per Klick+Drag verschoben werden.</p>
-
-      <!-- CD PLACEMENT CANVAS -->
-      <div style="margin-bottom:1rem;">
-        <div style="font-size:.68rem;color:#aaa;margin-bottom:.4rem;">Vorschau & Platzierung — ziehe CDs um sie zu positionieren</div>
-        <div id="cd-canvas" style="position:relative;width:100%;aspect-ratio:16/9;background:#f0f0f0;border:1px solid #ddd;border-radius:6px;overflow:hidden;background-image:linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px);background-size:5% 5%;cursor:default;"></div>
-      </div>
-
-      <div id="circles-admin-list" style="margin-bottom:.8rem;"></div>
-      <div style="border:1px solid #eee;padding:.8rem;background:#fafafa;border-radius:4px;">
-        <div class="admin-section-title">Neue CD hinzufügen</div>
-        <div class="admin-field"><label>Quelle</label>
-          <select id="nc-source" style="border:1px solid #ddd;padding:.35rem;font-size:.8rem;font-family:'Viaoda Libre',cursive;background:#fafafa;outline:none;">
-            <option value="soundcloud">SoundCloud</option>
-            <option value="bandcamp">Bandcamp</option>
-          </select>
-        </div>
-        <div class="admin-field"><label>URL (SoundCloud Track-URL oder Bandcamp Embed-src)</label>
-          <input id="nc-url" placeholder="https://soundcloud.com/..." style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;width:100%;font-family:'Viaoda Libre',cursive;outline:none;"/>
-        </div>
-        <div class="admin-field"><label>Größe (px)</label>
-          <input type="range" id="nc-size" min="60" max="200" value="100" oninput="document.getElementById('nc-size-val').textContent=this.value+'px';renderCdCanvas()"/>
-          <span id="nc-size-val" style="font-size:.7rem;margin-left:.4rem;">100px</span>
-        </div>
-        <button class="admin-btn" onclick="addCircle()">+ CD hinzufügen</button>
-      </div>
-    </div>`;
-  renderCirclesAdmin();
-  renderCdCanvas();
-}
-
-function renderCdCanvas(){
-  const canvas=document.getElementById('cd-canvas');if(!canvas)return;
-  const circles=data.soundCircles||[];
-  // Remove old cd dots
-  canvas.querySelectorAll('.cd-dot').forEach(e=>e.remove());
-  const cw=canvas.offsetWidth||300;
-  const ch=canvas.offsetHeight||168;
-
-  circles.forEach((c,i)=>{
-    const dot=document.createElement('div');
-    dot.className='cd-dot';
-    const dotSize=Math.max(24,Math.min(60,(c.size||100)*0.38));
-    const px=(c.x/100)*cw;
-    const py=(c.y/100)*ch;
-    dot.style.cssText=`position:absolute;width:${dotSize}px;height:${dotSize}px;border-radius:50%;
-      background:radial-gradient(circle at 38% 35%,#f8f8f8,#d0d0d8 60%,#b0b0c0);
-      border:1.5px solid rgba(0,0,0,0.15);
-      box-shadow:0 2px 6px rgba(0,0,0,0.18);
-      left:${px}px;top:${py}px;
-      transform:translate(-50%,-50%);
-      cursor:grab;user-select:none;z-index:10;
-      display:flex;align-items:center;justify-content:center;
-      font-size:${Math.max(8,dotSize*0.28)}px;color:rgba(0,0,0,0.4);`;
-    dot.title=`CD ${i+1} — ziehen um zu verschieben`;
-    dot.innerHTML=`<span style="pointer-events:none;">${i+1}</span>`;
-
-    // Mousedown starts drag
-    dot.addEventListener('mousedown',e=>{
-      _cdDrag={dot,c,startX:e.clientX,startY:e.clientY,origX:c.x,origY:c.y,canvas};
-      dot.style.cursor='grabbing';e.preventDefault();
-    });
-    // Touch
-    dot.addEventListener('touchstart',e=>{
-      _cdDrag={dot,c,startX:e.touches[0].clientX,startY:e.touches[0].clientY,origX:c.x,origY:c.y,canvas};
-      e.preventDefault();
-    },{passive:false});
-    dot.addEventListener('touchmove',_cdTouchMove,{passive:false});
-    dot.addEventListener('touchend',_cdTouchEnd);
-
-    canvas.appendChild(dot);
-  });
-
-  // Preview dot
-  const previewSize=parseInt(document.getElementById('nc-size')?.value||100);
-  const previewDot=document.createElement('div');
-  previewDot.style.cssText=`position:absolute;right:8px;bottom:8px;width:${Math.max(16,previewSize*0.28)}px;height:${Math.max(16,previewSize*0.28)}px;border-radius:50%;background:rgba(26,26,26,0.1);border:1px dashed #aaa;pointer-events:none;`;
-  canvas.appendChild(previewDot);
-}
-function renderCirclesAdmin(){
-  const el=document.getElementById('circles-admin-list');if(!el)return;
-  const circles=data.soundCircles||[];
-  if(!circles.length){el.innerHTML='<p style="font-size:.73rem;color:#aaa;margin-bottom:.5rem;">Noch keine CDs.</p>';return;}
-  el.innerHTML=circles.map((c,i)=>`
-    <div class="media-admin-item">
-      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><strong>${i+1}.</strong> ${c.source==='soundcloud'?'🎵 SoundCloud':'🎵 Bandcamp'} — ${escH((c.url||'').substring(0,45))}</span>
-      <button class="admin-btn danger small" onclick="removeCircle(${i})">✕</button>
-    </div>`).join('');
-}
-
-function addCircle(){
-  const url=document.getElementById('nc-url').value.trim();
-  const source=document.getElementById('nc-source').value;
-  const size=parseInt(document.getElementById('nc-size').value)||100;
-  if(!url){alert('Bitte URL eingeben.');return;}
-  if(!data.soundCircles)data.soundCircles=[];
-  let x,y,attempts=0,ok=false;
-  while(!ok&&attempts<50){
-    x=10+Math.random()*80;y=10+Math.random()*80;
-    ok=data.soundCircles.every(c=>Math.hypot(c.x-x,c.y-y)>12);
-    attempts++;
-  }
-  data.soundCircles.push({url,source,size,x:Math.round(x*10)/10,y:Math.round(y*10)/10});
-  document.getElementById('nc-url').value='';
-  renderCirclesAdmin();renderCdCanvas();renderCircles();showSaveNotice();
-}
-function removeCircle(i){
-  data.soundCircles.splice(i,1);renderCirclesAdmin();renderCdCanvas();renderCircles();showSaveNotice();
+  renderTabGeneral();renderTabSplash();renderTabTermine();projSecs.forEach(s=>renderTabProjects(s.id));renderTabBio();renderTabKontakt();
 }
 function switchTab(id,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -1262,9 +850,7 @@ function switchTab(id,el){
 
 // ALLGEMEIN
 function renderTabGeneral(){
-  const hb=data.homeBg||{url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
-  const homeBgBlock=bgAdminBlock('home_page',hb,'Hintergrundbild (Startseite)').replace(/saveSectionBg\('home_page'\)/g,"saveHomeBg()");
-  document.getElementById('tab-general').innerHTML=homeBgBlock+`
+  document.getElementById('tab-general').innerHTML=`
     <div class="admin-section">
       <div class="admin-section-title">Website-Infos</div>
       <div class="admin-field"><label>Name / Titel</label><input id="a-name" value="${escH(data.name||'')}"/></div>
@@ -1280,7 +866,6 @@ function renderTabGeneral(){
       <div id="pw-msg" style="font-size:.73rem;color:#888;min-height:1rem;margin-bottom:.4rem;"></div>
       <button class="admin-btn" onclick="changePw()">Passwort ändern</button>
     </div>`;
-  setTimeout(()=>previewBg('home_page'),50);
 }
 function saveGeneral(){
   data.name=document.getElementById('a-name').value;
@@ -1288,17 +873,6 @@ function saveGeneral(){
   data.homeText={de:document.getElementById('a-home-de').value,en:document.getElementById('a-home-en').value};
   data.footer=document.getElementById('a-footer').value;
   renderAll();showSaveNotice();
-}
-function saveHomeBg(){
-  if(!data.homeBg)data.homeBg={};
-  data.homeBg.url=(document.getElementById('sb-url-home_page')?.value||'').trim();
-  data.homeBg.active=document.getElementById('sb-active-home_page')?.value==='1';
-  data.homeBg.posX=document.getElementById('sb-posx-home_page')?.value||'50';
-  data.homeBg.posY=document.getElementById('sb-posy-home_page')?.value||'50';
-  data.homeBg.opacity=(parseInt(document.getElementById('sb-opacity-home_page')?.value||100)/100);
-  data.homeBg.glowStrength=parseInt(document.getElementById('sb-glow-home_page')?.value||70);
-  if(currentSection==='home'){renderHomeText();renderHomeBg();renderCircles();updateBgState();}
-  showSaveNotice();
 }
 function changePw(){
   const p1=document.getElementById('a-pw1').value,p2=document.getElementById('a-pw2').value,msg=document.getElementById('pw-msg');
@@ -1313,10 +887,14 @@ function changePw(){
 
 // TERMINE
 function renderTabTermine(){
-  const sb=(data.sectionBg||{}).termine||{url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
-  const bgBlock=bgAdminBlock('termine',sb,'Hintergrundbild (Termine-Seite)');
   const ei=data.eventsImage||{url:'',active:false};
-  document.getElementById('tab-termine').innerHTML=bgBlock+`
+  document.getElementById('tab-termine').innerHTML=`
+    <div class="admin-section">
+      <div class="admin-section-title">Hintergrundbild (Startseite)</div>
+      <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="ev-img-url" value="${escH(ei.url||'')}" placeholder="https://i.ibb.co/..."/></div>
+      <div class="admin-field"><label>Sichtbar?</label><select id="ev-img-active"><option value="0"${!ei.active?' selected':''}>Nein – kein Bild</option><option value="1"${ei.active?' selected':''}>Ja – Bild anzeigen</option></select></div>
+      <button class="admin-btn" onclick="saveEventsImage()">Speichern</button>
+    </div>
     <div class="admin-section">
       <div class="admin-section-title">Termine</div>
       <div id="ev-list"></div>
@@ -1330,7 +908,6 @@ function renderTabTermine(){
       </div>
     </div>`;
   renderEventsAdmin();
-  setTimeout(()=>previewBg('termine'),50);
 }
 function renderEventsAdmin(){
   const el=document.getElementById('ev-list');if(!el)return;
@@ -1382,58 +959,26 @@ function saveEventsImage(){
 }
 
 // PROJEKTE
-function bgAdminBlock(id,sb,label){
-  return`
-    <div class="admin-section">
-      <div class="admin-section-title">${label}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
-        <div>
-          <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="sb-url-${id}" value="${escH(sb.url||'')}" placeholder="https://i.ibb.co/..." oninput="previewBg('${id}')"/></div>
-          <div class="admin-field"><label>Sichtbar?</label><select id="sb-active-${id}" onchange="previewBg('${id}')"><option value="0"${!sb.active?' selected':''}>Nein</option><option value="1"${sb.active?' selected':''}>Ja</option></select></div>
-          <div class="admin-field"><label>Horizontal (${sb.posX||50}%)</label><input type="range" id="sb-posx-${id}" min="0" max="100" value="${sb.posX||50}" oninput="document.getElementById('sb-posx-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-posx-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${sb.posX||50}%</span></div>
-          <div class="admin-field"><label>Vertikal (${sb.posY||50}%)</label><input type="range" id="sb-posy-${id}" min="0" max="100" value="${sb.posY||50}" oninput="document.getElementById('sb-posy-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-posy-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${sb.posY||50}%</span></div>
-          <div class="admin-field"><label>Deckkraft (${Math.round((sb.opacity||1)*100)}%)</label><input type="range" id="sb-opacity-${id}" min="10" max="100" value="${Math.round((sb.opacity||1)*100)}" oninput="document.getElementById('sb-opacity-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-opacity-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${Math.round((sb.opacity||1)*100)}%</span></div>
-          <div class="admin-field"><label>Leuchtstärke der Schrift (${sb.glowStrength||70}%)</label><input type="range" id="sb-glow-${id}" min="0" max="100" value="${sb.glowStrength||70}" oninput="document.getElementById('sb-glow-val-${id}').textContent=this.value+'%';previewBg('${id}')"/><span id="sb-glow-val-${id}" style="font-size:.7rem;margin-left:.4rem;">${sb.glowStrength||70}%</span></div>
-          <button class="admin-btn" onclick="saveSectionBg('${id}')">Speichern</button>
-        </div>
-        <div>
-          <div style="font-size:.68rem;color:#aaa;margin-bottom:.4rem;">Vorschau</div>
-          <div id="bg-preview-${id}" style="position:relative;width:100%;aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#eee;border:1px solid #ddd;">
-            <div id="bg-preview-img-${id}" style="position:absolute;inset:0;background-size:cover;background-position:50% 50%;"></div>
-            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:1rem;">
-              <div id="bg-preview-text-${id}" style="font-family:'Viaoda Libre',cursive;font-size:.95rem;color:#1a1a1a;">Projektname</div>
-              <div id="bg-preview-sub-${id}" style="font-family:'Viaoda Libre',cursive;font-size:.72rem;color:#555;margin-top:.2rem;">Kurzbeschreibung</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-}
-
-function previewBg(id){
-  const url=(document.getElementById('sb-url-'+id)?.value||'').trim();
-  const opacity=(document.getElementById('sb-opacity-'+id)?.value||100)/100;
-  const glow=(document.getElementById('sb-glow-'+id)?.value||70);
-  const posX=document.getElementById('sb-posx-'+id)?.value||50;
-  const posY=document.getElementById('sb-posy-'+id)?.value||50;
-  const imgEl=document.getElementById('bg-preview-img-'+id);
-  const textEl=document.getElementById('bg-preview-text-'+id);
-  const subEl=document.getElementById('bg-preview-sub-'+id);
-  if(imgEl){
-    imgEl.style.backgroundImage=url?`url('${url}')`:'' ;
-    imgEl.style.backgroundPosition=`${posX}% ${posY}%`;
-    imgEl.style.opacity=url?opacity:0;
-  }
-  const g=glow/100;
-  const shadow=`0 0 ${8+g*12}px rgba(255,255,255,${g}), 0 0 ${20+g*40}px rgba(255,255,255,${g*0.85}), 0 0 ${50+g*60}px rgba(255,255,255,${g*0.5})`;
-  if(textEl)textEl.style.textShadow=shadow;
-  if(subEl)subEl.style.textShadow=shadow;
-}
-
 function renderTabProjects(sectionId){
   const el=document.getElementById('tab-proj_'+sectionId);if(!el)return;
-  const sb=(data.sectionBg||{})[sectionId]||{url:'',active:false,posX:'50',posY:'50',opacity:1,glowStrength:70};
-  el.innerHTML=bgAdminBlock(sectionId,sb,'Hintergrundbild der Rubrik-Seite')+`
+  const sb=(data.sectionBg||{})[sectionId]||{url:'',active:false,posX:'50',posY:'50',gradient:'to left'};
+  el.innerHTML=`
+    <div class="admin-section">
+      <div class="admin-section-title">Hintergrundbild der Rubrik-Seite</div>
+      <div class="admin-field"><label>Bild-URL (imgbb Direct link)</label><input id="sb-url-${sectionId}" value="${escH(sb.url||'')}" placeholder="https://i.ibb.co/..."/></div>
+      <div class="admin-field"><label>Sichtbar?</label><select id="sb-active-${sectionId}"><option value="0"${!sb.active?' selected':''}>Nein – kein Bild</option><option value="1"${sb.active?' selected':''}>Ja – Bild anzeigen</option></select></div>
+      <div class="admin-field"><label>Bildausschnitt horizontal (0 = ganz links, 50 = mitte, 100 = ganz rechts)</label><input type="range" id="sb-posx-${sectionId}" min="0" max="100" value="${escH(sb.posX||'50')}" oninput="document.getElementById('sb-posx-val-${sectionId}').textContent=this.value+'%'"/><span id="sb-posx-val-${sectionId}" style="font-size:.7rem;margin-left:.4rem;">${escH(sb.posX||'50')}%</span></div>
+      <div class="admin-field"><label>Bildausschnitt vertikal (0 = ganz oben, 50 = mitte, 100 = ganz unten)</label><input type="range" id="sb-posy-${sectionId}" min="0" max="100" value="${escH(sb.posY||'50')}" oninput="document.getElementById('sb-posy-val-${sectionId}').textContent=this.value+'%'"/><span id="sb-posy-val-${sectionId}" style="font-size:.7rem;margin-left:.4rem;">${escH(sb.posY||'50')}%</span></div>
+      <div class="admin-field"><label>Gradient-Richtung (wo ist der Text lesbar?)</label>
+        <select id="sb-grad-${sectionId}">
+          <option value="to left"${sb.gradient==='to left'?' selected':''}>← Links transparent, rechts deckend</option>
+          <option value="to right"${sb.gradient==='to right'?' selected':''}>→ Rechts transparent, links deckend</option>
+          <option value="to bottom"${sb.gradient==='to bottom'?' selected':''}>↓ Oben transparent, unten deckend</option>
+          <option value="to top"${sb.gradient==='to top'?' selected':''}>↑ Unten transparent, oben deckend</option>
+        </select>
+      </div>
+      <button class="admin-btn" onclick="saveSectionBg('${sectionId}')">Speichern</button>
+    </div>
     <div class="admin-section">
       <div class="admin-section-title">Medien — rechte Spalte der Rubrikseite</div>
       <div id="sm-list-${sectionId}"></div>
@@ -1455,7 +1000,6 @@ function renderTabProjects(sectionId){
     <div class="admin-section"><div class="admin-section-title">Projekte</div><div id="pa-${sectionId}"></div><button class="admin-btn" style="margin-top:.6rem;" onclick="addProject('${sectionId}')">+ Projekt hinzufügen</button></div>`;
   renderSectionMediaAdmin(sectionId);
   renderProjectCards(sectionId);
-  setTimeout(()=>previewBg(sectionId),50);
 }
 function renderSectionMediaAdmin(sectionId){
   const el=document.getElementById('sm-list-'+sectionId);if(!el)return;
@@ -1477,25 +1021,16 @@ function addSectionMedia(sectionId){
   if(currentSection===sectionId)renderSectionList(sectionId);
   showSaveNotice();
 }
-function saveSectionBg(id){
+function saveSectionBg(sectionId){
   if(!data.sectionBg)data.sectionBg={};
-  if(!data.sectionBg[id])data.sectionBg[id]={};
-  data.sectionBg[id].url=(document.getElementById('sb-url-'+id)?.value||'').trim();
-  data.sectionBg[id].active=document.getElementById('sb-active-'+id)?.value==='1';
-  data.sectionBg[id].posX=document.getElementById('sb-posx-'+id)?.value||'50';
-  data.sectionBg[id].posY=document.getElementById('sb-posy-'+id)?.value||'50';
-  data.sectionBg[id].opacity=(parseInt(document.getElementById('sb-opacity-'+id)?.value||100)/100);
-  data.sectionBg[id].glowStrength=parseInt(document.getElementById('sb-glow-'+id)?.value||70);
-  // Apply glow to page if currently viewing this section
-  applyGlowStrength(data.sectionBg[id].glowStrength);
-  if(currentSection===id)renderSectionList(id);
-  if(currentSection==='termine'&&id==='termine')renderTermineView();
+  if(!data.sectionBg[sectionId])data.sectionBg[sectionId]={};
+  data.sectionBg[sectionId].url=document.getElementById('sb-url-'+sectionId).value.trim();
+  data.sectionBg[sectionId].active=document.getElementById('sb-active-'+sectionId).value==='1';
+  data.sectionBg[sectionId].posX=document.getElementById('sb-posx-'+sectionId).value;
+  data.sectionBg[sectionId].posY=document.getElementById('sb-posy-'+sectionId).value;
+  data.sectionBg[sectionId].gradient=document.getElementById('sb-grad-'+sectionId).value;
+  if(currentSection===sectionId)renderSectionList(sectionId);
   showSaveNotice();
-}
-function applyGlowStrength(pct){
-  const g=pct/100;
-  const shadow=`0 0 ${Math.round(8+g*12)}px rgba(255,255,255,${g.toFixed(2)}), 0 0 ${Math.round(20+g*40)}px rgba(255,255,255,${(g*0.85).toFixed(2)}), 0 0 ${Math.round(50+g*60)}px rgba(255,255,255,${(g*0.5).toFixed(2)})`;
-  document.documentElement.style.setProperty('--glow-shadow',shadow);
 }
 function removeSectionMedia(sectionId,idx){
   data.sectionMedia[sectionId].splice(idx,1);
@@ -1584,27 +1119,13 @@ function saveProject(sectionId,idx){
 
 // BIO
 function renderTabBio(){
-  const bb=data.bioBg||{url:'',active:false,opacity:1,glowStrength:70};
-  const bbBlock=bgAdminBlock('bio_page',bb,'Hintergrundbild (Bio-Seite)').replace(/saveSectionBg\('bio_page'\)/g,"saveBioBg()");
-  document.getElementById('tab-bio').innerHTML=bbBlock+`
+  document.getElementById('tab-bio').innerHTML=`
     <div class="admin-section">
       <div class="admin-section-title">Bio</div>
       <div class="admin-field"><label>Foto-URL (von imgbb.com — Direct link)</label><input id="a-bio-img" value="${escH((data.bio||{}).img||'')}" placeholder="https://i.ibb.co/..."/></div>
       <div class="admin-field"><label>Text DE / EN</label><div class="bilingual"><div><div class="bilingual-label">🇩🇪</div><textarea id="a-bio-de" style="height:150px;">${escH(((data.bio||{}).text||{}).de||'')}</textarea></div><div><div class="bilingual-label">🇬🇧</div><textarea id="a-bio-en" style="height:150px;">${escH(((data.bio||{}).text||{}).en||'')}</textarea></div></div></div>
       <button class="admin-btn" onclick="saveBio()">Speichern</button>
     </div>`;
-  setTimeout(()=>previewBg('bio_page'),50);
-}
-function saveBioBg(){
-  if(!data.bioBg)data.bioBg={};
-  data.bioBg.url=(document.getElementById('sb-url-bio_page')?.value||'').trim();
-  data.bioBg.active=document.getElementById('sb-active-bio_page')?.value==='1';
-  data.bioBg.posX=document.getElementById('sb-posx-bio_page')?.value||'50';
-  data.bioBg.posY=document.getElementById('sb-posy-bio_page')?.value||'50';
-  data.bioBg.opacity=(parseInt(document.getElementById('sb-opacity-bio_page')?.value||100)/100);
-  data.bioBg.glowStrength=parseInt(document.getElementById('sb-glow-bio_page')?.value||70);
-  if(currentSection==='bio'){applyPageBg('bio');updateBgState();}
-  showSaveNotice();
 }
 function saveBio(){
   if(!data.bio)data.bio={};
@@ -1615,9 +1136,7 @@ function saveBio(){
 
 // KONTAKT
 function renderTabKontakt(){
-  const kb=data.kontaktBg||{url:'',active:false,opacity:1,glowStrength:70};
-  const kbBlock=bgAdminBlock('kontakt_page',kb,'Hintergrundbild (Kontakt-Seite)').replace(/saveSectionBg\('kontakt_page'\)/g,"saveKontaktBg()");
-  document.getElementById('tab-kontakt').innerHTML=kbBlock+`
+  document.getElementById('tab-kontakt').innerHTML=`
     <div class="admin-section">
       <div class="admin-section-title">Links</div>
       <div id="contact-admin-list"></div>
@@ -1629,18 +1148,6 @@ function renderTabKontakt(){
       </div>
     </div>`;
   renderContactAdmin();
-  setTimeout(()=>previewBg('kontakt_page'),50);
-}
-function saveKontaktBg(){
-  if(!data.kontaktBg)data.kontaktBg={};
-  data.kontaktBg.url=(document.getElementById('sb-url-kontakt_page')?.value||'').trim();
-  data.kontaktBg.active=document.getElementById('sb-active-kontakt_page')?.value==='1';
-  data.kontaktBg.posX=document.getElementById('sb-posx-kontakt_page')?.value||'50';
-  data.kontaktBg.posY=document.getElementById('sb-posy-kontakt_page')?.value||'50';
-  data.kontaktBg.opacity=(parseInt(document.getElementById('sb-opacity-kontakt_page')?.value||100)/100);
-  data.kontaktBg.glowStrength=parseInt(document.getElementById('sb-glow-kontakt_page')?.value||70);
-  if(currentSection==='kontakt'){applyPageBg('kontakt');updateBgState();}
-  showSaveNotice();
 }
 function renderContactAdmin(){
   const el=document.getElementById('contact-admin-list');if(!el)return;
@@ -1710,35 +1217,28 @@ function buildSplashAudioPlayer(){
       if(vb)vb.style.display='flex';
     }
   }else{
-    // SoundCloud or Bandcamp via iframe
-    const url=sa.source==='soundcloud'?sa.soundcloudSrc:sa.bandcampSrc;
-    if(!url)return;
+    // Reuse preloaded iframe if it exists (SoundCloud), otherwise create new (Bandcamp)
     let iframe=document.getElementById('splash-audio-frame');
-    if(iframe){
-      // Already preloaded — just trigger play
-      try{
-        iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(currentVolume*100)}),'*');
-        iframe.contentWindow.postMessage(JSON.stringify({method:'play'}),'*');
-      }catch(e){}
-    }else{
-      // Create fresh with autoplay=true
+    if(!iframe){
+      const url=sa.source==='soundcloud'?sa.soundcloudSrc:sa.bandcampSrc;
+      if(!url)return;
       iframe=document.createElement('iframe');
       iframe.id='splash-audio-frame';
       iframe.style.cssText='display:none;position:absolute;width:0;height:0;';
       iframe.allow='autoplay';
       if(sa.source==='soundcloud'){
         let scUrl=url;
-        if(!scUrl.includes('w.soundcloud.com')){
-          scUrl='https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false';
-        }else{
-          scUrl=scUrl.replace('auto_play=false','auto_play=true');
-          if(!scUrl.includes('auto_play='))scUrl+='&auto_play=true';
-        }
+        if(!scUrl.includes('w.soundcloud.com')){scUrl='https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false';}
+        else{scUrl=scUrl.replace('auto_play=false','auto_play=true');if(!scUrl.includes('auto_play='))scUrl+='&auto_play=true';}
         iframe.src=scUrl;
-      }else{
-        let b=url;b+=b.includes('?')?'&autoplay=1':'?autoplay=1';iframe.src=b;
-      }
+      }else{let b=url;b+=b.includes('?')?'&autoplay=1':'?autoplay=1';iframe.src=b;}
       document.body.appendChild(iframe);
+    }else{
+      // Unmute and play preloaded SC iframe
+      try{
+        iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(currentVolume*100)}),'*');
+        iframe.contentWindow.postMessage(JSON.stringify({method:'play'}),'*');
+      }catch(e){}
     }
     splashAudio=iframe;
     const vb=document.getElementById('volume-bar');
@@ -1768,57 +1268,24 @@ function applyVolume(vol){
 
 function initSplash(){
   const splash=document.getElementById('splash');
-  if(!splash)return;
   const sa=data.splashAudio||{};
-  const splashImgUrl=data.splashImg||'';
-
-  // Set image immediately
   const imgEl=document.getElementById('splash-img');
-  if(splashImgUrl&&imgEl){imgEl.src=splashImgUrl;imgEl.style.display='block';}
-
-  // Set hint text
+  const splashImgUrl=data.splashImg||'';
+  if(splashImgUrl){imgEl.src=splashImgUrl;imgEl.style.display='block';}
   const hint=document.getElementById('splash-hint');
   if(hint)hint.textContent=lang==='en'?'click to enter':'klicken um einzutreten';
-
-  // If nothing configured, skip splash entirely
   if(!splashImgUrl&&!sa.active){splash.style.display='none';return;}
-
-  // Preload SoundCloud iframe silently so it's ready on first click
-  if(sa.active&&sa.source==='soundcloud'&&sa.soundcloudSrc){
-    const existing=document.getElementById('splash-audio-frame');
-    if(!existing){
-      const iframe=document.createElement('iframe');
-      iframe.id='splash-audio-frame';
-      iframe.style.cssText='display:none;position:absolute;width:0;height:0;';
-      iframe.allow='autoplay';
-      let scUrl=sa.soundcloudSrc;
-      if(!scUrl.includes('w.soundcloud.com')){
-        scUrl='https://w.soundcloud.com/player/?url='+encodeURIComponent(scUrl)+'&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false';
-      }else{
-        scUrl=scUrl.replace('auto_play=true','auto_play=false');
-      }
-      iframe.src=scUrl;
-      document.body.appendChild(iframe);
-    }
-  }
-
   let clicked=false;
   splash.addEventListener('click',function(){
     if(!clicked){
-      // FIRST CLICK: show text + start sound
       clicked=true;
-      if(hint)hint.style.opacity='0';
       const ctaWrap=document.getElementById('splash-cta');
       const ctaText=document.getElementById('splash-cta-text');
+      if(hint)hint.style.opacity='0';
       if(ctaWrap)ctaWrap.style.display='block';
       if(ctaText)setTimeout(()=>{ctaText.style.opacity='1';},50);
-      // Start audio
       if(sa.active)buildSplashAudioPlayer();
-      // Show volume bar
-      const vb=document.getElementById('volume-bar');
-      if(vb&&sa.active)vb.style.display='flex';
     }else{
-      // SECOND CLICK: enter the site
       splash.classList.add('fade-out');
       setTimeout(()=>{splash.style.display='none';},1000);
     }
@@ -1929,35 +1396,24 @@ function saveSplash(){
 }
 
 function updateBgState(){
-  const hasBg=['section-bg','project-bg','home-bg','termine-bg','bio-bg','kontakt-bg']
-    .some(id=>document.getElementById(id)?.style.display==='block');
+  const hasBg=document.getElementById('section-bg')?.style.display==='block'||
+               document.getElementById('project-bg')?.style.display==='block'||
+               document.getElementById('home-bg')?.style.display==='block';
   document.body.classList.toggle('has-bg',hasBg);
+  // Retrigger scroll check
   window.dispatchEvent(new Event('scroll'));
 }
 
-// HEADER SCROLL TRANSPARENCY — throttled via requestAnimationFrame
-let _scrollRAF=false;
+// HEADER SCROLL TRANSPARENCY
 window.addEventListener('scroll',()=>{
-  if(_scrollRAF)return;
-  _scrollRAF=true;
-  requestAnimationFrame(()=>{
-    _scrollRAF=false;
-    const header=document.querySelector('header');
-    if(!header)return;
-    const hasBg=['section-bg','project-bg','home-bg','termine-bg','bio-bg','kontakt-bg']
-      .some(id=>document.getElementById(id)?.style.display==='block');
-    if(!hasBg){header.classList.remove('scrolled');header.style.background='';return;}
-    const scrollY=window.scrollY;
-    const fadeStart=20,fadeEnd=140;
-    if(scrollY<=fadeStart){
-      header.style.background='var(--bg)';header.classList.remove('scrolled');
-    }else if(scrollY>=fadeEnd){
-      header.style.background='transparent';header.classList.add('scrolled');
-    }else{
-      const alpha=1-(scrollY-fadeStart)/(fadeEnd-fadeStart);
-      header.style.background=`rgba(255,255,255,${alpha})`;header.classList.add('scrolled');
-    }
-  });
+  const header=document.querySelector('header');
+  if(!header)return;
+  // Only go transparent when a background image is active
+  const hasBg=document.getElementById('section-bg')?.style.display==='block'||
+               document.getElementById('project-bg')?.style.display==='block'||
+               document.getElementById('home-bg')?.style.display==='block';
+  if(hasBg&&window.scrollY>60){header.classList.add('scrolled');}
+  else{header.classList.remove('scrolled');}
 },{ passive:true });
 
 // SOUNDCLOUD PRELOAD — load iframe silently at page start so iOS allows playback on click
@@ -1986,18 +1442,13 @@ function preloadSoundcloudIfNeeded(){
 function init(){
   data=migrateData(data);
   renderAll();
-  renderHomeBg();
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===lang.toUpperCase()));
   initSplash();
+  preloadSoundcloudIfNeeded();
   if(window.location.hash==='#backend'){openBackend();}
   history.replaceState({},'',window.location.pathname);
 }
-try{init();}catch(e){
-  console.error('Init error:',e);
-  // Safety: always hide splash so user can see the page
-  const s=document.getElementById('splash');
-  if(s)s.style.display='none';
-}
+init();
 </script>
 </body>
 </html>
