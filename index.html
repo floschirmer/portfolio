@@ -271,7 +271,7 @@
     }
 
     /* SPLASH SCREEN */
-    #splash{position:fixed;inset:0;z-index:1000;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 1s ease;}
+    #splash{position:fixed;inset:0;z-index:1000;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 1s ease;}
     #splash.fade-out{opacity:0;pointer-events:none;}
     #splash-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;}
     #splash-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.32);}
@@ -1947,7 +1947,12 @@ function init(){
   if(window.location.hash==='#backend'){openBackend();}
   history.replaceState({},'',window.location.pathname);
 }
-init();
+try{init();}catch(e){
+  console.error('Init error:',e);
+  // Safety: always hide splash so user can see the page
+  const s=document.getElementById('splash');
+  if(s)s.style.display='none';
+}
 </script>
 </body>
 </html>
