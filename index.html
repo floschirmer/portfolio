@@ -1350,9 +1350,13 @@ function addCircle(){
   if(!url){alert('Bitte URL eingeben.');return;}
   if(!data.soundCircles)data.soundCircles=[];
   let x,y,attempts=0,ok=false;
-  while(!ok&&attempts<50){
+  while(!ok&&attempts<200){
     x=10+Math.random()*80;y=10+Math.random()*80;
-    ok=data.soundCircles.every(c=>Math.hypot(c.x-x,c.y-y)>12);
+    ok=data.soundCircles.every(c=>{
+      const dx=c.x-x, dy=(c.y-y)*1.78;
+      const combined=((c.size||100)+(size))/960*100*0.6;
+      return Math.hypot(dx,dy)>combined;
+    });
     attempts++;
   }
   data.soundCircles.push({url,source,size,x:Math.round(x*10)/10,y:Math.round(y*10)/10});
