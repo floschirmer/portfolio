@@ -109,64 +109,27 @@ function defaultSections(){return[
 
 // ========== MEDIA & RENDERING FUNCTIONS ==========
 // Stoppt alle Audio/Video-Embedded-Elemente und hält nur ein Audio aktiv
+function setSplashVolume(vol){
+  const v=Math.max(0,Math.min(1,Number(vol)));
+  const iframe=document.getElementById('splash-audio-frame');
+  if(iframe){try{iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(v*100)}),'*');}catch(e){}}
+  if(splashAudio&&splashAudio.tagName==='AUDIO'){try{splashAudio.volume=v;}catch(e){}}
+}
+
 function stopAllMedia(){
-  document.querySelectorAll('audio').forEach(a=>{try{a.pause();}catch(e){}}
-  );
+  document.querySelectorAll('audio').forEach(a=>{
+    if(a.id!=='splash-audio-el')try{a.pause();}catch(e){}
+  });
   document.querySelectorAll('.sound-circle.expanded').forEach(el=>_collapseCdEl(el));
   document.querySelectorAll('iframe').forEach(f=>{
+    if(f.id==='splash-audio-frame') return;
     const src=(f.src||'').toLowerCase();
-    if(src.includes('w.soundcloud.com/player')||src.includes('soundcloud.com/player')||src.includes('bandcamp.com')||src.includes('youtube.com/embed')||src.includes('player.vimeo.com')||f.id==='splash-audio-frame'){
+    if(src.includes('w.soundcloud.com/player')||src.includes('soundcloud.com/player')||src.includes('bandcamp.com')||src.includes('youtube.com/embed')||src.includes('player.vimeo.com')){
       try{f.contentWindow.postMessage(JSON.stringify({method:'pause'}),'*');}catch(e){}
       try{f.contentWindow.postMessage(JSON.stringify({method:'stop'}),'*');}catch(e){}
       try{f.contentWindow.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:''}),'*');}catch(e){}
     }
   });
-  const splashFrame=document.getElementById('splash-audio-frame');
-  if(splashFrame){
-    try{splashFrame.contentWindow.postMessage(JSON.stringify({method:'pause'}),'*');}catch(e){}
-  }
-  if(splashAudio&&splashAudio.tagName==='AUDIO'){
-    try{splashAudio.pause();}catch(e){}
-  }
-}
-
-function setIframeVolume(iframe,vol){
-  const src=(iframe.src||'').toLowerCase();
-  if(src.includes('youtube.com/embed')){
-    try{iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[Math.round(vol*100)]}),'*');}catch(e){}
-  }else if(src.includes('player.vimeo.com')){
-    try{iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:vol}),'https://player.vimeo.com');}catch(e){}
-  }else{
-    try{iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(vol*100)}),'*');}catch(e){}
-  }
-}
-
-let _mutedBandcampFrames=[];
-function applyVolume(vol){
-  document.querySelectorAll('audio').forEach(a=>{try{a.volume=vol;}catch(e){}});
-  document.querySelectorAll('iframe').forEach(f=>{
-    const src=(f.src||'').toLowerCase();
-    if(src.includes('soundcloud.com')||src.includes('youtube.com/embed')||src.includes('player.vimeo.com')||f.id==='splash-audio-frame'){
-      setIframeVolume(f,vol);
-    }
-  });
-  // Bandcamp has no postMessage volume API — remove iframe on mute, restore on unmute
-  if(vol===0){
-    document.querySelectorAll('iframe').forEach(f=>{
-      if((f.src||'').toLowerCase().includes('bandcamp.com')){
-        _mutedBandcampFrames.push({parent:f.parentNode,html:f.outerHTML});
-        f.remove();
-      }
-    });
-  }else if(_mutedBandcampFrames.length){
-    _mutedBandcampFrames.forEach(({parent,html})=>{
-      if(parent&&parent.isConnected){const t=document.createElement('div');t.innerHTML=html;const el=t.firstElementChild;if(el)parent.appendChild(el);}
-    });
-    _mutedBandcampFrames=[];
-  }
-  if(splashAudio&&splashAudio.tagName==='AUDIO'){
-    try{splashAudio.volume=vol;}catch(e){}
-  }
 }
 
 // ========== NAVIGATION & ROUTING ==========
@@ -752,10 +715,11 @@ function renderCircles(){
       <div class="cd-inner-player"><div id="cdp-${i}"></div></div>
       <button class="cd-close" onclick="collapseCd(event,this.parentElement)">✕</button>`;
 
-    const dragState={dragging:false,preventClick:false,startX:0,startY:0,startXpct:0,startYpct:0};
-    function startDrag(clientX,clientY){
+    const dragState={dragging:false,preventClick:false,startX:0,startY:0,startXpct:0,startYpct:0,pointerId:null};
+    function startDrag(clientX,clientY,pid){
       dragState.dragging=true;
       dragState.preventClick=false;
+      dragState.pointerId=pid??null;
       dragState.startX=clientX;
       dragState.startY=clientY;
       dragState.startXpct=c.x;
@@ -777,6 +741,10 @@ function renderCircles(){
       const nx=Math.max(5,Math.min(95,dragState.startXpct+dx));
       const ny=Math.max(5,Math.min(95,dragState.startYpct+dy));
       if(Math.abs(dxPx)>10||Math.abs(dyPx)>10){
+        if(!dragState.preventClick&&dragState.pointerId!==null){
+          // Capture pointer only once drag threshold is crossed — keeps e.target correct for taps
+          div.setPointerCapture?.(dragState.pointerId);
+        }
         dragState.preventClick=true;
         c.x=Math.round(nx*10)/10;
         c.y=Math.round(ny*10)/10;
@@ -789,67 +757,31 @@ function renderCircles(){
       dragState.dragging=false;
       div.style.cursor='grab';
     }
+    // Pointer events only — covers both mouse and touch without conflicts.
+    // Touch + pointer events firing together on mobile caused touchend to always
+    // exit early (pointerup had already reset dragging=false before touchend ran).
     div.addEventListener('pointerdown',function(e){
       if(e.button!==0) return;
       e.preventDefault();
-      div.setPointerCapture?.(e.pointerId);
-      startDrag(e.clientX,e.clientY);
+      startDrag(e.clientX,e.clientY,e.pointerId);
     });
     div.addEventListener('pointermove',function(e){
       updateDrag(e.clientX,e.clientY);
-      if(dragState.dragging) e.preventDefault();
     });
     div.addEventListener('pointerup',function(e){
       if(!dragState.dragging) return;
-      div.releasePointerCapture?.(e.pointerId);
-      endDrag();
-      if(dragState.preventClick){
-        e.stopPropagation();
-        e.preventDefault();
-      }
-    });
-    div.addEventListener('pointercancel',function(){endDrag();});
-    div.addEventListener('mousedown',function(e){
-      if(e.button!==0) return;
-      startDrag(e.clientX,e.clientY);
-    });
-    div.addEventListener('mousemove',function(e){
-      updateDrag(e.clientX,e.clientY);
-      if(dragState.dragging) e.preventDefault();
-    });
-    div.addEventListener('mouseup',function(){endDrag();});
-    div.addEventListener('touchstart',function(e){
-      if(e.touches.length!==1) return;
-      const t=e.touches[0];
-      startDrag(t.clientX,t.clientY);
-      e.preventDefault();
-    },{passive:false});
-    div.addEventListener('touchmove',function(e){
-      if(!dragState.dragging||e.touches.length!==1) return;
-      updateDrag(e.touches[0].clientX,e.touches[0].clientY);
-      e.preventDefault();
-    },{passive:false});
-    div.addEventListener('touchend',function(e){
-      if(!dragState.dragging)return;
       const wasDrag=dragState.preventClick;
+      if(wasDrag) div.releasePointerCapture?.(e.pointerId);
       endDrag();
-      // touchstart.preventDefault() suppresses the synthetic click on iOS — handle tap manually
+      dragState.preventClick=false;
       if(!wasDrag){
-        if(e.target.closest('.cd-close')){_collapseCdEl(div);return;}
-        if(div.classList.contains('expanded')){_collapseCdEl(div);}else{expandCd(div,c,i);}
+        if(e.target.closest('.cd-close')){_collapseCdEl(div,true);return;}
+        if(div.classList.contains('expanded')){_collapseCdEl(div,true);}else{expandCd(div,c,i);}
       }
     });
-    div.addEventListener('click',function(e){
-      if(dragState.preventClick){
-        dragState.preventClick=false;
-        return;
-      }
-      if(e.target.closest('.cd-close'))return;
-      if(this.classList.contains('expanded')){
-        _collapseCdEl(this);
-      }else{
-        expandCd(this,c,i);
-      }
+    div.addEventListener('pointercancel',function(){
+      endDrag();
+      dragState.preventClick=false;
     });
 
     container.appendChild(div);
@@ -880,15 +812,10 @@ function expandCd(el,c,idx){
     inner.innerHTML=buildCircleEmbedExpanded(c,expandedSize);
     const iframe=inner.querySelector('iframe');
     if(iframe){
-      iframe.addEventListener('load',()=>{
-        playEmbedIframe(iframe);
-        applyVolume(isMuted?0:currentVolume);
-      });
+      iframe.addEventListener('load',()=>playEmbedIframe(iframe));
       playEmbedIframe(iframe);
     }
   }
-  showVolumeBar();
-  applyVolume(isMuted?0:currentVolume);
 }
 
 function playEmbedIframe(iframe){
@@ -918,8 +845,8 @@ function buildCircleEmbedExpanded(c,size){
   }
   if(c.source==='bandcamp'){
     let src=c.url;const m=c.url.match(/src=["']([^"']+)["']/);if(m)src=m[1];
-    src=src.replace(/\/?$/,'').replace(/\/autoplay=\d+/,'');
-    src=src+'/autoplay=1';
+    src=src.replace(/\/?$/,'').replace(/\/autoplay=[^/]*/,'');
+    src=src+'/autoplay=t';
     return`<iframe src="${escH(src)}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen style="width:82%;height:${h}px;border:0;border-radius:8px;display:block;margin:0 auto;box-shadow:0 2px 12px rgba(0,0,0,0.15);" seamless></iframe>`;
   }
   return'';
@@ -932,10 +859,7 @@ function _collapseCdEl(el){
   el.style.transform='scale(1)';
   if(idx!==undefined){
     const inner=document.getElementById('cdp-'+idx);
-    if(inner){
-      _mutedBandcampFrames=_mutedBandcampFrames.filter(f=>f.parent!==inner);
-      inner.innerHTML='';
-    }
+    if(inner)inner.innerHTML='';
   }
 }
 
@@ -1551,9 +1475,6 @@ function cleanup(){_dt=null;_di=null;_ds=null;document.querySelectorAll('.draggi
 
 // SPLASH SCREEN & AUDIO
 let splashAudio=null;
-let isMuted=false;
-let currentVolume=0.7;
-let previousVolume=0.7;
 let trackIndex=0;
 
 function buildNativePlayer(tracks){
@@ -1563,7 +1484,7 @@ function buildNativePlayer(tracks){
   const audio=document.createElement('audio');
   audio.id='splash-audio-el';
   audio.style.display='none';
-  audio.volume=currentVolume;
+  audio.volume=0.7;
   audio.src=tracks[0].url;
   audio.addEventListener('ended',()=>{
     trackIndex=(trackIndex+1)%tracks.length;
@@ -1614,25 +1535,14 @@ function buildSplashAudioPlayer(){
     }
     document.body.appendChild(iframe);
     splashAudio=iframe;
+    iframe.addEventListener('load',()=>{
+      const sl=document.getElementById('splash-vol');
+      if(sl)setSplashVolume(sl.value);
+    });
     showVolumeBar();
   }
 }
 
-function toggleMute(){
-  const icon=document.getElementById('vol-icon');
-  if(isMuted){
-    const vol=previousVolume||0.7;
-    currentVolume=vol;
-    isMuted=false;
-    if(icon)icon.innerHTML='<path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-    applyVolume(vol);
-  } else {
-    previousVolume=currentVolume||previousVolume||0.7;
-    isMuted=true;
-    if(icon)icon.innerHTML='<path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
-    applyVolume(0);
-  }
-}
 
 function initSplash(){
   const splash=document.getElementById('splash');
