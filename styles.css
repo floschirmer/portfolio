@@ -6,7 +6,7 @@ body{background:var(--bg);color:var(--text);font-family:'Viaoda Libre',cursive;f
 #app{display:flex;flex-direction:column;min-height:100vh;}
 
 /* ========== HEADER & NAVIGATION ========== */
-header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);transition:opacity 0.2s ease;}
+header{padding:2.5rem 4rem 2rem;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,var(--header-bg-opacity,1));transition:background 0.3s ease,opacity 0.2s ease;}
 header.transparent{background:transparent !important;}
 .site-name{font-family:'Viaoda Libre',cursive;font-size:1.4rem;font-weight:400;letter-spacing:0.05em;text-transform:lowercase;color:var(--text);cursor:pointer;display:block;}
 .site-sub{font-size:0.78rem;color:var(--muted);letter-spacing:0.08em;margin-top:0.2rem;}
