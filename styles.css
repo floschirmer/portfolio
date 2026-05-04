@@ -161,7 +161,7 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
 #view-home{position:relative;min-height:100vh;}
 .home-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;background-size:cover;background-repeat:no-repeat;background-position:center center;display:none;}
 #view-home > #circles-container{
-  position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;
+  position:fixed;top:0;left:0;width:100vw;height:100vh;
   z-index:1;pointer-events:none;
 }
 #view-home > #circles-container .sound-circle{pointer-events:auto;}
@@ -266,9 +266,6 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
 #volume-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;gap:0.7rem;background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:opacity 0.5s ease;}
 #volume-bar.hidden{opacity:0;pointer-events:none;}
 #volume-bar svg{width:16px;height:16px;}
-#volume-slider{-webkit-appearance:none;appearance:none;width:110px;height:2px;border-radius:1px;background:var(--line);outline:none;cursor:pointer;}
-#volume-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--text);cursor:pointer;}
-#volume-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--text);border:none;cursor:pointer;}
 #mute-btn{min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;padding:4px;}
 #mute-btn:hover{opacity:1!important;}
 
@@ -285,9 +282,7 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
   /* Touch targets min 44-48px */
   nav a,.project-item,.event-item,.contact-link-item,.lang-btn,.back-btn,.ext-link{min-height:44px;display:flex;align-items:center;padding:0.7rem 0;}
   /* Volume bar mobile */
-  #volume-bar{bottom:1.5rem;padding:0.6rem 1rem;gap:0.8rem;}
-  #volume-slider{width:90px;height:3px;}
-  #volume-slider::-webkit-slider-thumb,#volume-slider::-moz-range-thumb{width:18px;height:18px;}
+  #volume-bar{bottom:1.5rem;padding:0.6rem 1rem;}
   /* Layouts */
   .bio-grid{grid-template-columns:1fr;}
   .bio-img,.bio-img-placeholder{max-width:100%;}
