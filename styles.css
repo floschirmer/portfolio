@@ -268,6 +268,11 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
 #splash-vol{-webkit-appearance:none;appearance:none;width:120px;height:2px;border-radius:1px;background:var(--line);outline:none;cursor:pointer;}
 #splash-vol::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--text);cursor:pointer;}
 #splash-vol::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--text);border:none;cursor:pointer;}
+#splash-vol-cta{-webkit-appearance:none;appearance:none;width:293px;height:1px;border-radius:1px;background:rgba(255,255,255,0.35);outline:none;cursor:pointer;display:block;margin:0 auto;}
+#splash-vol-cta::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:32px;height:32px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,0.3);}
+#splash-vol-cta::-moz-range-thumb{width:32px;height:32px;border-radius:50%;background:#fff;border:none;cursor:pointer;}
+#volume-bar{flex-direction:column;gap:0.4rem;}
+#vol-label{font-family:'Viaoda Libre',cursive;font-size:0.62rem;letter-spacing:0.18em;text-transform:lowercase;color:var(--muted);text-align:center;}
 
 /* ========== RESPONSIVE DESIGN (MOBILE) ========== */
 @media(max-width:700px){

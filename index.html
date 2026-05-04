@@ -46,15 +46,19 @@
 <div id="splash">
   <img id="splash-img" src="" alt="" style="display:none;" loading="eager"/>
   <div id="splash-overlay"></div>
-  <div id="splash-cta" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
-    <div style="font-family:'Viaoda Libre',cursive;font-size:1.3rem;letter-spacing:0.25em;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,0.5);text-transform:lowercase;opacity:0;transition:opacity 1s ease;" id="splash-cta-text">welcome, start listening</div>
+  <div id="splash-cta" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+    <div id="splash-cta-text" style="opacity:0;transition:opacity 1s ease;" onclick="event.stopPropagation()">
+      <input type="range" id="splash-vol-cta" class="splash-vol-input" min="0" max="1" step="0.01" value="0" oninput="setSplashVolume(this.value);onSplashSliderMove()"/>
+      <div style="font-family:'Viaoda Libre',cursive;font-size:1.24rem;letter-spacing:0.18em;color:rgba(255,255,255,0.55);text-transform:lowercase;margin-top:1.4rem;">add ambience</div>
+    </div>
   </div>
-  <div id="splash-hint" style="position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);font-family:'Viaoda Libre',cursive;font-size:0.78rem;letter-spacing:0.2em;color:rgba(255,255,255,0.6);text-shadow:0 1px 8px rgba(0,0,0,0.4);pointer-events:none;user-select:none;text-transform:lowercase;transition:opacity 0.4s;">klicken um einzutreten</div>
+  <div id="splash-hint" style="position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);font-family:'Viaoda Libre',cursive;font-size:0.78rem;letter-spacing:0.2em;color:rgba(255,255,255,0.6);text-shadow:0 1px 8px rgba(0,0,0,0.4);pointer-events:none;user-select:none;text-transform:lowercase;transition:opacity 0.4s;">click to enter</div>
 </div>
 
 <!-- VOLUME BAR -->
 <div id="volume-bar">
-  <input type="range" id="splash-vol" min="0" max="1" step="0.01" value="0.7" oninput="setSplashVolume(this.value)"/>
+  <input type="range" id="splash-vol" class="splash-vol-input" min="0" max="1" step="0.01" value="0" oninput="setSplashVolume(this.value)"/>
+  <div id="vol-label">remove ambience</div>
 </div>
 
 <div id="app">
