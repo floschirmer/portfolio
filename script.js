@@ -131,14 +131,21 @@ function stopAllMedia(){
 }
 
 function setIframeVolume(iframe,vol){
-  try{iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(vol*100)}),'*');}catch(e){}
+  const src=(iframe.src||'').toLowerCase();
+  if(src.includes('youtube.com/embed')){
+    try{iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[Math.round(vol*100)]}),'*');}catch(e){}
+  }else if(src.includes('player.vimeo.com')){
+    try{iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:vol}),'https://player.vimeo.com');}catch(e){}
+  }else{
+    try{iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(vol*100)}),'*');}catch(e){}
+  }
 }
 
 function applyVolume(vol){
   document.querySelectorAll('audio').forEach(a=>{try{a.volume=vol;}catch(e){}});
   document.querySelectorAll('iframe').forEach(f=>{
     const src=(f.src||'').toLowerCase();
-    if(src.includes('w.soundcloud.com/player')||src.includes('soundcloud.com/player')||src.includes('bandcamp.com/embeddedplayer')||f.id==='splash-audio-frame'){
+    if(src.includes('soundcloud.com')||src.includes('bandcamp.com')||src.includes('youtube.com/embed')||src.includes('player.vimeo.com')||f.id==='splash-audio-frame'){
       setIframeVolume(f,vol);
     }
   });
@@ -427,8 +434,8 @@ function renderProject(sectionId,idx){
 }
 
 function buildEmbed(m){
-  if(m.type==='youtube'){const id=extractYT(m.url);return id?`<div class="embed-wrap"><iframe src="https://www.youtube.com/embed/${id}" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige YouTube-URL</p>';}
-  if(m.type==='vimeo'){const id=extractVimeo(m.url);return id?`<div class="embed-wrap"><iframe src="https://player.vimeo.com/video/${id}" allowfullscreen allow="autoplay;fullscreen;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige Vimeo-URL</p>';}
+  if(m.type==='youtube'){const id=extractYT(m.url);return id?`<div class="embed-wrap"><iframe src="https://www.youtube.com/embed/${id}?enablejsapi=1" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige YouTube-URL</p>';}
+  if(m.type==='vimeo'){const id=extractVimeo(m.url);return id?`<div class="embed-wrap"><iframe src="https://player.vimeo.com/video/${id}?api=1" allowfullscreen allow="autoplay;fullscreen;picture-in-picture"></iframe></div>`:'<p style="color:#888;font-size:.8rem;">Ungültige Vimeo-URL</p>';}
   if(m.type==='soundcloud'){const srcMatch=m.url.match(/src=["']([^"']+)["']/);if(srcMatch){return`<div class="embed-audio"><iframe height="166" scrolling="no" frameborder="no" allow="autoplay" style="width:100%" src="${escH(srcMatch[1])}"></iframe></div>`;}return`<div class="embed-audio"><iframe height="166" scrolling="no" frameborder="no" allow="autoplay" style="width:100%" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(m.url)}&color=%231a1a1a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false"></iframe></div>`;}
   if(m.type==='bandcamp'){
     // Unterstützt sowohl die src-URL direkt als auch den kopierten iframe-Code
@@ -856,10 +863,15 @@ function expandCd(el,c,idx){
     inner.innerHTML=buildCircleEmbedExpanded(c,expandedSize);
     const iframe=inner.querySelector('iframe');
     if(iframe){
-      iframe.addEventListener('load',()=>playEmbedIframe(iframe));
+      iframe.addEventListener('load',()=>{
+        playEmbedIframe(iframe);
+        applyVolume(currentVolume);
+      });
       playEmbedIframe(iframe);
     }
   }
+  showVolumeBar();
+  applyVolume(currentVolume);
 }
 
 function playEmbedIframe(iframe){
@@ -1555,8 +1567,7 @@ function buildSplashAudioPlayer(){
     splashAudio=buildNativePlayer(tracks);
     if(splashAudio){
       splashAudio.play().catch(()=>{});
-      const vb=document.getElementById('volume-bar');
-      if(vb)vb.style.display='flex';
+      showVolumeBar();
     }
   }else{
     // SoundCloud or Bandcamp via iframe
@@ -1598,8 +1609,7 @@ function buildSplashAudioPlayer(){
       document.body.appendChild(iframe);
     }
     splashAudio=iframe;
-    const vb=document.getElementById('volume-bar');
-    if(vb)vb.style.display='flex';
+    showVolumeBar();
   }
 }
 
@@ -1677,7 +1687,7 @@ function initSplash(){
       // Show volume bar + start auto-hide on idle
       if(sa.active){
         const vb=document.getElementById('volume-bar');
-        if(vb)vb.style.display='flex';
+        showVolumeBar();
         initVolumeBarAutoHide();
       }
     }else{
@@ -1689,16 +1699,29 @@ function initSplash(){
 
 // VOLUME BAR AUTO-HIDE: show on mouse move, hide after 7s idle
 let _vbTimer=null;
+let _vbAutoHideInit=false;
+function _vbShow(){
+  const vb=document.getElementById('volume-bar');
+  if(!vb)return;
+  vb.classList.remove('hidden');
+  clearTimeout(_vbTimer);
+  _vbTimer=setTimeout(()=>vb.classList.add('hidden'),7000);
+}
+function showVolumeBar(){
+  const vb=document.getElementById('volume-bar');
+  if(!vb)return;
+  vb.style.display='flex';
+  _vbShow();
+  initVolumeBarAutoHide();
+}
 function initVolumeBarAutoHide(){
   const vb=document.getElementById('volume-bar');
   if(!vb)return;
-  function showVb(){
-    vb.classList.remove('hidden');
-    clearTimeout(_vbTimer);
-    _vbTimer=setTimeout(()=>vb.classList.add('hidden'),7000);
+  if(!_vbAutoHideInit){
+    _vbAutoHideInit=true;
+    document.addEventListener('mousemove',_vbShow,{passive:true});
+    document.addEventListener('touchstart',_vbShow,{passive:true});
   }
-  document.addEventListener('mousemove',showVb,{passive:true});
-  document.addEventListener('touchstart',showVb,{passive:true});
   // Start timer immediately
   _vbTimer=setTimeout(()=>vb.classList.add('hidden'),7000);
 }
