@@ -515,7 +515,7 @@ function showAdminUI(){document.getElementById('pw-gate').style.display='none';d
 // EXPORT & GITHUB DEPLOY
 const GITHUB_USER='floschirmer';
 const GITHUB_REPO='portfolio';
-const GITHUB_FILE='index.html';
+const GITHUB_FILE='script.js';
 const GITHUB_BRANCH='main';
 
 function getGithubToken(){return localStorage.getItem('pf_gh_token')||'';}
@@ -528,15 +528,18 @@ async function exportSite(){
   const token=getGithubToken();
   const btn=document.querySelector('.export-btn');
 
-  // Baue neue HTML — holt saubere Kopie vom Server und ersetzt nur _DATA_
+  // Holt saubere Kopie von script.js vom Server und ersetzt nur _DATA_
   async function buildNewHtml(){
     let originalHtml;
     try{
-      const resp=await fetch(window.location.pathname,{cache:'no-store'});
+      const resp=await fetch('script.js',{cache:'no-store'});
       if(resp.ok)originalHtml=await resp.text();
     }catch(e){}
-    // Fallback: outerHTML (weniger zuverlässig aber besser als gar nichts)
-    if(!originalHtml)originalHtml=document.documentElement.outerHTML;
+    // Fallback: aktuellen script-Inhalt aus DOM lesen
+    if(!originalHtml){
+      const sc=Array.from(document.scripts).find(s=>s.src&&s.src.includes('script.js'));
+      if(sc){try{const r=await fetch(sc.src,{cache:'no-store'});if(r.ok)originalHtml=await r.text();}catch(e){}}
+    }
     const dataJson=JSON.stringify(data);
     const marker='var _DATA_ = ';
     const markerEnd=';\nvar data = JSON.parse';
@@ -783,7 +786,16 @@ function renderCircles(){
       updateDrag(e.touches[0].clientX,e.touches[0].clientY);
       e.preventDefault();
     },{passive:false});
-    div.addEventListener('touchend',function(){endDrag();});
+    div.addEventListener('touchend',function(e){
+      if(!dragState.dragging)return;
+      const wasDrag=dragState.preventClick;
+      endDrag();
+      // touchstart.preventDefault() suppresses the synthetic click on iOS — handle tap manually
+      if(!wasDrag){
+        if(e.target.closest('.cd-close')){_collapseCdEl(div);return;}
+        if(div.classList.contains('expanded')){_collapseCdEl(div);}else{expandCd(div,c,i);}
+      }
+    });
     div.addEventListener('click',function(e){
       if(dragState.preventClick){
         dragState.preventClick=false;
@@ -1533,11 +1545,19 @@ function buildSplashAudioPlayer(){
     if(!url)return;
     let iframe=document.getElementById('splash-audio-frame');
     if(iframe){
-      // Already preloaded — just trigger play
-      try{
-        iframe.contentWindow.postMessage(JSON.stringify({method:'setVolume',value:Math.round(currentVolume*100)}),'*');
-        iframe.contentWindow.postMessage(JSON.stringify({method:'play'}),'*');
-      }catch(e){}
+      // Reload src with auto_play=true — postMessage is not a user gesture on iOS and won't trigger playback
+      let scUrl=url;
+      if(sa.source==='soundcloud'){
+        if(!scUrl.includes('w.soundcloud.com')){
+          scUrl='https://w.soundcloud.com/player/?url='+encodeURIComponent(scUrl)+'&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false';
+        }else{
+          scUrl=scUrl.replace('auto_play=false','auto_play=true');
+          if(!scUrl.includes('auto_play='))scUrl+='&auto_play=true';
+        }
+      }else{
+        scUrl=url;scUrl+=scUrl.includes('?')?'&autoplay=1':'?autoplay=1';
+      }
+      iframe.src=scUrl;
     }else{
       // Create fresh with autoplay=true
       iframe=document.createElement('iframe');

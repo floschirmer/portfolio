@@ -9,7 +9,6 @@
   <meta name="theme-color" content="#ffffff"/>
   <title id="site-title-tag">FLORIAN SCHIRMER</title>
   <meta name="description" content="Flo Schirmer – Komposition &amp; Klanggestaltung in Bands und für Theater und Film."/>
-  <meta name="description" lang="en" content="Flo Schirmer – Composition &amp; Sound Design in Bands and for Theatre and Film."/>
   <meta name="keywords" content="Flo Schirmer, Komponist, Klanggestaltung, Komposition, Theater, Film, Freiburg, Mannheim, L-Tryptophan, Spa Boys, Timbeau"/>
   <meta name="author" content="Flo Schirmer"/>
   <meta property="og:title" content="Flo Schirmer – Komposition &amp; Klanggestaltung"/>
@@ -22,14 +21,30 @@
   <meta property="og:image" content="https://i.ibb.co/Zz26fyB4/fr-bearbeotet.jpg"/>
   <meta property="og:site_name" content="Flo Schirmer"/>
   <meta name="twitter:image" content="https://i.ibb.co/Zz26fyB4/fr-bearbeotet.jpg"/>
+  <meta property="og:image:alt" content="Flo Schirmer – Komponist &amp; Klanggestalter"/>
   <link rel="canonical" href="https://floschirmer.de"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" as="style">
   <link href="https://fonts.googleapis.com/css2?family=Viaoda+Libre&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"></head>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Flo Schirmer",
+    "alternateName": "Florian Schirmer",
+    "url": "https://floschirmer.de",
+    "jobTitle": "Komponist & Klanggestalter",
+    "description": "Komposition & Klanggestaltung in Bands und für Theater und Film."
+  }
+  </script>
+</head>
 <body>
 <!-- SPLASH SCREEN -->
 <div id="splash">
-  <img id="splash-img" src="" alt="" style="display:none;" loading="lazy"/>
+  <img id="splash-img" src="" alt="" style="display:none;" loading="eager"/>
   <div id="splash-overlay"></div>
   <div id="splash-cta" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
     <div style="font-family:'Viaoda Libre',cursive;font-size:1.3rem;letter-spacing:0.25em;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,0.5);text-transform:lowercase;opacity:0;transition:opacity 1s ease;" id="splash-cta-text">welcome, start listening</div>
@@ -114,10 +129,10 @@
       <div class="contact-links-grid" id="contact-links-list"></div>
       <div class="contact-section-title" id="cf-title">Nachricht senden</div>
       <div class="mail-form">
-        <label id="cf-label-name">Dein Name</label><input type="text" id="cf-name"/>
-        <label id="cf-label-email">E-Mail</label><input type="email" id="cf-email"/>
-        <label id="cf-label-subject">Betreff</label><input type="text" id="cf-subject"/>
-        <label id="cf-label-msg">Nachricht</label><textarea id="cf-msg"></textarea>
+        <label id="cf-label-name" for="cf-name">Dein Name</label><input type="text" id="cf-name" autocomplete="name"/>
+        <label id="cf-label-email" for="cf-email">E-Mail</label><input type="email" id="cf-email" autocomplete="email"/>
+        <label id="cf-label-subject" for="cf-subject">Betreff</label><input type="text" id="cf-subject" autocomplete="off"/>
+        <label id="cf-label-msg" for="cf-msg">Nachricht</label><textarea id="cf-msg" autocomplete="off"></textarea>
         <button onclick="sendMail()" id="cf-send-btn">Senden</button>
         <div class="form-status" id="form-status"></div>
       </div>
@@ -147,7 +162,7 @@
     </div>
     <div id="admin-ui">
       <div class="export-box">
-        <div class="export-box-title">🚀 Änderungen veröffentlichen</div>
+        <div class="export-box-title">Änderungen veröffentlichen</div>
         <p>GitHub-Token einmalig eintragen (wird nur lokal gespeichert) → dann reicht ein Klick um die Seite live zu schalten.</p>
         <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;">
           <input type="password" id="gh-token-input" placeholder="GitHub Token (ghp_...)" style="border:1px solid #ddd;padding:.38rem .6rem;font-size:.82rem;font-family:'Viaoda Libre',cursive;outline:none;flex:1;min-width:200px;background:#fafafa;" oninput="updateTokenStatus()"/>
@@ -155,7 +170,7 @@
         </div>
         <div id="gh-token-status" style="font-size:.72rem;color:#888;margin-bottom:.8rem;min-height:1rem;"></div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-          <button class="export-btn" onclick="exportSite()">🚀 Speichern & veröffentlichen</button>
+          <button class="export-btn" onclick="exportSite()">Speichern & veröffentlichen</button>
         </div>
       </div>
       <div class="tabs" id="admin-tabs"></div>
@@ -167,7 +182,7 @@
   </div>
 </div>
 
-<div class="save-notice" id="save-notice">Vorschau aktualisiert ✓</div>
+<div class="save-notice" id="save-notice">Vorschau aktualisiert</div>
 
 <script defer src="script.js"></script>
 </body>
