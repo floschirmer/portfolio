@@ -21,7 +21,6 @@ nav a:hover,nav a.active{color:var(--text);border-bottom-color:var(--text);}
 
 /* ========== MAIN CONTENT ========== */
 main{flex:1;padding:3rem 4rem;max-width:960px;}
-footer{padding:2rem 4rem;font-size:0.72rem;color:var(--muted);letter-spacing:0.08em;}
 .view{display:none;}.view.active{display:block;}
 
 /* ========== HOME & EVENTS SECTION ========== */
@@ -109,8 +108,7 @@ body.has-bg .events-heading,
 body.has-bg .contact-section-title,
 body.has-bg .contact-link-label,
 body.has-bg .contact-link-val a,
-body.has-bg .bio-text,
-body.has-bg footer{
+body.has-bg .bio-text{
   color:#1a1a1a;
   text-shadow:var(--glow-shadow);
 }
@@ -259,11 +257,11 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
 #mobile-nav a:hover,#mobile-nav a.active{color:var(--text);}
 
 /* ========== SPLASH SCREEN & VOLUME CONTROL ========== */
-#splash{position:fixed;inset:0;z-index:1000;background:#111 url('https://i.ibb.co/Zz26fyB4/fr-bearbeotet.jpg') center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 1s ease;}
+#splash{position:fixed;inset:0;z-index:1000;background:#111 url('/splashpic.webp') center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity 1s ease;}
 #splash.fade-out{opacity:0;pointer-events:none;}
 #splash-img{display:none;}
 #splash-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.32);}
-#volume-bar{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:opacity 0.5s ease;}
+#volume-bar{position:fixed;bottom:max(2rem,calc(env(safe-area-inset-bottom,0px) + 1rem));left:50%;transform:translateX(-50%);z-index:999;display:none;align-items:center;background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.08);padding:0.5rem 1.1rem;border-radius:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:opacity 0.5s ease;}
 #volume-bar.hidden{opacity:0;pointer-events:none;}
 #splash-vol{-webkit-appearance:none;appearance:none;width:120px;height:14px;background:transparent;outline:none;cursor:pointer;}
 #splash-vol::-webkit-slider-runnable-track{height:2px;border-radius:1px;background:var(--line);}
@@ -281,17 +279,16 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
 /* ========== RESPONSIVE DESIGN (MOBILE) ========== */
 @media(max-width:700px){
   html{font-size:14px;}
-  header{padding:1rem 1.2rem;flex-direction:row;align-items:center;justify-content:space-between;gap:0;}
+  header{padding:max(1rem,env(safe-area-inset-top,0px)) 1.2rem 0.8rem;flex-direction:row;align-items:center;justify-content:space-between;gap:0;}
   .header-right{display:none;}
   .burger-btn{display:flex;min-width:48px;min-height:48px;padding:8px;}
   .burger-btn span{width:20px;height:2px;}
   .site-name{font-size:1.2rem;}
-  main{padding:2.5rem 1.2rem 1.5rem;}
-  footer{padding:1.2rem 1.5rem;font-size:0.65rem;}
+  main{padding:calc(max(1rem,env(safe-area-inset-top,0px)) + 4rem) 1.2rem calc(env(safe-area-inset-bottom,0px) + 1.5rem);}
   /* Touch targets min 44-48px */
   nav a,.project-item,.event-item,.contact-link-item,.lang-btn,.back-btn,.ext-link{min-height:44px;display:flex;align-items:center;padding:0.7rem 0;}
   /* Volume bar mobile */
-  #volume-bar{bottom:1.5rem;padding:0.6rem 1rem;}
+  #volume-bar{bottom:max(1.5rem,calc(env(safe-area-inset-bottom,0px) + 0.8rem));padding:0.6rem 1rem;}
   /* Layouts */
   .bio-grid{grid-template-columns:1fr;}
   .bio-img,.bio-img-placeholder{max-width:100%;}
@@ -309,7 +306,7 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
   /* Home view mobile */
   #view-home{min-height:100vh;}
   #view-home > #circles-container{height:100vh;}
-  #circles-container .sound-circle{transform-origin:center center;}
+  #circles-container .sound-circle{transform-origin:center center;scale:0.7;}
   /* Splash screen mobile */
   #splash-cta-text{font-size:1rem !important;}
   #splash-hint{font-size:0.7rem;}
