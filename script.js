@@ -1565,7 +1565,7 @@ function buildNativePlayer(tracks){
   const audio=document.createElement('audio');
   audio.id='splash-audio-el';
   audio.style.display='none';
-  audio.volume=0;
+  audio.volume=1;
   audio.loop=true;
   audio.preload='auto';
   audio.crossOrigin='anonymous';
