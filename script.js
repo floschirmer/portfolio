@@ -43,7 +43,7 @@ function setLang(l){
   // Sync header text
   document.getElementById('header-name').textContent=data.name||'';
   document.getElementById('header-sub').textContent=L(data.sub)||'';
-  document.getElementById('footer-text').textContent=data.footer||'© 2026';
+  const _ft=document.getElementById('footer-text');if(_ft)_ft.textContent=data.footer||'© 2026';
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
 }
 
@@ -352,7 +352,7 @@ function renderAll(){
   document.getElementById('header-name').textContent=data.name||'';
   document.getElementById('header-sub').textContent=L(data.sub)||'';
   document.getElementById('site-title-tag').textContent=data.name||'';
-  document.getElementById('footer-text').textContent=data.footer||'© 2026';
+  const _ft=document.getElementById('footer-text');if(_ft)_ft.textContent=data.footer||'© 2026';
   buildNav();renderHomeText();renderHomeBg();renderCircles();applyLangUI();
   if(currentSection&&currentSection!=='home'&&currentSection!=='project'){
     const sec=(data.sections||[]).find(s=>s.id===currentSection);
