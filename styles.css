@@ -294,7 +294,16 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
   .bio-img,.bio-img-placeholder{max-width:100%;}
   .section-two-col{grid-template-columns:1fr;}
   .section-media-col{position:static;}
-  .event-item,.contact-link-item{flex-direction:column;gap:0.4rem;}
+  .event-item,.contact-link-item{flex-direction:column;gap:0.4rem;align-items:flex-start;text-align:left;}
+  .event-date,.event-title{text-align:left;width:100%;}
+  /* Prevent horizontal scroll */
+  body{overflow-x:hidden;}
+  /* Project items: stack everything vertically, consistent font size */
+  .project-item{flex-direction:column;align-items:flex-start;}
+  .project-item-header{display:flex;flex-direction:column;gap:0.1rem;width:100%;}
+  .project-title,body.has-bg .project-title{font-size:1.15rem;white-space:normal;word-break:break-word;}
+  .project-year{white-space:normal;font-size:0.7rem;}
+  .project-short-desc,body.has-bg .project-short-desc{font-size:0.78rem;}
   .contact-link-label{min-width:auto;}
   .bilingual{grid-template-columns:1fr;}
   .bilingual input,.bilingual textarea{font-size:16px !important;padding:0.6rem;}
