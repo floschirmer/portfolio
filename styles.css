@@ -14,13 +14,14 @@ header.transparent{background:transparent !important;}
 nav{display:flex;flex-wrap:wrap;justify-content:flex-end;}
 nav a{font-size:0.78rem;letter-spacing:0.12em;text-transform:lowercase;color:var(--muted);text-decoration:none;margin-left:2rem;padding-bottom:2px;border-bottom:1px solid transparent;transition:color .2s,border-color .2s;cursor:pointer;}
 nav a:hover,nav a.active{color:var(--text);border-bottom-color:var(--text);}
-.lang-switch{display:flex;gap:0;align-self:flex-end;}
+.lang-switch{display:flex;gap:0;margin-left:auto;}
+.mobile-lang-switch{display:flex;justify-content:flex-end;}
 .lang-btn{background:none;border:none;font-family:'Viaoda Libre',cursive;font-size:0.7rem;letter-spacing:0.12em;color:var(--muted);cursor:pointer;padding:0.1rem 0.4rem;transition:color .2s;}
 .lang-btn.active{color:var(--text);font-weight:500;}
 .lang-sep{font-size:0.7rem;color:var(--line);line-height:1.4;}
 
 /* ========== MAIN CONTENT ========== */
-main{flex:1;padding:3rem 4rem;max-width:960px;}
+main{flex:1;padding:3rem 4rem;width:100%;}
 .view{display:none;}.view.active{display:block;}
 
 /* ========== HOME & EVENTS SECTION ========== */
@@ -37,6 +38,8 @@ main{flex:1;padding:3rem 4rem;max-width:960px;}
 
 /* ========== PROJECT LIST & SINGLE PROJECT ========== */
 .project-list{list-style:none;}
+.projekte-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3rem;}
+.projekte-col-heading{font-size:0.7rem;letter-spacing:0.14em;text-transform:lowercase;color:var(--muted);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--line);}
 .project-item{padding:1.4rem 0;cursor:pointer;transition:opacity .15s;}
 .project-item:hover{opacity:0.6;}
 .project-item-header{display:grid;grid-template-columns:max-content auto;column-gap:1.5rem;align-items:baseline;margin-bottom:0.4rem;}
@@ -65,15 +68,16 @@ main{flex:1;padding:3rem 4rem;max-width:960px;}
 .ext-link:hover{opacity:0.6;}
 
 /* ========== BIO & CONTACT SECTIONS ========== */
-.bio-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:3rem;align-items:start;}
+.bio-grid{display:grid;grid-template-columns:minmax(0,3.5fr) minmax(0,3fr);gap:2rem;align-items:stretch;}
 .bio-img{width:100%;display:block;}
 .bio-img-placeholder{width:100%;aspect-ratio:2/3;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;}
-.bio-text{font-family:'Viaoda Libre',cursive;font-size:1.05rem;line-height:1.9;font-weight:400;}
+.bio-text{font-family:'Viaoda Libre',cursive;font-size:1.05rem;line-height:1.9;font-weight:400;text-align:justify;display:flex;flex-direction:column;justify-content:space-between;}
 
 /* ========== CONTACT FORM ========== */
 .contact-links-grid{display:flex;flex-direction:column;margin-bottom:3rem;}
 .contact-link-item{display:flex;align-items:baseline;gap:2rem;padding:1rem 0;}
-.contact-link-label{font-size:0.72rem;letter-spacing:0.08em;text-transform:lowercase;color:var(--muted);min-width:110px;flex-shrink:0;}
+.contact-link-label{font-family:'Viaoda Libre',cursive;font-size:1.05rem;color:var(--text);text-decoration:none;letter-spacing:0.04em;text-transform:lowercase;transition:color .2s;}
+.contact-link-label:hover{color:var(--muted);}
 .contact-link-val a{font-family:'Viaoda Libre',cursive;font-size:1.05rem;color:var(--text);text-decoration:none;transition:color .2s;}
 .contact-link-val a:hover{border-color:var(--text);}
 .contact-section-title{font-size:0.7rem;letter-spacing:0.1em;text-transform:lowercase;color:var(--muted);margin-bottom:1.5rem;}
@@ -130,6 +134,10 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
 .sound-circle.expanded{animation:cd-spin 12s linear infinite;}
 .sound-circle.expanded::after{box-shadow:0 10px 40px rgba(0,0,0,0.35);}
 @keyframes cd-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+#cd-widget-panel{display:none;position:fixed;z-index:500;background:#fff;border-radius:12px;box-shadow:0 8px 36px rgba(0,0,0,0.22);padding:1.2rem 1rem 1rem;pointer-events:all;}
+#cd-widget-close{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.08);border:none;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#cd-widget-close:hover{background:rgba(0,0,0,0.16);}
+#cd-widget-content iframe{width:100%;border:none;border-radius:8px;display:block;}
 /* SVG layer — always fills the circle */
 .sound-circle .cd-svg-wrap{position:absolute;inset:0;border-radius:50%;overflow:hidden;pointer-events:none;}
 .sound-circle .cd-svg-wrap svg{width:100%;height:100%;display:block;}
@@ -164,6 +172,7 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
 }
 #view-home > #circles-container .sound-circle{pointer-events:auto;}
 #view-home > .home-intro{position:relative;z-index:2;}
+#home-note{position:fixed;bottom:2rem;right:2rem;max-width:240px;background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.1);border-radius:4px;padding:0.85rem 1rem;font-family:'Viaoda Libre',cursive;font-size:0.85rem;line-height:1.65;color:#333;z-index:10;pointer-events:none;}
 .section-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-repeat:no-repeat;display:none;}
 .section-bg::after{content:'';position:absolute;inset:0;}
 #view-section .section-two-col{position:relative;z-index:1;}
@@ -290,6 +299,7 @@ body.has-bg .contact-link-val a{font-size:1.15rem;}
   /* Volume bar mobile */
   #volume-bar{bottom:max(1.5rem,calc(env(safe-area-inset-bottom,0px) + 0.8rem));padding:0.6rem 1rem;}
   /* Layouts */
+  .projekte-grid{grid-template-columns:1fr;gap:2rem;}
   .bio-grid{grid-template-columns:1fr;}
   .bio-img,.bio-img-placeholder{max-width:100%;}
   .section-two-col{grid-template-columns:1fr;}
