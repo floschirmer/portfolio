@@ -149,11 +149,7 @@ function onSplashSliderMove(){
 function setSplashVolume(vol){
   const v=Math.max(0,Math.min(1,Number(vol)));
   document.querySelectorAll('.splash-vol-input').forEach(sl=>{sl.value=v;});
-  if(_splashGainNode){
-    _splashGainNode.gain.value=v;
-    if(splashAudio&&splashAudio.tagName==='AUDIO')splashAudio.volume=v>0?1:0;
-    if(_splashAudioCtx&&_splashAudioCtx.state==='suspended')_splashAudioCtx.resume();
-  }else if(splashAudio&&splashAudio.tagName==='AUDIO'){
+  if(splashAudio&&splashAudio.tagName==='AUDIO'){
     try{splashAudio.volume=v;}catch(e){}
     if(splashAudio.paused&&v>0)try{splashAudio.play().catch(()=>{});}catch(e){}
   }
@@ -174,9 +170,6 @@ function initSliderTouchHandling(){
     }
     function handle(e){
       e.preventDefault();
-      if(_splashAudioCtx&&_splashAudioCtx.state==='suspended'){
-        _splashAudioCtx.resume();
-      }
       input.value=getVal(e);
       input.dispatchEvent(new Event('input',{bubbles:true}));
     }
@@ -1671,21 +1664,6 @@ function buildSplashAudioPlayer(){
     trackIndex=0;
     splashAudio=buildNativePlayer(tracks);
     if(splashAudio){
-      if(!_isIOS){
-        // Desktop: AudioContext + GainNode für saubere Lautstärkekontrolle
-        try{
-          if(!_splashAudioCtx){
-            _splashAudioCtx=new(window.AudioContext||window.webkitAudioContext)();
-            const src=_splashAudioCtx.createMediaElementSource(splashAudio);
-            _splashGainNode=_splashAudioCtx.createGain();
-            _splashGainNode.gain.value=0;
-            src.connect(_splashGainNode);
-            _splashGainNode.connect(_splashAudioCtx.destination);
-          }
-          if(_splashAudioCtx.state==='suspended')_splashAudioCtx.resume();
-        }catch(e){}
-      }
-      // iOS: kein AudioContext — direkt play() + volume, synchron im Klick-Handler
       splashAudio.play().catch(()=>{});
       setSplashVolume(0);
       showVolumeBar();
